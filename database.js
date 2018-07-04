@@ -27,9 +27,7 @@ const insert = query => {
   });
 };
 
-const read = query => {
-  let response;
-
+const read = async query => {
   let db = new sqlite3.Database(dbFile, sqlite3.OPEN_READONLY, err => {
     if (err) {
       return console.log(err.message);
@@ -37,13 +35,13 @@ const read = query => {
     console.log("Connected to sim.db");
   });
 
-  db.serialize(() => {
-    db.each(`${query}`, (err, row) => {
+  const prom = new Promise((resolve, reject) => {
+    db.all(query, (err, res) => {
       if (err) {
         console.error(err.message);
+        reject(err);
       }
-      console.log(row);
-      response = row;
+      resolve(res);
     });
   });
 
@@ -54,13 +52,8 @@ const read = query => {
     console.log("Close the database connection.");
   });
 
-  return response;
+  return prom;
 };
-
-const query = `INSERT INTO sprints values(null, "a", "asd", "b")`;
-// const query = `SELECT * FROM sprints`;
-read(query);
-// insert(query);
 
 module.exports = {
   insert: insert,

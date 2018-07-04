@@ -16,9 +16,13 @@ app.post("/createSprint", (req, res) => {
 
 app.post("/getSprints", (req, res) => {
   const query = `SELECT * FROM sprints`;
-  const response = db.read(query);
-  console.log(response);
-  res.send(response);
+  db.read(query)
+    .then(response => {
+      res.send(response);
+    })
+    .catch(err => {
+      console.log(err);
+    });
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

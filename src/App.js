@@ -16,8 +16,15 @@ class App extends Component {
     sprints: []
   };
 
-  test = () => {
-    getSprints().then(foo => console.log(foo.body));
+  test = async () => {
+    const foo = await getSprints();
+    console.log("app");
+    console.log(foo);
+    // .then(foo => foo.body)
+    // .then(body => {
+    //   const reader = body.getReader();
+    //   console.log(reader.read());
+    // });
   };
 
   render() {
