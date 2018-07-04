@@ -10,10 +10,11 @@
   color: white;
 }
 
-.App-title {
-  font-size: 1.5em;
+.ModalForm {
+  padding: 20px;
+  text-align: center;
 }
 
-.App-intro {
-  font-size: large;
+.Padding {
+  padding: 10px;
 }
