@@ -8,15 +8,23 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import SprintModal from "./components/SprintModal/SprintModal";
 
+// import { createSprint, foo } from "./utils/api/api";
+import getSprints from "./utils/api/api";
+
 class App extends Component {
   state = {
     sprints: []
+  };
+
+  test = () => {
+    getSprints().then(foo => console.log(foo.body));
   };
 
   render() {
     return (
       <div className="App">
         <SprintModal />
+        <Button onClick={this.test} />
       </div>
     );
   }
