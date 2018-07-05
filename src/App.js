@@ -1,37 +1,39 @@
 import React, { Component } from "react";
 import "./App.css";
-import { Button, Modal, Input, Form } from "semantic-ui-react";
-import ReactDatePicker from "react-datepicker";
-import moment from "moment";
+import { Button, Modal, Dropdown, Form } from "semantic-ui-react";
 
 import "react-datepicker/dist/react-datepicker.css";
 
 import SprintModal from "./components/SprintModal/SprintModal";
+import SprintDropDown from "./components/SprintDropDown/SprintDropDown";
 
 // import { createSprint, foo } from "./utils/api/api";
 import getSprints from "./utils/api/api";
 
 class App extends Component {
   state = {
-    sprints: []
+    sprints: [],
+    selectedSprint: null
   };
 
-  test = async () => {
-    const foo = await getSprints();
-    console.log("app");
-    console.log(foo);
-    // .then(foo => foo.body)
-    // .then(body => {
-    //   const reader = body.getReader();
-    //   console.log(reader.read());
-    // });
+  handleSprintSelect = (event, { value }) => {
+    this.setState({
+      selectedSprint: value
+    });
   };
+
+  componentDidMount() {
+    getSprints().then(sprints => this.setState({ sprints }));
+  }
 
   render() {
+    const { sprints, selectedSprint } = this.state;
+    console.log(selectedSprint);
+
     return (
       <div className="App">
         <SprintModal />
-        <Button onClick={this.test} />
+        <SprintDropDown sprints={sprints} onChange={this.handleSprintSelect} />
       </div>
     );
   }

@@ -24,16 +24,6 @@ const getSprints = () => {
   }).then(response => {
     return response.json();
   });
-  // const body = await response.json();
-  // console.log( //   body.body
-  //     .getReader()
-  //     .read()
-  //     .then(bar => console.log(bar))
-  // );
-
-  // if (response.status !== 200) throw Error(body.message);
-
-  // return body;
 };
 
 // export default { createSprint, getSprints };
