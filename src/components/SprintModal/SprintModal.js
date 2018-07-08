@@ -96,7 +96,7 @@ class SprintModal extends Component {
         color={weeksAdv === 1 ? "blue" : "red"}
         disabled={
           sprints &&
-          sprints.find(
+          !!sprints.find(
             sprint => sprint.name === `${this.futureMonday(weeksAdv)} Sprint`
           )
         }
@@ -107,8 +107,7 @@ class SprintModal extends Component {
   };
 
   render() {
-    const { name, startDate, endDate, modalOpen } = this.state;
-    const { sprints } = this.props;
+    const { startDate, endDate, modalOpen } = this.state;
 
     return (
       <Modal

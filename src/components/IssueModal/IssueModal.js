@@ -71,17 +71,9 @@ class IssueModal extends Component {
   };
 
   render() {
-    const {
-      name,
-      status,
-      timeEstimate,
-      timeRemaining,
-      projectId,
-      blocked,
-      modalOpen
-    } = this.state;
+    const { modalOpen } = this.state;
 
-    const { sprintId, sprints, projects } = this.props;
+    const { sprints, projects } = this.props;
 
     return (
       <Modal
@@ -98,7 +90,6 @@ class IssueModal extends Component {
         className="Modal"
       >
         <Modal.Header className="ModalHeader">Create Issue</Modal.Header>
-        {/* <Form> */}
         <Form className="ModalForm">
           <Form.Field inline>
             <label>Issue Name</label>

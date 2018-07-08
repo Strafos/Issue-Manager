@@ -1,9 +1,7 @@
 import React, { Component } from "react";
-import { Menu, Icon, Input, Form } from "semantic-ui-react";
-import SprintDropDown from "../SprintDropDown/SprintDropDown";
+import { Menu, Icon } from "semantic-ui-react";
 
 import { setStatus, setBlocked } from "../../utils/api/api";
-import { networkInterfaces } from "os";
 
 class Status extends Component {
   state = {

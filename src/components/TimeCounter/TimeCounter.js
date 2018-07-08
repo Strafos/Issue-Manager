@@ -58,7 +58,7 @@ class TimeCounter extends Component {
     const { issueId, stat } = this.props;
     const { tempTime } = this.state;
     this.setState({
-      time: parseInt(tempTime)
+      time: parseInt(tempTime, 10)
     });
     setTime(issueId, stat, tempTime);
     this.handleClose();

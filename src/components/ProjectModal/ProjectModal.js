@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./ProjectModal.css";
-import { Segment, Grid, Button, Modal, Input, Form } from "semantic-ui-react";
+import { Segment, Button, Modal, Input } from "semantic-ui-react";
 
 import { createProject } from "../../utils/api/api";
 
@@ -44,7 +44,6 @@ class ProjectModal extends Component {
 
   render() {
     const { modalOpen } = this.state;
-    const { sprints, projects } = this.props;
 
     return (
       <Modal
