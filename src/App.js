@@ -6,9 +6,15 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import SprintModal from "./components/SprintModal/SprintModal";
 import SprintDropDown from "./components/SprintDropDown/SprintDropDown";
+import IssueModal from "./components/IssueModal/IssueModal";
+import IssueTable from "./components/IssueTable/IssueTable";
 
-// import { createSprint, foo } from "./utils/api/api";
-import getSprints from "./utils/api/api";
+import {
+  createSprint,
+  createIssue,
+  getSprints,
+  getProjects
+} from "./utils/api/api";
 
 class App extends Component {
   state = {
@@ -23,17 +29,25 @@ class App extends Component {
   };
 
   componentDidMount() {
-    getSprints().then(sprints => this.setState({ sprints }));
+    getSprints().then(sprints => {
+      this.setState({ sprints });
+      this.setState({
+        selectedSprint:
+          sprints && sprints.length > 0 ? sprints[sprints.length - 1].id : null //Default to latest sprint
+      });
+    });
   }
 
   render() {
     const { sprints, selectedSprint } = this.state;
-    console.log(selectedSprint);
 
     return (
       <div className="App">
-        <SprintModal />
+        <SprintModal sprints={sprints} />
+        <ProjectModal sprints={sprints} />
+        <IssueModal sprints={sprints} sprintId={selectedSprint} />
         <SprintDropDown sprints={sprints} onChange={this.handleSprintSelect} />
+        <IssueTable sprintId={selectedSprint || 0} />
       </div>
     );
   }
