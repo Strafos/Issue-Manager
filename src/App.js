@@ -1,6 +1,14 @@
 import React, { Component } from "react";
 import "./App.css";
 
+import {
+  Icon,
+  Header,
+  Button,
+  Grid,
+  GridColumn,
+  GridRow
+} from "semantic-ui-react";
 import "react-datepicker/dist/react-datepicker.css";
 
 import SprintModal from "./components/SprintModal/SprintModal";
@@ -19,8 +27,17 @@ class App extends Component {
 
   handleSprintSelect = (event, { value }) => {
     this.setState({
-      selectedSprint: value
+      selectedSprint: this.state.sprints.find(sprint => sprint.id === value)
     });
+  };
+
+  selectSprint = sprints => {
+    const d = new Date();
+    d.setDate(d.getDate() + ((1 + 7 - d.getDay()) % 7) - 7); // Current Monday
+
+    const options = { month: "2-digit", day: "2-digit", year: "2-digit" };
+    const lastMonday = d.toLocaleDateString("en-US", options);
+    return sprints.find(sprint => sprint.start_date === lastMonday);
   };
 
   componentDidMount() {
@@ -31,7 +48,7 @@ class App extends Component {
       this.setState({ sprints });
       this.setState({
         selectedSprint:
-          sprints && sprints.length > 0 ? sprints[sprints.length - 1].id : null //Default to latest sprint
+          sprints && sprints.length > 0 ? this.selectSprint(sprints) : null
       });
     });
   }
@@ -41,15 +58,44 @@ class App extends Component {
 
     return (
       <div className="App">
-        <SprintModal sprints={sprints} />
-        <ProjectModal sprints={sprints} projects={projects} />
-        <IssueModal
-          projects={projects}
-          sprints={sprints}
-          sprintId={selectedSprint}
-        />
-        <SprintDropDown sprints={sprints} onChange={this.handleSprintSelect} />
-        <IssueTable projects={projects} sprintId={selectedSprint || 0} />
+        <div className="foo">
+          <Header size="huge" as="h1">
+            <Icon name="trash alternate outline" />
+            Zaibo's Issue Manager
+          </Header>
+        </div>
+        <Grid columns={2} divided>
+          <Grid.Row />
+          <Grid.Row>
+            <GridColumn textAlign="right" width={3}>
+              <Grid.Row>
+                <Button.Group color="green" vertical>
+                  <SprintModal sprints={sprints} />
+                  <ProjectModal sprints={sprints} projects={projects} />
+                  <IssueModal
+                    projects={projects}
+                    sprints={sprints}
+                    sprintId={selectedSprint}
+                  />
+                </Button.Group>
+              </Grid.Row>
+              <br />
+              <Grid.Row>
+                <SprintDropDown
+                  sprints={sprints}
+                  onChange={this.handleSprintSelect}
+                />
+              </Grid.Row>
+            </GridColumn>
+            <GridColumn width={13}>
+              <IssueTable
+                projects={projects}
+                selectedSprint={selectedSprint}
+                sprintId={selectedSprint && selectedSprint.id}
+              />
+            </GridColumn>
+          </Grid.Row>
+        </Grid>
       </div>
     );
   }

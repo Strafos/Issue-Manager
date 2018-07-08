@@ -18,3 +18,9 @@
 .Padding {
   padding: 10px;
 }
+
+.foo {
+  text-align: left;
+  padding-left: 10px;
+  padding-top: 15px;
+}
