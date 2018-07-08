@@ -12,12 +12,15 @@ class SprintDropDown extends Component {
     });
 
   render() {
-    const { sprints, onChange } = this.props;
+    const { sprints, onChange, defaultVal, simple } = this.props;
     return (
       <Dropdown
         placeholder="Select Sprint"
-        search
+        // search
         selection
+        defaultValue={defaultVal}
+        item
+        simple={simple}
         onChange={onChange}
         options={this.sprintOptions(sprints)}
       />

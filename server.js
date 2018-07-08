@@ -9,7 +9,7 @@ const port = process.env.PORT || 5000;
 
 app.post("/createSprint", (req, res) => {
   const { name, startDate, endDate } = req.body;
-  const query = `INSERT INTO sprints values(null, "${name}", "${startDate}", "${endDate}")`;
+  const query = `INSERT INTO sprints values(null, "${name}", "${startDate}", "${endDate}", "")`;
   db.insert(query);
   res.send({ dbconn: "Success" });
 });
@@ -58,11 +58,15 @@ app.post("/getSprint/:id", (req, res) => {
 
 app.put("/setStatus/:id", (req, res) => {
   const { status } = req.body;
-  console.log("foo");
-  console.log(req.body);
   const query = `UPDATE issues SET status="${status}" where id=${
     req.params.id
   }`;
+  db.insert(query);
+});
+
+app.put("/updateNotes/:id", (req, res) => {
+  const { notes } = req.body;
+  const query = `UPDATE sprints SET notes="${notes}" where id=${req.params.id}`;
   db.insert(query);
 });
 

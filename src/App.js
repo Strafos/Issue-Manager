@@ -2,17 +2,21 @@ import React, { Component } from "react";
 import "./App.css";
 
 import {
+  Menu,
+  TextArea,
   Icon,
   Header,
   Button,
   Grid,
   GridColumn,
-  GridRow
+  GridRow,
+  Form
 } from "semantic-ui-react";
 import "react-datepicker/dist/react-datepicker.css";
 
 import SprintModal from "./components/SprintModal/SprintModal";
 import SprintDropDown from "./components/SprintDropDown/SprintDropDown";
+import RecentMenu from "./components/RecentMenu/RecentMenu";
 import IssueModal from "./components/IssueModal/IssueModal";
 import IssueTable from "./components/IssueTable/IssueTable";
 import ProjectModal from "./components/ProjectModal/ProjectModal";
@@ -28,6 +32,12 @@ class App extends Component {
   handleSprintSelect = (event, { value }) => {
     this.setState({
       selectedSprint: this.state.sprints.find(sprint => sprint.id === value)
+    });
+  };
+
+  handleSprintMenuClick = (event, { index }) => {
+    this.setState({
+      selectedSprint: this.state.sprints.find(sprint => sprint.id === index)
     });
   };
 
@@ -53,6 +63,14 @@ class App extends Component {
     });
   }
 
+  updateNotes = notes => {
+    const { selectedSprint } = this.state;
+    selectedSprint.notes = notes;
+    this.setState({
+      selectedSprint
+    });
+  };
+
   render() {
     const { sprints, projects, selectedSprint } = this.state;
 
@@ -67,23 +85,33 @@ class App extends Component {
         <Grid columns={2} divided>
           <Grid.Row />
           <Grid.Row>
-            <GridColumn textAlign="right" width={3}>
+            <GridColumn width={3}>
               <Grid.Row>
+                <br />
                 <Button.Group color="green" vertical>
                   <SprintModal sprints={sprints} />
                   <ProjectModal sprints={sprints} projects={projects} />
                   <IssueModal
                     projects={projects}
                     sprints={sprints}
-                    sprintId={selectedSprint}
+                    selectedSprint={selectedSprint}
                   />
                 </Button.Group>
+              </Grid.Row>
+              <br />
+              <Grid.Row>
+                <RecentMenu
+                  selectedSprint={selectedSprint}
+                  handleSprintMenuClick={this.handleSprintMenuClick}
+                  sprints={sprints}
+                />
               </Grid.Row>
               <br />
               <Grid.Row>
                 <SprintDropDown
                   sprints={sprints}
                   onChange={this.handleSprintSelect}
+                  simple={true}
                 />
               </Grid.Row>
             </GridColumn>
@@ -92,6 +120,7 @@ class App extends Component {
                 projects={projects}
                 selectedSprint={selectedSprint}
                 sprintId={selectedSprint && selectedSprint.id}
+                update={this.updateNotes}
               />
             </GridColumn>
           </Grid.Row>

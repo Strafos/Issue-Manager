@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./ProjectModal.css";
-import { Segment, Button, Modal, Input } from "semantic-ui-react";
+import { Icon, Segment, Button, Modal, Input } from "semantic-ui-react";
 
 import { createProject } from "../../utils/api/api";
 
@@ -53,8 +53,9 @@ class ProjectModal extends Component {
         onClose={this.handleClose}
         open={modalOpen}
         trigger={
-          <Button onClick={this.handleOpen} primary>
+          <Button icon labelPosition="left" onClick={this.handleOpen} primary>
             New Project
+            <Icon name="plus" />
           </Button>
         }
       >

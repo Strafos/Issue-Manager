@@ -119,6 +119,19 @@ export const setTime = (id, stat, time) => {
   });
 };
 
+export const updateNotes = (notes, id) => {
+  return fetch(`/updateNotes/${id}`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ notes })
+  }).then(response => {
+    return response.json();
+  });
+};
+
 export default {
   createSprint,
   createIssue,
@@ -126,5 +139,6 @@ export default {
   getSprints,
   getSprint,
   getProjects,
-  setStatus
+  setStatus,
+  updateNotes
 };

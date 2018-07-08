@@ -73,7 +73,7 @@ class IssueModal extends Component {
   render() {
     const { modalOpen } = this.state;
 
-    const { sprints, projects } = this.props;
+    const { sprints, projects, selectedSprint } = this.props;
 
     return (
       <Modal
@@ -83,7 +83,7 @@ class IssueModal extends Component {
         onClose={this.handleClose}
         open={modalOpen}
         trigger={
-          <Button icon labelPosition="right" onClick={this.handleOpen} primary>
+          <Button icon labelPosition="left" onClick={this.handleOpen} primary>
             <Icon name="plus" />
             New issue
           </Button>
@@ -99,6 +99,7 @@ class IssueModal extends Component {
           <Form.Field inline>
             <label>Sprint</label>
             <SprintDropDown
+              defaultVal={selectedSprint && selectedSprint.id}
               sprints={sprints}
               onChange={this.handleSprintSelect}
             />

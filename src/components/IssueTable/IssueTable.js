@@ -1,15 +1,16 @@
 import React, { Component } from "react";
 import "./IssueTable.css";
-import { Table } from "semantic-ui-react";
+import { Button, Form, TextArea, Table, Header } from "semantic-ui-react";
 
 import Status from "../Status/Status";
 import TimeCounter from "../TimeCounter/TimeCounter";
 
-import { getSprint } from "../../utils/api/api";
+import { getSprint, updateNotes } from "../../utils/api/api";
 
 class IssueTable extends Component {
   state = {
-    issueList: []
+    issueList: [],
+    notes: ""
   };
 
   mapProjectId = id => {
@@ -19,13 +20,40 @@ class IssueTable extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    const { sprintId } = nextProps;
-    getSprint(sprintId).then(issues => {
+    const { selectedSprint } = nextProps;
+    getSprint(selectedSprint && selectedSprint.id).then(issues => {
       this.setState({
         issueList: issues
       });
     });
+
+    this.setState({
+      notes: selectedSprint ? selectedSprint.notes : ""
+    });
   }
+
+  handleNotes = (event, { value }) => {
+    this.setState({
+      notes: value
+    });
+  };
+
+  handleSaveNotes = () => {
+    const { notes } = this.state;
+    updateNotes(notes, this.props.selectedSprint.id);
+    this.props.update(notes);
+  };
+
+  renderTextArea = () => {
+    return (
+      <TextArea
+        onChange={this.handleNotes}
+        style={{ minHeight: 150 }}
+        placeholder="Sprint notes..."
+        value={this.state.notes}
+      />
+    );
+  };
 
   renderIssue = issue => {
     const {
@@ -38,8 +66,6 @@ class IssueTable extends Component {
       project_id,
       blocked
     } = issue;
-    const { projects } = this.props;
-    console.log(projects);
     return (
       <Table.Row key={id}>
         <Table.Cell collapsing>{name}</Table.Cell>
@@ -72,9 +98,13 @@ class IssueTable extends Component {
 
   render() {
     const { issueList } = this.state;
+    const { selectedSprint } = this.props;
 
     return (
-      <div className="Table">
+      <div>
+        <Header floated="left" as="h2">
+          {selectedSprint && selectedSprint.name}
+        </Header>
         <Table celled size="large" compact>
           <Table.Header>
             <Table.Row>
@@ -89,6 +119,15 @@ class IssueTable extends Component {
 
           <Table.Body>{issueList.map(this.renderIssue)}</Table.Body>
         </Table>
+        <Form textAlign="left">
+          <Form.Field control={this.renderTextArea} label="Notes" />
+        </Form>
+        <br />
+        <div className="Right">
+          <Button color="green" onClick={this.handleSaveNotes}>
+            Save notes
+          </Button>
+        </div>
       </div>
     );
   }

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./SprintModal.css";
-import { Grid, Button, Modal, Input, Form } from "semantic-ui-react";
+import { Icon, Grid, Button, Modal, Input, Form } from "semantic-ui-react";
 import ReactDatePicker from "react-datepicker";
 
 import { createSprint } from "../../utils/api/api";
@@ -29,10 +29,11 @@ class SprintModal extends Component {
       modalOpen: true
     });
 
-  handleClose = () =>
+  handleClose = event => {
     this.setState({
-      modalOpen: false
+      modalOpen: event instanceof MouseEvent ? true : false
     });
+  };
 
   handleValidate = () => {
     const { name, startDate, endDate } = this.state;
@@ -61,8 +62,8 @@ class SprintModal extends Component {
     const { startDate, endDate, name } = this.state;
     const requestObj = {
       name,
-      startDate: startDate.format("L"),
-      endDate: endDate.format("L")
+      startDate: startDate.format("MM/DD/YY"),
+      endDate: endDate.format("MM/DD/YY")
     };
     createSprint(requestObj);
     this.handleClose();
@@ -117,8 +118,9 @@ class SprintModal extends Component {
         onClose={this.handleClose}
         open={modalOpen}
         trigger={
-          <Button onClick={this.handleOpen} primary>
+          <Button icon labelPosition="left" onClick={this.handleOpen} primary>
             New Sprint
+            <Icon name="plus" />
           </Button>
         }
       >
