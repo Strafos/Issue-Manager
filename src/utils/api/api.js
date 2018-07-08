@@ -31,22 +31,18 @@ export const createIssue = async requestObj => {
   // return body;
 };
 
-// export const createProject = async requestObj => {
-//   const response = await fetch("/createProject", {
-//     method: "POST",
-//     headers: {
-//       Accept: "application/json",
-//       "Content-Type": "application/json"
-//     },
-//     body: JSON.stringify(requestObj)
-//   });
-//   // const body = await response.json();
+export const createProject = async requestObj => {
+  const response = await fetch("/createProject", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(requestObj)
+  });
 
-//   // if (response.status !== 200) throw Error(body.message);
-
-//   return await response;
-//   // return body;
-// };
+  return await response;
+};
 
 export const getSprints = () => {
   return fetch("/getSprints", {
@@ -125,9 +121,10 @@ export const setTime = (id, stat, time) => {
 
 export default {
   createSprint,
+  createIssue,
+  createProject,
   getSprints,
   getSprint,
-  createIssue,
-  setStatus,
-  getProjects
+  getProjects,
+  setStatus
 };

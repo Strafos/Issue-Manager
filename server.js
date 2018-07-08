@@ -82,15 +82,22 @@ app.put("/setTime/:id", (req, res) => {
   res.send({ dbconn: "Success" });
 });
 
-// app.post("/getProjects", (req, res) => {
-//   const query = `SELECT * FROM projects`;
-//   db.read(query)
-//     .then(response => {
-//       res.send(response);
-//     })
-//     .catch(err => {
-//       console.log(err);
-//     });
-// });
+app.post("/createProject", (req, res) => {
+  const { name } = req.body;
+  const query = `INSERT INTO projects values(null, "${name}")`;
+  db.insert(query);
+  res.send({ dbconn: "Success" });
+});
+
+app.post("/getProjects", (req, res) => {
+  const query = `SELECT * FROM projects`;
+  db.read(query)
+    .then(response => {
+      res.send(response);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

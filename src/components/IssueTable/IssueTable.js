@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import "./IssueTable.css";
-import { Table, Icon, Label, Menu } from "semantic-ui-react";
-import SprintDropDown from "../SprintDropDown/SprintDropDown";
+import { Table } from "semantic-ui-react";
 
 import Status from "../Status/Status";
 import TimeCounter from "../TimeCounter/TimeCounter";
@@ -11,6 +10,12 @@ import { getSprint } from "../../utils/api/api";
 class IssueTable extends Component {
   state = {
     issueList: []
+  };
+
+  mapProjectId = id => {
+    const { projects } = this.props;
+    const project = projects.find(proj => proj.id === id);
+    return project ? project.name : "";
   };
 
   componentWillReceiveProps(nextProps) {
@@ -33,10 +38,12 @@ class IssueTable extends Component {
       project_id,
       blocked
     } = issue;
+    const { projects } = this.props;
+    console.log(projects);
     return (
       <Table.Row key={id}>
         <Table.Cell collapsing>{name}</Table.Cell>
-        <Table.Cell collapsing>{project_id}</Table.Cell>
+        <Table.Cell collapsing>{this.mapProjectId(project_id)}</Table.Cell>
         <Table.Cell collapsing>
           <Status issueId={id} blocked={blocked === "true"} status={status} />
         </Table.Cell>

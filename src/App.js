@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import "./App.css";
-import { Button, Modal, Dropdown, Form } from "semantic-ui-react";
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -8,13 +7,9 @@ import SprintModal from "./components/SprintModal/SprintModal";
 import SprintDropDown from "./components/SprintDropDown/SprintDropDown";
 import IssueModal from "./components/IssueModal/IssueModal";
 import IssueTable from "./components/IssueTable/IssueTable";
+import ProjectModal from "./components/ProjectModal/ProjectModal";
 
-import {
-  createSprint,
-  createIssue,
-  getSprints,
-  getProjects
-} from "./utils/api/api";
+import { getSprints, getProjects } from "./utils/api/api";
 
 class App extends Component {
   state = {
@@ -29,6 +24,9 @@ class App extends Component {
   };
 
   componentDidMount() {
+    getProjects().then(projects => {
+      this.setState({ projects });
+    });
     getSprints().then(sprints => {
       this.setState({ sprints });
       this.setState({
@@ -39,15 +37,19 @@ class App extends Component {
   }
 
   render() {
-    const { sprints, selectedSprint } = this.state;
+    const { sprints, projects, selectedSprint } = this.state;
 
     return (
       <div className="App">
         <SprintModal sprints={sprints} />
-        <ProjectModal sprints={sprints} />
-        <IssueModal sprints={sprints} sprintId={selectedSprint} />
+        <ProjectModal sprints={sprints} projects={projects} />
+        <IssueModal
+          projects={projects}
+          sprints={sprints}
+          sprintId={selectedSprint}
+        />
         <SprintDropDown sprints={sprints} onChange={this.handleSprintSelect} />
-        <IssueTable sprintId={selectedSprint || 0} />
+        <IssueTable projects={projects} sprintId={selectedSprint || 0} />
       </div>
     );
   }

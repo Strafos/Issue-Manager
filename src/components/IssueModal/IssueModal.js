@@ -1,15 +1,16 @@
 import React, { Component } from "react";
 import "./IssueModal.css";
 import { Button, Modal, Input, Form } from "semantic-ui-react";
-import SprintDropDown from "../SprintDropDown/SprintDropDown";
 
 import { createIssue } from "../../utils/api/api";
+import ProjectDropDown from "../ProjectDropDown/ProjectDropDown";
+import SprintDropDown from "../SprintDropDown/SprintDropDown";
 
 class IssueModal extends Component {
   state = {
     name: "",
     timeEstimate: 0,
-    projectId: null,
+    projectId: 0,
     sprintId: 0,
     modalOpen: false
   };
@@ -39,6 +40,12 @@ class IssueModal extends Component {
   handleSprintSelect = (event, { value }) => {
     this.setState({
       sprintId: value
+    });
+  };
+
+  handleProjectSelect = (event, { value }) => {
+    this.setState({
+      projectId: value
     });
   };
 
@@ -85,7 +92,7 @@ class IssueModal extends Component {
         open={modalOpen}
         trigger={
           <Button onClick={this.handleOpen} primary>
-            Create new issue
+            New issue
           </Button>
         }
         className="Modal"
@@ -108,13 +115,13 @@ class IssueModal extends Component {
             <label>Time Est.</label>
             <Input size="tiny" type="text" onChange={this.handleTime} />
           </Form.Field>
-          {/* <Form.Field inline>
+          <Form.Field inline>
             <label>Project</label>
-            <SprintDropDown
-              sprints={sprints}
-              // onChange={this.handleSprintSelect}
+            <ProjectDropDown
+              projects={projects}
+              onChange={this.handleProjectSelect}
             />
-          </Form.Field> */}
+          </Form.Field>
           <Button
             onClick={this.handleSubmit}
             disabled={this.handleValidate()}

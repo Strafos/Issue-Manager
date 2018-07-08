@@ -119,7 +119,7 @@ class SprintModal extends Component {
         open={modalOpen}
         trigger={
           <Button onClick={this.handleOpen} primary>
-            Create new sprint
+            New Sprint
           </Button>
         }
       >
