@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./IssueModal.css";
-import { Button, Modal, Input, Form } from "semantic-ui-react";
+import { Icon, Button, Modal, Input, Form } from "semantic-ui-react";
 
 import { createIssue } from "../../utils/api/api";
 import ProjectDropDown from "../ProjectDropDown/ProjectDropDown";
@@ -83,7 +83,8 @@ class IssueModal extends Component {
         onClose={this.handleClose}
         open={modalOpen}
         trigger={
-          <Button onClick={this.handleOpen} primary>
+          <Button icon labelPosition="right" onClick={this.handleOpen} primary>
+            <Icon name="plus" />
             New issue
           </Button>
         }
