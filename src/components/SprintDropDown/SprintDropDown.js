@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { Dropdown } from "semantic-ui-react";
 
-import "react-datepicker/dist/react-datepicker.css";
-
 class SprintDropDown extends Component {
   sprintOptions = sprints =>
     sprints.map(sprint => {
