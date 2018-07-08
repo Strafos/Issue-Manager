@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import "./SprintModal.css";
-import { Button, Modal, Input, Form } from "semantic-ui-react";
+import { Grid, Button, Modal, Input, Form } from "semantic-ui-react";
 import ReactDatePicker from "react-datepicker";
-import moment from "moment";
 
-import createSprint from "../../utils/api/api";
+import { createSprint } from "../../utils/api/api";
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -17,7 +16,7 @@ class SprintModal extends Component {
   };
 
   padding = {
-    padding: "10px",
+    padding: "5px",
     textAlign: "center"
   };
 
@@ -40,7 +39,7 @@ class SprintModal extends Component {
     return name.length === 0 || startDate === null || endDate === null;
   };
 
-  handleChangeStartDate = date => {
+  handleChangeStartDate = (date, foo) => {
     this.setState({
       startDate: date
     });
@@ -62,15 +61,55 @@ class SprintModal extends Component {
     const { startDate, endDate, name } = this.state;
     const requestObj = {
       name,
-      startDate,
-      endDate
+      startDate: startDate.format("L"),
+      endDate: endDate.format("L")
     };
     createSprint(requestObj);
     this.handleClose();
   };
 
+  quickCreate = weeksAdv => {
+    const startDate = this.futureMonday(weeksAdv);
+    const name = `${startDate} Sprint`;
+    const requestObj = {
+      name,
+      startDate,
+      endDate: this.futureMonday(weeksAdv + 1)
+    };
+    createSprint(requestObj);
+    this.handleClose();
+  };
+
+  futureMonday = weeksAdv => {
+    const d = new Date();
+    d.setDate(d.getDate() + (weeksAdv - 1) * 7 + ((1 + 7 - d.getDay()) % 7));
+    const options = { month: "2-digit", day: "2-digit", year: "2-digit" };
+    return d.toLocaleDateString("en-US", options);
+  };
+
+  renderQuickCreate = weeksAdv => {
+    const { sprints } = this.props;
+    return (
+      <Button
+        onClick={() => this.quickCreate(weeksAdv)}
+        style={this.padding}
+        color={weeksAdv === 1 ? "blue" : "red"}
+        disabled={
+          sprints &&
+          sprints.find(
+            sprint => sprint.name === `${this.futureMonday(weeksAdv)} Sprint`
+          )
+        }
+      >
+        {"Quick Create: " + this.futureMonday(weeksAdv)}
+      </Button>
+    );
+  };
+
   render() {
     const { name, startDate, endDate, modalOpen } = this.state;
+    const { sprints } = this.props;
+
     return (
       <Modal
         size="mini"
@@ -85,32 +124,42 @@ class SprintModal extends Component {
         }
       >
         <Modal.Header className="ModalHeader">Create Sprint</Modal.Header>
-        <Form className="ModalForm">
-          <Form.Field>
-            <label>Sprint Name</label>
-            <Input size="tiny" type="text" onChange={this.handleName} />
-          </Form.Field>
-          <Form.Field inline>
-            <ReactDatePicker
-              selected={startDate}
-              onChange={this.handleChangeStartDate}
-            />
-          </Form.Field>
-          <Form.Field inline>
-            <ReactDatePicker
-              selected={endDate}
-              onChange={this.handleChangeEndDate}
-            />
-          </Form.Field>
-          <Button
-            onClick={this.handleSubmit}
-            disabled={this.handleValidate()}
-            style={this.padding}
-            color="green"
-          >
-            Create Sprint
-          </Button>
-        </Form>
+        <Grid columns={2} divided>
+          <Grid.Column width={9}>
+            <Form className="ModalForm">
+              <Form.Field>
+                <label>Sprint Name</label>
+                <Input size="tiny" type="text" onChange={this.handleName} />
+              </Form.Field>
+              <Form.Field inline>
+                <ReactDatePicker
+                  selected={startDate}
+                  onChange={this.handleChangeStartDate}
+                />
+              </Form.Field>
+              <Form.Field inline>
+                <ReactDatePicker
+                  selected={endDate}
+                  onChange={this.handleChangeEndDate}
+                />
+              </Form.Field>
+              <Button
+                onClick={this.handleSubmit}
+                disabled={this.handleValidate()}
+                style={this.padding}
+                color="green"
+              >
+                Create Sprint
+              </Button>
+            </Form>
+          </Grid.Column>
+          <Grid.Column verticalAlign="middle" width={7}>
+            {this.renderQuickCreate(1)}
+            <br />
+            <br />
+            {this.renderQuickCreate(2)}
+          </Grid.Column>
+        </Grid>
       </Modal>
     );
   }
