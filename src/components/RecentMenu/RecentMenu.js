@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./RecentMenu.css";
 import { Menu, Grid, Button, Modal, Input, Form } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -13,6 +14,7 @@ class RecentMenu extends Component {
         index={sprint.id}
         active={selectedSprint && selectedSprint.name === sprint.name}
         onClick={this.props.handleSprintMenuClick}
+        // href="/"
       />
     );
   };
