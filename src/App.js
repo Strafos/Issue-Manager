@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import "./App.css";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+
+import { Link } from "react-router-dom";
 
 import {
   Menu,
@@ -20,6 +23,7 @@ import RecentMenu from "./components/RecentMenu/RecentMenu";
 import IssueModal from "./components/IssueModal/IssueModal";
 import IssueTable from "./components/IssueTable/IssueTable";
 import ProjectModal from "./components/ProjectModal/ProjectModal";
+import IssueDisplay from "./components/IssueDisplay/IssueDisplay";
 
 import { getSprints, getProjects } from "./utils/api/api";
 
@@ -27,6 +31,12 @@ class App extends Component {
   state = {
     sprints: [],
     selectedSprint: null
+  };
+
+  handleSprintIndex = index => {
+    this.setState({
+      selectedSprint: this.state.sprints.find(sprint => sprint.id === index)
+    });
   };
 
   handleSprintSelect = (event, { value }) => {
@@ -56,10 +66,10 @@ class App extends Component {
     });
     getSprints().then(sprints => {
       this.setState({ sprints });
-      this.setState({
-        selectedSprint:
-          sprints && sprints.length > 0 ? this.selectSprint(sprints) : null
-      });
+      // this.setState({
+      //   selectedSprint:
+      //     sprints && sprints.length > 0 ? this.selectSprint(sprints) : null
+      // });
     });
   }
 
@@ -71,61 +81,101 @@ class App extends Component {
     });
   };
 
+  updateComponent = () => {
+    this.forceUpdate();
+  };
+
+  renderIssueTable = () => {
+    const { projects, selectedSprint } = this.state;
+
+    return (
+      <IssueTable
+        projects={projects}
+        selectedSprint={selectedSprint}
+        sprintId={selectedSprint && selectedSprint.id}
+        update={this.updateNotes}
+      />
+    );
+  };
+
   render() {
     const { sprints, projects, selectedSprint } = this.state;
 
     return (
-      <div className="App">
-        <div className="foo">
-          <Header size="huge" as="h1">
-            <Icon name="trash alternate outline" />
-            Zaibo's Issue Manager
-          </Header>
-        </div>
-        <Grid columns={2} divided>
-          <Grid.Row />
-          <Grid.Row>
-            <GridColumn width={3}>
-              <Grid.Row>
+      <Router>
+        <div className="App">
+          {/* <nav>
+          <Link to="/test">Test</Link>
+        </nav> */}
+          <div className="foo">
+            <Header size="huge" as="h1">
+              <Icon name="trash alternate outline" />
+              Zaibo's Issue Manager
+            </Header>
+          </div>
+          <Grid columns={2} divided>
+            <Grid.Row />
+            <Grid.Row>
+              <GridColumn width={3}>
+                <Grid.Row>
+                  <br />
+                  <Button.Group color="green" vertical>
+                    <SprintModal sprints={sprints} />
+                    <ProjectModal sprints={sprints} projects={projects} />
+                    <IssueModal
+                      projects={projects}
+                      sprints={sprints}
+                      selectedSprint={selectedSprint}
+                      update={this.updateComponent}
+                    />
+                  </Button.Group>
+                </Grid.Row>
                 <br />
-                <Button.Group color="green" vertical>
-                  <SprintModal sprints={sprints} />
-                  <ProjectModal sprints={sprints} projects={projects} />
-                  <IssueModal
-                    projects={projects}
-                    sprints={sprints}
+                <Grid.Row>
+                  <RecentMenu
                     selectedSprint={selectedSprint}
+                    handleSprintMenuClick={this.handleSprintMenuClick}
+                    sprints={sprints}
                   />
-                </Button.Group>
-              </Grid.Row>
-              <br />
-              <Grid.Row>
-                <RecentMenu
-                  selectedSprint={selectedSprint}
-                  handleSprintMenuClick={this.handleSprintMenuClick}
-                  sprints={sprints}
+                </Grid.Row>
+                <br />
+                <Grid.Row>
+                  <SprintDropDown
+                    sprints={sprints}
+                    onChange={this.handleSprintSelect}
+                    simple={true}
+                  />
+                </Grid.Row>
+              </GridColumn>
+              <GridColumn width={13}>
+                <Route
+                  path="/sprint/:id?"
+                  render={props => {
+                    return (
+                      <IssueTable
+                        projects={projects}
+                        // selectedSprint={selectedSprint}
+                        sprintId={selectedSprint && selectedSprint.id}
+                        update={this.updateNotes}
+                        updateSprint={this.handleSprintIndex}
+                        sprints={sprints}
+                        {...props}
+                      />
+                    );
+                  }}
                 />
-              </Grid.Row>
-              <br />
-              <Grid.Row>
-                <SprintDropDown
-                  sprints={sprints}
-                  onChange={this.handleSprintSelect}
-                  simple={true}
+                <Route path="/issue/:id?" component={IssueDisplay} />
+                <Route
+                  path="/issue/:id?"
+                  render={props => {
+                    return <IssueDisplay {...props} />;
+                  }}
                 />
-              </Grid.Row>
-            </GridColumn>
-            <GridColumn width={13}>
-              <IssueTable
-                projects={projects}
-                selectedSprint={selectedSprint}
-                sprintId={selectedSprint && selectedSprint.id}
-                update={this.updateNotes}
-              />
-            </GridColumn>
-          </Grid.Row>
-        </Grid>
-      </div>
+              </GridColumn>
+            </Grid.Row>
+          </Grid>
+        </div>
+      </Router>
     );
   }
 }

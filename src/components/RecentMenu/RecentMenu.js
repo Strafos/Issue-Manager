@@ -7,14 +7,14 @@ import "react-datepicker/dist/react-datepicker.css";
 
 class RecentMenu extends Component {
   renderSprints = sprint => {
-    const { selectedSprint } = this.props;
+    const { selectedSprint, foo } = this.props;
     return (
       <Menu.Item
         content={sprint.name}
         index={sprint.id}
         active={selectedSprint && selectedSprint.name === sprint.name}
         onClick={this.props.handleSprintMenuClick}
-        // href="/"
+        href={`/sprint/${sprint.id}`}
       />
     );
   };

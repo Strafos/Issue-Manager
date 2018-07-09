@@ -19,16 +19,24 @@ class IssueTable extends Component {
     return project ? project.name : "";
   };
 
+  mapSprintId = id => {
+    const { sprints } = this.props;
+    const sprint = sprints.find(spr => spr.id === id);
+    return sprint;
+  };
+
   componentWillReceiveProps(nextProps) {
-    const { selectedSprint } = nextProps;
-    getSprint(selectedSprint && selectedSprint.id).then(issues => {
+    const { match, sprints } = nextProps;
+    const id = match.params.id;
+    getSprint(id).then(issues => {
       this.setState({
+        selectedSprint: sprints.find(spr => spr.id === id),
         issueList: issues
       });
     });
 
     this.setState({
-      notes: selectedSprint ? selectedSprint.notes : ""
+      notes: this.selectedSprint ? this.selectedSprint.notes : ""
     });
   }
 
@@ -39,8 +47,9 @@ class IssueTable extends Component {
   };
 
   handleSaveNotes = () => {
-    const { notes } = this.state;
-    updateNotes(notes, this.props.selectedSprint.id);
+    const { notes, selectedSprint } = this.state;
+    console.log(selectedSprint);
+    updateNotes(notes, selectedSprint.id);
     this.props.update(notes);
   };
 
@@ -97,8 +106,7 @@ class IssueTable extends Component {
   };
 
   render() {
-    const { issueList } = this.state;
-    const { selectedSprint } = this.props;
+    const { issueList, selectedSprint } = this.state;
 
     return (
       <div>
@@ -120,7 +128,7 @@ class IssueTable extends Component {
           <Table.Body>{issueList.map(this.renderIssue)}</Table.Body>
         </Table>
         <Form textAlign="left">
-          <Form.Field control={this.renderTextArea} label="Notes" />
+          <Form.Field control={this.renderTextArea} label="Sprint Notes" />
         </Form>
         <br />
         <div className="Right">

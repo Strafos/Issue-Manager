@@ -68,6 +68,7 @@ class IssueModal extends Component {
     };
     createIssue(requestObj);
     this.handleClose();
+    this.props.update();
   };
 
   render() {

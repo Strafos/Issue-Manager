@@ -56,6 +56,18 @@ app.post("/getSprint/:id", (req, res) => {
     });
 });
 
+app.post("/getIssue", (req, res) => {
+  const query = `SELECT * FROM issues where id=${req.params.id}`;
+  db.read(query)
+    .then(response => {
+      console.log(response);
+      res.send(response);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
 app.put("/setStatus/:id", (req, res) => {
   const { status } = req.body;
   const query = `UPDATE issues SET status="${status}" where id=${

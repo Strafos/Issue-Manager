@@ -80,6 +80,18 @@ export const getSprint = id => {
   });
 };
 
+export const getIssue = id => {
+  return fetch(`/getIssue/${id}`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    }
+  }).then(response => {
+    return response.json();
+  });
+};
+
 export const setStatus = (id, status) => {
   return fetch(`/setStatus/${id}`, {
     method: "PUT",
