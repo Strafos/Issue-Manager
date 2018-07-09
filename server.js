@@ -56,11 +56,10 @@ app.post("/getSprint/:id", (req, res) => {
     });
 });
 
-app.post("/getIssue", (req, res) => {
+app.post("/getIssue/:id", (req, res) => {
   const query = `SELECT * FROM issues where id=${req.params.id}`;
   db.read(query)
     .then(response => {
-      console.log(response);
       res.send(response);
     })
     .catch(err => {

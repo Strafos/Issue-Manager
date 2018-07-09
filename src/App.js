@@ -164,7 +164,6 @@ class App extends Component {
                     );
                   }}
                 />
-                <Route path="/issue/:id?" component={IssueDisplay} />
                 <Route
                   path="/issue/:id?"
                   render={props => {

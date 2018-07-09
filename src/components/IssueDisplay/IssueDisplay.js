@@ -14,27 +14,25 @@ class IssueDisplay extends Component {
 
   componentDidMount() {
     const issueId = this.props.match.params.id;
-    getIssue(issueId).then(issue => this.setState({ selectedIssue: issue }));
+    getIssue(issueId).then(issues =>
+      this.setState({ selectedIssue: issues[0] })
+    );
   }
 
   render() {
     const { selectedIssue } = this.state;
     console.log(selectedIssue);
+    console.log(selectedIssue && selectedIssue.name);
 
     return (
       <div>
         <Header floated="left" as="h2">
           {selectedIssue && selectedIssue.name}
         </Header>
-        <Form textAlign="left">
+        {/* <Form textAlign="left">
           <Form.Field control={this.renderTextArea} label="Notes" />
-        </Form>
+        </Form> */}
         <br />
-        <div className="Right">
-          <Button color="green" onClick={this.handleSaveNotes}>
-            Save notes
-          </Button>
-        </div>
       </div>
     );
   }
