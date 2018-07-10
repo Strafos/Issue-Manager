@@ -35,7 +35,7 @@ class App extends Component {
 
   handleSprintIndex = index => {
     this.setState({
-      selectedSprint: this.state.sprints.find(sprint => sprint.id === index)
+      selectedSprint: this.state.sprints.find(sprint => sprint.id == index)
     });
   };
 
@@ -66,10 +66,20 @@ class App extends Component {
     });
     getSprints().then(sprints => {
       this.setState({ sprints });
-      // this.setState({
-      //   selectedSprint:
-      //     sprints && sprints.length > 0 ? this.selectSprint(sprints) : null
-      // });
+      const path = window.location.pathname;
+      const pathRe = /\/(.*)\/(.*)/g;
+      const match = pathRe.exec(path);
+      // if (match) {
+      //   console.log(match);
+      //   console.log(match[2]);
+      //   const selectedSprint = sprints.find(sprint => sprint.id == match[2]);
+      //   console.log(selectedSprint);
+      // }
+      this.setState({
+        selectedSprint: match
+          ? sprints.find(sprint => sprint.id == match[2])
+          : null
+      });
     });
   }
 
@@ -104,9 +114,6 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
-          {/* <nav>
-          <Link to="/test">Test</Link>
-        </nav> */}
           <div className="foo">
             <Header size="huge" as="h1">
               <Icon name="trash alternate outline" />
@@ -167,7 +174,7 @@ class App extends Component {
                 <Route
                   path="/issue/:id?"
                   render={props => {
-                    return <IssueDisplay {...props} />;
+                    return <IssueDisplay sprints={sprints} {...props} />;
                   }}
                 />
               </GridColumn>

@@ -151,6 +151,7 @@ export default {
   getSprints,
   getSprint,
   getProjects,
+  getIssue,
   setStatus,
   updateNotes
 };

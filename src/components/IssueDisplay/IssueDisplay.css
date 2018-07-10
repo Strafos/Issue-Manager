@@ -9,6 +9,15 @@
   padding-right: 40px;
 }
 
+.Left {
+  text-align: left;
+  /* padding-left: 40px; */
+}
+
+.super {
+  vertical-align: super;
+}
+
 .Modal {
   padding: 20px;
 }
