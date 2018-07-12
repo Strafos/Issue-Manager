@@ -42,41 +42,51 @@ class Status extends Component {
     const { status, blocked } = this.state;
 
     return (
-      <Menu icon="labeled" compact size="mini">
-        <Menu.Item
-          name="In queue"
-          active={status === "In queue"}
-          onClick={this.handleItemClick}
-        >
-          <Icon name="clock" />
-        </Menu.Item>
+      <div>
+        <Menu icon="labeled" compact size="mini">
+          <Menu.Item
+            name="In queue"
+            active={status === "In queue"}
+            onClick={this.handleItemClick}
+          >
+            <Icon name="clock" />
+          </Menu.Item>
 
-        <Menu.Item
-          name="In progress"
-          active={status === "In progress"}
-          onClick={this.handleItemClick}
-        >
-          <Icon name="play" />
-        </Menu.Item>
-        <Menu.Item
-          name="Paused"
-          active={status === "Paused"}
-          onClick={this.handleItemClick}
-        >
-          <Icon name="pause" />
-        </Menu.Item>
+          <Menu.Item
+            name="In progress"
+            active={status === "In progress"}
+            onClick={this.handleItemClick}
+          >
+            <Icon name="play" />
+          </Menu.Item>
+          <Menu.Item
+            name="Paused"
+            active={status === "Paused"}
+            onClick={this.handleItemClick}
+          >
+            <Icon name="pause" />
+          </Menu.Item>
 
-        <Menu.Item
-          name="Done"
-          active={status === "Done"}
-          onClick={this.handleItemClick}
-        >
-          <Icon name="check" />
-        </Menu.Item>
-        <Menu.Item name="block" active={blocked} onClick={this.handleBlock}>
-          <Icon name="ban" />
-        </Menu.Item>
-      </Menu>
+          <Menu.Item
+            name="Done"
+            active={status === "Done"}
+            onClick={this.handleItemClick}
+          >
+            <Icon name="check" />
+          </Menu.Item>
+        </Menu>
+        {"     "}
+        <Menu icon="labeled" compact size="mini">
+          <Menu.Item
+            name="block"
+            color="red"
+            active={blocked}
+            onClick={this.handleBlock}
+          >
+            <Icon name="ban" />
+          </Menu.Item>
+        </Menu>
+      </div>
     );
   }
 }

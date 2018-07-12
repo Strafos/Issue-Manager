@@ -23,12 +23,8 @@ export const createIssue = async requestObj => {
     },
     body: JSON.stringify(requestObj)
   });
-  // const body = await response.json();
-
-  // if (response.status !== 200) throw Error(body.message);
 
   return await response;
-  // return body;
 };
 
 export const createProject = async requestObj => {
@@ -144,6 +140,31 @@ export const updateNotes = (notes, id) => {
   });
 };
 
+export const updateIssue = (requestObj, id) => {
+  return fetch(`/updateIssue/${id}`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(requestObj)
+  }).then(response => {
+    return response.json();
+  });
+};
+
+export const deleteIssue = id => {
+  return fetch(`/issue/${id}`, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    }
+  }).then(response => {
+    return response.json();
+  });
+};
+
 export default {
   createSprint,
   createIssue,
@@ -153,5 +174,6 @@ export default {
   getProjects,
   getIssue,
   setStatus,
-  updateNotes
+  updateNotes,
+  updateIssue
 };

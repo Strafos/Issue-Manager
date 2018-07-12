@@ -12,12 +12,13 @@ class ProjectDropDown extends Component {
     });
 
   render() {
-    const { projects, onChange } = this.props;
+    const { projects, value, onChange } = this.props;
     return (
       <Dropdown
         placeholder="Select Project"
         search
         selection
+        value={value}
         onChange={onChange}
         options={this.projectOptions(projects)}
       />

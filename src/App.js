@@ -30,6 +30,7 @@ import { getSprints, getProjects } from "./utils/api/api";
 class App extends Component {
   state = {
     sprints: [],
+    projects: [],
     selectedSprint: null
   };
 
@@ -69,12 +70,6 @@ class App extends Component {
       const path = window.location.pathname;
       const pathRe = /\/(.*)\/(.*)/g;
       const match = pathRe.exec(path);
-      // if (match) {
-      //   console.log(match);
-      //   console.log(match[2]);
-      //   const selectedSprint = sprints.find(sprint => sprint.id == match[2]);
-      //   console.log(selectedSprint);
-      // }
       this.setState({
         selectedSprint: match
           ? sprints.find(sprint => sprint.id == match[2])
@@ -114,7 +109,7 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
-          <div className="foo">
+          <div className="foo" alternative>
             <Header size="huge" as="h1">
               <Icon name="trash alternate outline" />
               Zaibo's Issue Manager
@@ -174,7 +169,13 @@ class App extends Component {
                 <Route
                   path="/issue/:id?"
                   render={props => {
-                    return <IssueDisplay sprints={sprints} {...props} />;
+                    return (
+                      <IssueDisplay
+                        projects={projects}
+                        sprints={sprints}
+                        {...props}
+                      />
+                    );
                   }}
                 />
               </GridColumn>

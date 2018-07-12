@@ -64,7 +64,8 @@ class IssueModal extends Component {
       timeRemaining: timeEstimate,
       status: "In queue", //In queue
       blocked: 0, // not blocked
-      projectId
+      projectId,
+      notes: ""
     };
     createIssue(requestObj);
     this.handleClose();
@@ -100,7 +101,7 @@ class IssueModal extends Component {
           <Form.Field inline>
             <label>Sprint</label>
             <SprintDropDown
-              defaultVal={selectedSprint && selectedSprint.id}
+              value={selectedSprint && selectedSprint.id}
               sprints={sprints}
               onChange={this.handleSprintSelect}
             />

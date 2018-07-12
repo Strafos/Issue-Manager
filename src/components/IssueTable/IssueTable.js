@@ -1,6 +1,7 @@
+import _ from "lodash";
 import React, { Component } from "react";
 import "./IssueTable.css";
-import { Button, Form, TextArea, Table, Header } from "semantic-ui-react";
+import { Icon, Button, Form, TextArea, Table, Header } from "semantic-ui-react";
 
 import Status from "../Status/Status";
 import TimeCounter from "../TimeCounter/TimeCounter";
@@ -9,8 +10,22 @@ import { getSprint, updateNotes } from "../../utils/api/api";
 
 class IssueTable extends Component {
   state = {
+    selectedSprint: null,
     issueList: [],
-    notes: ""
+    notes: "",
+    showNoteList: [],
+    totalTimeSpent: 0,
+    totalTimeRemaining: 0,
+    totalTimeEstimate: 0,
+    sortByColumn: null,
+    direction: null
+  };
+
+  statusMap = {
+    "In queue": 0,
+    "In progress": 1,
+    Paused: 2,
+    Done: 3
   };
 
   mapProjectId = id => {
@@ -29,16 +44,75 @@ class IssueTable extends Component {
     const { match, sprints } = nextProps;
     const id = match.params.id;
     getSprint(id).then(issues => {
-      this.setState({
-        selectedSprint: sprints.find(spr => spr.id === id),
-        issueList: issues
-      });
-    });
+      const selectedSprint = sprints.find(spr => spr.id == id);
+      const noteList = {};
+      issues.map(issue => (noteList[issue.id] = false));
 
-    this.setState({
-      notes: this.selectedSprint ? this.selectedSprint.notes : ""
+      // Issues, note toggle array, summing times for footer
+      this.setState({
+        selectedSprint,
+        issueList: issues,
+        showNoteList: noteList,
+        totalTimeEstimate: issues
+          .map(i => i.time_estimate)
+          .reduce((a, b) => a + b),
+        totalTimeSpent: issues.map(i => i.time_spent).reduce((a, b) => a + b),
+        totalTimeRemaining: issues
+          .map(i => i.time_remaining)
+          .reduce((a, b) => a + b)
+      });
+
+      // SPRINT notes
+      this.setState({
+        notes: selectedSprint ? selectedSprint.notes : ""
+      });
+
+      // Want to sort by status by default
+      this.handleStatusSort();
     });
   }
+
+  handleStatusSort = () => {
+    const { issueList } = this.state;
+    this.setState({
+      issueList: issueList.sort(
+        (a, b) => this.statusMap[a.status] - this.statusMap[b.status]
+      ),
+      direction: "ascending",
+      sortByColumn: "status"
+    });
+  };
+
+  handleSort = clickedColumn => () => {
+    const { sortByColumn, issueList, direction } = this.state;
+    if (sortByColumn !== clickedColumn) {
+      if (clickedColumn === "status") {
+        this.handleStatusSort();
+        return;
+      }
+
+      if (clickedColumn.includes("time")) {
+        this.setState({
+          sortByColumn: clickedColumn,
+          issueList: _.sortBy(issueList, [clickedColumn]).reverse(),
+          direction: "ascending"
+        });
+      }
+
+      this.setState({
+        sortByColumn: clickedColumn,
+        issueList: _.sortBy(issueList, [clickedColumn]),
+        direction: "descending"
+      });
+
+      return;
+    }
+
+    this.setState({
+      issueList: issueList.reverse(),
+      direction: direction === "ascending" ? "descending" : "ascending"
+    });
+  };
 
   handleNotes = (event, { value }) => {
     this.setState({
@@ -48,9 +122,16 @@ class IssueTable extends Component {
 
   handleSaveNotes = () => {
     const { notes, selectedSprint } = this.state;
-    console.log(selectedSprint);
     updateNotes(notes, selectedSprint.id);
     this.props.update(notes);
+  };
+
+  handleShowNotes = id => {
+    const { showNoteList } = this.state;
+    showNoteList[id] = !showNoteList[id];
+    this.setState({
+      showNoteList
+    });
   };
 
   renderTextArea = () => {
@@ -64,75 +145,150 @@ class IssueTable extends Component {
     );
   };
 
+  renderName = (name, id) => (
+    <div>
+      {name}
+      <a href={`/issue/${id}`}>
+        <Icon className="super" name="plus" size="small" />
+      </a>
+    </div>
+  );
+
   renderIssue = issue => {
     const {
-      id,
       name,
+      id,
       status,
       time_spent,
       time_estimate,
       time_remaining,
       project_id,
-      blocked
+      blocked,
+      notes
     } = issue;
+
     return (
-      <Table.Row key={id}>
-        <Table.Cell collapsing>{name}</Table.Cell>
-        <Table.Cell collapsing>{this.mapProjectId(project_id)}</Table.Cell>
-        <Table.Cell collapsing>
-          <Status issueId={id} blocked={blocked === "true"} status={status} />
-        </Table.Cell>
-        <Table.Cell textAlign="left" collapsing>
-          <TimeCounter
-            issueId={id}
-            inc={true}
-            stat="time_spent"
-            time={time_spent}
-          />
-        </Table.Cell>
-        <Table.Cell textAlign="right" collapsing>
-          <TimeCounter
-            issueId={id}
-            inc={false}
-            stat="time_remaining"
-            time={time_remaining}
-          />
-        </Table.Cell>
-        <Table.Cell textAlign="right" collapsing>
-          {time_estimate}
-        </Table.Cell>
-      </Table.Row>
+      <Table.Body>
+        <Table.Row key={id}>
+          <Table.Cell onClick={() => this.handleShowNotes(id)} collapsing>
+            {this.renderName(name, id)}
+          </Table.Cell>
+          <Table.Cell onClick={() => this.handleShowNotes(id)} collapsing>
+            {this.mapProjectId(project_id)}
+          </Table.Cell>
+          <Table.Cell collapsing>
+            <Status issueId={id} blocked={blocked === "true"} status={status} />
+          </Table.Cell>
+          <Table.Cell textAlign="center" collapsing>
+            <TimeCounter
+              issueId={id}
+              inc={true}
+              stat="time_spent"
+              time={time_spent}
+            />
+          </Table.Cell>
+          <Table.Cell textAlign="center" collapsing>
+            <TimeCounter
+              issueId={id}
+              inc={false}
+              stat="time_remaining"
+              time={time_remaining}
+            />
+          </Table.Cell>
+          <Table.Cell
+            onClick={() => this.handleShowNotes(id)}
+            textAlign="center"
+            collapsing
+          >
+            {time_estimate}
+          </Table.Cell>
+        </Table.Row>
+        {this.state.showNoteList[id] && (
+          <Table.Row>
+            <Table.Cell colSpan="6">
+              <label className="bold">Notes: </label>
+              <div className="linebreak">{notes}</div>
+            </Table.Cell>
+          </Table.Row>
+        )}
+      </Table.Body>
     );
   };
 
   render() {
-    const { issueList, selectedSprint } = this.state;
+    const {
+      issueList,
+      selectedSprint,
+      totalTimeSpent,
+      totalTimeRemaining,
+      totalTimeEstimate
+    } = this.state;
 
     return (
       <div>
         <Header floated="left" as="h2">
           {selectedSprint && selectedSprint.name}
         </Header>
-        <Table celled size="large" compact>
+        <Table sortable celled size="large" compact>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell width={1}>Name</Table.HeaderCell>
-              <Table.HeaderCell width={1}>Project</Table.HeaderCell>
-              <Table.HeaderCell width={1}>Status</Table.HeaderCell>
-              <Table.HeaderCell width={1}>Time Spent</Table.HeaderCell>
-              <Table.HeaderCell width={1}>Time Remaining</Table.HeaderCell>
-              <Table.HeaderCell width={1}>Time Estimate</Table.HeaderCell>
+              <Table.HeaderCell onClick={this.handleSort("name")} width={1}>
+                Name
+              </Table.HeaderCell>
+              <Table.HeaderCell
+                onClick={this.handleSort("project_id")}
+                width={1}
+              >
+                Project
+              </Table.HeaderCell>
+              <Table.HeaderCell onClick={this.handleSort("status")} width={1}>
+                Status
+              </Table.HeaderCell>
+              <Table.HeaderCell
+                onClick={this.handleSort("time_spent")}
+                width={1}
+              >
+                Time Spent
+              </Table.HeaderCell>
+              <Table.HeaderCell
+                onClick={this.handleSort("time_remaining")}
+                width={1}
+              >
+                Time Remaining
+              </Table.HeaderCell>
+              <Table.HeaderCell
+                onClick={this.handleSort("time_estimate")}
+                width={1}
+              >
+                Time Estimate
+              </Table.HeaderCell>
             </Table.Row>
           </Table.Header>
-
-          <Table.Body>{issueList.map(this.renderIssue)}</Table.Body>
+          {issueList.map(this.renderIssue)}
+          <Table.Footer fullWidth>
+            <Table.Row>
+              <Table.HeaderCell colSpan="3" />
+              <Table.HeaderCell textAlign="center" colSpan="1">
+                {totalTimeSpent}
+                {" hours"}
+              </Table.HeaderCell>
+              <Table.HeaderCell textAlign="center" colSpan="1">
+                {totalTimeRemaining}
+                {" hours"}
+              </Table.HeaderCell>
+              <Table.HeaderCell textAlign="center" colSpan="1">
+                {totalTimeEstimate}
+                {" hours"}
+              </Table.HeaderCell>
+            </Table.Row>
+          </Table.Footer>
         </Table>
-        <Form textAlign="left">
+        <Form>
           <Form.Field control={this.renderTextArea} label="Sprint Notes" />
         </Form>
         <br />
-        <div className="Right">
-          <Button color="green" onClick={this.handleSaveNotes}>
+        <div>
+          <Button floated="left" color="green" onClick={this.handleSaveNotes}>
             Save notes
           </Button>
         </div>

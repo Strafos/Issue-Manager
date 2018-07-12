@@ -23,13 +23,14 @@ app.post("/createIssue", (req, res) => {
     timeRemaining,
     status,
     blocked,
-    projectId
+    projectId,
+    notes
   } = req.body;
   const query =
     `INSERT INTO issues values(null, ` +
     `${sprintId}, "${name}", "${status}", ` +
     `${timeEstimate}, ${timeRemaining}, ` +
-    `${projectId}, "${blocked}", ${timeSpent})`;
+    `${projectId}, "${blocked}", ${timeSpent}, "${notes}")`;
   db.insert(query);
   res.send({ dbconn: "Success" });
 });
@@ -75,12 +76,6 @@ app.put("/setStatus/:id", (req, res) => {
   db.insert(query);
 });
 
-app.put("/updateNotes/:id", (req, res) => {
-  const { notes } = req.body;
-  const query = `UPDATE sprints SET notes="${notes}" where id=${req.params.id}`;
-  db.insert(query);
-});
-
 app.put("/setBlocked/:id", (req, res) => {
   const { blocked } = req.body;
   const query = `UPDATE issues SET blocked="${blocked}" where id=${
@@ -113,6 +108,37 @@ app.post("/getProjects", (req, res) => {
     .catch(err => {
       console.log(err);
     });
+});
+
+app.put("/updateNotes/:id", (req, res) => {
+  const { notes } = req.body;
+  const query = `UPDATE sprints SET notes="${notes}" where id=${req.params.id}`;
+  db.insert(query);
+});
+
+app.put("/updateIssue/:id", (req, res) => {
+  const {
+    name,
+    sprintId,
+    projectId,
+    status,
+    timeEstimate,
+    timeRemaining,
+    timeSpent,
+    blocked,
+    notes
+  } = req.body;
+  const query =
+    `UPDATE issues SET name="${name}", sprint_id=${sprintId}, project_id=${projectId}, ` +
+    `status="${status}", time_estimate=${timeEstimate}, time_remaining=${timeRemaining}, ` +
+    `time_spent=${timeSpent}, blocked="${blocked}", notes="${notes} "` +
+    `where id=${req.params.id}`;
+  db.insert(query);
+});
+
+app.delete("/issue/:id", (req, res) => {
+  const query = `DELETE FROM issues where id=${req.params.id}`;
+  db.insert(query);
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

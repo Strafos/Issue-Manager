@@ -20,3 +20,15 @@
 .Padding {
   padding: 10px;
 }
+
+.super {
+  vertical-align: super;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.linebreak {
+  white-space: pre-line;
+}

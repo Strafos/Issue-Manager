@@ -2,10 +2,6 @@ import React, { Component } from "react";
 import { Dropdown } from "semantic-ui-react";
 
 class SprintDropDown extends Component {
-  state = {
-    defaultVal: 0
-  };
-
   sprintOptions = sprints =>
     sprints.map(sprint => {
       return {
@@ -15,20 +11,13 @@ class SprintDropDown extends Component {
       };
     });
 
-  // componentWillReceiveProps(nextProps) {
-  //   this.setState({
-  //     defaultVal: nextProps.defaultVal
-  //   });
-  // }
-
   render() {
-    // const { defaultVal } = this.state;
-    const { sprints, onChange, simple, defaultVal } = this.props;
+    const { sprints, onChange, simple, value } = this.props;
     return (
       <Dropdown
         placeholder="Select Sprint"
         selection
-        defaultValue={defaultVal}
+        value={value}
         item
         simple={simple}
         onChange={onChange}
