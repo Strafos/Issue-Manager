@@ -22,3 +22,6 @@ yarn-error.log*
 
 /db
 .vscode/
+
+forest-themes/
+src/semantic*

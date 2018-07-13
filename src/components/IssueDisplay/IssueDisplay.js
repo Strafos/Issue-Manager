@@ -8,7 +8,7 @@ import {
   Button,
   Form,
   TextArea,
-  Table,
+  Message,
   Header,
   HeaderContent
 } from "semantic-ui-react";
@@ -35,7 +35,8 @@ class IssueDisplay extends Component {
     timeRemaining: 0,
     notes: "",
     blocked: "false",
-    modalOpen: false
+    modalOpen: false,
+    showMessage: false
   };
 
   componentDidMount() {
@@ -93,6 +94,9 @@ class IssueDisplay extends Component {
       blocked
     };
     updateIssue(requestObj, issueId);
+    this.setState({
+      showMessage: true
+    });
   };
 
   handleDelete = () => {
@@ -167,6 +171,12 @@ class IssueDisplay extends Component {
     });
   };
 
+  handleMessageClose = () => {
+    this.setState({
+      showMessage: false
+    });
+  };
+
   renderTextArea = () => {
     return (
       <TextArea
@@ -175,6 +185,14 @@ class IssueDisplay extends Component {
         placeholder="Issue notes..."
         value={this.state.notes}
       />
+    );
+  };
+
+  renderMessage = () => {
+    return (
+      <Message positive onDismiss={this.handleMessageClose}>
+        <Message.Header>Save successful :P</Message.Header>
+      </Message>
     );
   };
 
@@ -191,12 +209,14 @@ class IssueDisplay extends Component {
       timeSpent,
       notes,
       blocked,
-      modalOpen
+      modalOpen,
+      showMessage
     } = this.state;
     const { sprints, projects } = this.props;
 
     return (
       <div>
+        {showMessage && this.renderMessage()}
         <div className="Left">
           {editName ? (
             <Form>

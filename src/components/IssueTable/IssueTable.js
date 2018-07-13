@@ -42,7 +42,13 @@ class IssueTable extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { match, sprints } = nextProps;
-    const id = match.params.id;
+
+    const defaultSprint = this.getDefaultSprint(sprints);
+    const defaultSprintId = defaultSprint ? defaultSprint.id : null;
+
+    // If the id is part of the url params, use that, otherwise, display default sprint
+    const id = match.params.id ? match.params.id : defaultSprintId;
+
     getSprint(id).then(issues => {
       const selectedSprint = sprints.find(spr => spr.id == id);
       const noteList = {};
@@ -53,13 +59,15 @@ class IssueTable extends Component {
         selectedSprint,
         issueList: issues,
         showNoteList: noteList,
-        totalTimeEstimate: issues
-          .map(i => i.time_estimate)
-          .reduce((a, b) => a + b),
-        totalTimeSpent: issues.map(i => i.time_spent).reduce((a, b) => a + b),
-        totalTimeRemaining: issues
-          .map(i => i.time_remaining)
-          .reduce((a, b) => a + b)
+        totalTimeEstimate:
+          issues.length > 0 &&
+          issues.map(i => i.time_estimate).reduce((a, b) => a + b),
+        totalTimeSpent:
+          issues.length > 0 &&
+          issues.map(i => i.time_spent).reduce((a, b) => a + b),
+        totalTimeRemaining:
+          issues.length > 0 &&
+          issues.map(i => i.time_remaining).reduce((a, b) => a + b)
       });
 
       // SPRINT notes
@@ -71,6 +79,15 @@ class IssueTable extends Component {
       this.handleStatusSort();
     });
   }
+
+  getDefaultSprint = sprints => {
+    const d = new Date();
+    d.setDate(d.getDate() + ((1 + 7 - d.getDay()) % 7) - 7); // Current Monday
+
+    const options = { month: "2-digit", day: "2-digit", year: "2-digit" };
+    const lastMonday = d.toLocaleDateString("en-US", options);
+    return sprints.find(sprint => sprint.start_date === lastMonday);
+  };
 
   handleStatusSort = () => {
     const { issueList } = this.state;
