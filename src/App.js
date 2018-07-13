@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
+// import "./semantic.darkly.min.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-
-import { Link } from "react-router-dom";
 
 import {
   Menu,
@@ -31,7 +30,8 @@ class App extends Component {
   state = {
     sprints: [],
     projects: [],
-    selectedSprint: null
+    selectedSprint: null,
+    defaultSprint: null
   };
 
   handleSprintIndex = index => {
@@ -50,15 +50,6 @@ class App extends Component {
     this.setState({
       selectedSprint: this.state.sprints.find(sprint => sprint.id === index)
     });
-  };
-
-  selectSprint = sprints => {
-    const d = new Date();
-    d.setDate(d.getDate() + ((1 + 7 - d.getDay()) % 7) - 7); // Current Monday
-
-    const options = { month: "2-digit", day: "2-digit", year: "2-digit" };
-    const lastMonday = d.toLocaleDateString("en-US", options);
-    return sprints.find(sprint => sprint.start_date === lastMonday);
   };
 
   componentDidMount() {
@@ -151,15 +142,26 @@ class App extends Component {
               </GridColumn>
               <GridColumn width={13}>
                 <Route
+                  exact
+                  path="/"
+                  render={props => {
+                    return (
+                      <IssueTable
+                        projects={projects}
+                        update={this.updateNotes}
+                        sprints={sprints}
+                        {...props}
+                      />
+                    );
+                  }}
+                />
+                <Route
                   path="/sprint/:id?"
                   render={props => {
                     return (
                       <IssueTable
                         projects={projects}
-                        // selectedSprint={selectedSprint}
-                        sprintId={selectedSprint && selectedSprint.id}
                         update={this.updateNotes}
-                        updateSprint={this.handleSprintIndex}
                         sprints={sprints}
                         {...props}
                       />
