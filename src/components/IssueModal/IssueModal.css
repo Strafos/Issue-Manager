@@ -1,6 +1,6 @@
 .ModalForm {
   padding: 20px;
-  text-align: center;
+  text-align: left;
 }
 
 .Modal {
@@ -13,4 +13,8 @@
 
 .Padding {
   padding: 10px;
+}
+
+.center {
+  text-align: center;
 }

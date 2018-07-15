@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./IssueModal.css";
-import { Icon, Button, Modal, Input, Form } from "semantic-ui-react";
+import { Container, Icon, Button, Modal, Input, Form } from "semantic-ui-react";
 
 import { createIssue } from "../../utils/api/api";
 import ProjectDropDown from "../ProjectDropDown/ProjectDropDown";
@@ -86,7 +86,7 @@ class IssueModal extends Component {
 
     return (
       <Modal
-        size="tiny"
+        size="mini"
         closeIcon
         centered
         onClose={this.handleClose}
@@ -99,31 +99,36 @@ class IssueModal extends Component {
         }
         className="Modal"
       >
-        <Modal.Header className="ModalHeader">Create Issue</Modal.Header>
-        <Form className="ModalForm">
-          <Form.Field inline>
-            <label>Issue Name</label>
-            <Input size="tiny" type="text" onChange={this.handleName} />
-          </Form.Field>
-          <Form.Field inline>
-            <label>Sprint</label>
-            <SprintDropDown
-              value={selectedSprint && selectedSprint.id}
-              sprints={sprints}
-              onChange={this.handleSprintSelect}
-            />
-          </Form.Field>
-          <Form.Field inline>
-            <label>Time Est.</label>
-            <Input size="tiny" type="text" onChange={this.handleTime} />
-          </Form.Field>
-          <Form.Field inline>
-            <label>Project</label>
-            <ProjectDropDown
-              projects={projects}
-              onChange={this.handleProjectSelect}
-            />
-          </Form.Field>
+        <Modal.Header textAlign="left">Create Issue</Modal.Header>
+        <Container textAlign="left">
+          <Form>
+            <Form.Field>
+              <label>Issue Name</label>
+              <Input size="tiny" type="text" onChange={this.handleName} />
+            </Form.Field>
+            <Form.Field>
+              <label>Sprint</label>
+              <SprintDropDown
+                value={selectedSprint && selectedSprint.id}
+                sprints={sprints}
+                onChange={this.handleSprintSelect}
+              />
+            </Form.Field>
+            <Form.Field>
+              <label>Time Est.</label>
+              <Input size="tiny" type="text" onChange={this.handleTime} />
+            </Form.Field>
+            <Form.Field>
+              <label>Project</label>
+              <ProjectDropDown
+                projects={projects}
+                onChange={this.handleProjectSelect}
+              />
+            </Form.Field>
+          </Form>
+        </Container>
+        <br />
+        <Container textAlign="center">
           <Button
             onClick={this.handleSubmit}
             disabled={this.handleValidate()}
@@ -132,7 +137,7 @@ class IssueModal extends Component {
           >
             Create Sprint
           </Button>
-        </Form>
+        </Container>
       </Modal>
     );
   }
