@@ -10,6 +10,12 @@ CREATE TABLE status (
  type text NOT NULL
 );
 
+CREATE TABLE recent_issues (
+  id integer PRIMARY KEY AUTOINCREMENT,
+  issue_id integer NOT NULL,
+  name text NOT NULL
+);
+
 INSERT INTO status values(null, "In queue");
 INSERT INTO status values(null, "In progress");
 INSERT INTO status values(null, "Paused");

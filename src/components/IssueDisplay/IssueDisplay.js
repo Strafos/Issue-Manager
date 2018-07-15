@@ -19,7 +19,12 @@ import TimeCounter from "../TimeCounter/TimeCounter";
 import SprintDropDown from "../SprintDropDown/SprintDropDown";
 import ProjectDropDown from "../ProjectDropDown/ProjectDropDown";
 
-import { getIssue, updateIssue, deleteIssue } from "../../utils/api/api";
+import {
+  getIssue,
+  addRecentIssue,
+  updateIssue,
+  deleteIssue
+} from "../../utils/api/api";
 
 class IssueDisplay extends Component {
   state = {
@@ -41,6 +46,7 @@ class IssueDisplay extends Component {
 
   componentDidMount() {
     const issueId = this.props.match.params.id;
+
     getIssue(issueId).then(issues => {
       const issue = issues[0];
       this.setState({
@@ -57,6 +63,7 @@ class IssueDisplay extends Component {
         notes: issue.notes,
         blocked: issue.blocked
       });
+      issueId && this.addRecentIssue(issueId, issue.name);
     });
   }
 
@@ -165,7 +172,6 @@ class IssueDisplay extends Component {
   };
 
   handleStatusChange = (event, { name }) => {
-    console.log(event);
     this.setState({
       status: name
     });
@@ -175,6 +181,11 @@ class IssueDisplay extends Component {
     this.setState({
       showMessage: false
     });
+  };
+
+  addRecentIssue = (id, name) => {
+    console.log("foo");
+    addRecentIssue(id, name);
   };
 
   renderTextArea = () => {
@@ -207,7 +218,6 @@ class IssueDisplay extends Component {
       timeEstimate,
       timeRemaining,
       timeSpent,
-      notes,
       blocked,
       modalOpen,
       showMessage
@@ -338,9 +348,6 @@ class IssueDisplay extends Component {
                 </Button>
               </Modal.Actions>
             </Modal>
-            {/* <Button onClick={this.handleDelete} color="red">
-              Delete Issue
-            </Button> */}
           </Grid.Column>
         </Grid>
       </div>

@@ -8,7 +8,7 @@ const insert = query => {
     if (err) {
       return console.log(err.message);
     }
-    console.log("Connected to sim.db");
+    // console.log("Connected to sim.db");
   });
 
   db.serialize(() => {
@@ -23,7 +23,7 @@ const insert = query => {
     if (err) {
       console.error(err.message);
     }
-    console.log("Close the database connection.");
+    // console.log("Close the database connection.");
   });
 };
 
@@ -32,7 +32,7 @@ const read = async query => {
     if (err) {
       return console.log(err.message);
     }
-    console.log("Connected to sim.db");
+    // console.log("Connected to sim.db");
   });
 
   const prom = new Promise((resolve, reject) => {
@@ -49,7 +49,7 @@ const read = async query => {
     if (err) {
       console.error(err.message);
     }
-    console.log("Close the database connection.");
+    // console.log("Close the database connection.");
   });
 
   return prom;

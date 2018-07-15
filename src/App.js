@@ -1,20 +1,11 @@
 import React, { Component } from "react";
 import "./App.css";
-// import "./semantic.darkly.min.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-import {
-  Menu,
-  TextArea,
-  Icon,
-  Header,
-  Button,
-  Grid,
-  GridColumn,
-  GridRow,
-  Form
-} from "semantic-ui-react";
+import { Icon, Header, Button, Grid } from "semantic-ui-react";
 import "react-datepicker/dist/react-datepicker.css";
+
+import "./semantic/dist/semantic.min.css";
 
 import SprintModal from "./components/SprintModal/SprintModal";
 import SprintDropDown from "./components/SprintDropDown/SprintDropDown";
@@ -24,14 +15,15 @@ import IssueTable from "./components/IssueTable/IssueTable";
 import ProjectModal from "./components/ProjectModal/ProjectModal";
 import IssueDisplay from "./components/IssueDisplay/IssueDisplay";
 
-import { getSprints, getProjects } from "./utils/api/api";
+import { getSprints, getProjects, getRecentIssues } from "./utils/api/api";
 
 class App extends Component {
   state = {
     sprints: [],
     projects: [],
     selectedSprint: null,
-    defaultSprint: null
+    defaultSprint: null,
+    recentIssues: null
   };
 
   handleSprintIndex = index => {
@@ -52,7 +44,18 @@ class App extends Component {
     });
   };
 
+  handleIssueMenuClick = (event, { index }) => {
+    this.setState({
+      selectedIssue: index
+    });
+  };
+
   componentDidMount() {
+    getRecentIssues().then(issues => {
+      this.setState({
+        recentIssues: issues
+      });
+    });
     getProjects().then(projects => {
       this.setState({ projects });
     });
@@ -61,13 +64,28 @@ class App extends Component {
       const path = window.location.pathname;
       const pathRe = /\/(.*)\/(.*)/g;
       const match = pathRe.exec(path);
-      this.setState({
-        selectedSprint: match
-          ? sprints.find(sprint => sprint.id == match[2])
-          : null
-      });
+      if (match && match[1] === "sprint") {
+        this.setState({
+          selectedSprint: match
+            ? sprints.find(sprint => sprint.id == match[2])
+            : this.getDefaultSprint(sprints)
+        });
+      } else if (match && match[1] === "issue") {
+        this.setState({
+          selectedIssue: match[2]
+        });
+      }
     });
   }
+
+  getDefaultSprint = sprints => {
+    const d = new Date();
+    d.setDate(d.getDate() + ((1 + 7 - d.getDay()) % 7) - 7); // Current Monday
+
+    const options = { month: "2-digit", day: "2-digit", year: "2-digit" };
+    const lastMonday = d.toLocaleDateString("en-US", options);
+    return sprints.find(sprint => sprint.start_date === lastMonday);
+  };
 
   updateNotes = notes => {
     const { selectedSprint } = this.state;
@@ -95,21 +113,29 @@ class App extends Component {
   };
 
   render() {
-    const { sprints, projects, selectedSprint } = this.state;
+    const {
+      sprints,
+      projects,
+      selectedSprint,
+      recentIssues,
+      selectedIssue
+    } = this.state;
 
     return (
       <Router>
         <div className="App">
           <div className="foo" alternative>
             <Header size="huge" as="h1">
-              <Icon name="trash alternate outline" />
+              <a href={"/"}>
+                <Icon name="trash alternate outline" />
+              </a>
               Zaibo's Issue Manager
             </Header>
           </div>
           <Grid columns={2} divided>
             <Grid.Row />
             <Grid.Row>
-              <GridColumn width={3}>
+              <Grid.Column width={3}>
                 <Grid.Row>
                   <br />
                   <Button.Group color="green" vertical>
@@ -125,11 +151,16 @@ class App extends Component {
                 </Grid.Row>
                 <br />
                 <Grid.Row>
-                  <RecentMenu
-                    selectedSprint={selectedSprint}
-                    handleSprintMenuClick={this.handleSprintMenuClick}
-                    sprints={sprints}
-                  />
+                  <div className="center">
+                    <RecentMenu
+                      selectedSprint={selectedSprint}
+                      selectedIssue={selectedIssue}
+                      handleSprintMenuClick={this.handleSprintMenuClick}
+                      handleIssueMenuClick={this.handleIssueMenuClick}
+                      sprints={sprints}
+                      recentIssues={recentIssues}
+                    />
+                  </div>
                 </Grid.Row>
                 <br />
                 <Grid.Row>
@@ -139,8 +170,8 @@ class App extends Component {
                     simple={true}
                   />
                 </Grid.Row>
-              </GridColumn>
-              <GridColumn width={13}>
+              </Grid.Column>
+              <Grid.Column width={13}>
                 <Route
                   exact
                   path="/"
@@ -180,7 +211,7 @@ class App extends Component {
                     );
                   }}
                 />
-              </GridColumn>
+              </Grid.Column>
             </Grid.Row>
           </Grid>
         </div>

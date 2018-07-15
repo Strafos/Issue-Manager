@@ -19,6 +19,11 @@
   padding: 10px;
 }
 
+.center {
+  margin: auto;
+  width: 85%;
+}
+
 .foo {
   text-align: left;
   padding-left: 10px;

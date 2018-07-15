@@ -49,7 +49,7 @@ class Status extends Component {
             active={status === "In queue"}
             onClick={this.handleItemClick}
           >
-            <Icon name="clock" />
+            <Icon inverted color="grey" name="clock outline" />
           </Menu.Item>
 
           <Menu.Item
@@ -57,14 +57,14 @@ class Status extends Component {
             active={status === "In progress"}
             onClick={this.handleItemClick}
           >
-            <Icon name="play" />
+            <Icon inverted name="play" />
           </Menu.Item>
           <Menu.Item
             name="Paused"
             active={status === "Paused"}
             onClick={this.handleItemClick}
           >
-            <Icon name="pause" />
+            <Icon inverted color="grey" name="pause" />
           </Menu.Item>
 
           <Menu.Item
@@ -72,7 +72,7 @@ class Status extends Component {
             active={status === "Done"}
             onClick={this.handleItemClick}
           >
-            <Icon name="check" />
+            <Icon color="grey" inverted name="check" />
           </Menu.Item>
         </Menu>
         {"     "}
@@ -83,7 +83,7 @@ class Status extends Component {
             active={blocked}
             onClick={this.handleBlock}
           >
-            <Icon name="ban" />
+            <Icon inverted name="ban" />
           </Menu.Item>
         </Menu>
       </div>
