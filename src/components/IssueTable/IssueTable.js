@@ -131,6 +131,30 @@ class IssueTable extends Component {
     });
   };
 
+  // Resort after status is clicked. Not implementable currently because
+  // the state management is handled by the Status component
+  handleResort = () => {
+    const { sortByColumn, issueList, direction } = this.state;
+    if (sortByColumn === "status") {
+      this.handleStatusSort();
+      return;
+    }
+
+    if (sortByColumn.includes("time")) {
+      this.setState({
+        sortByColumn: sortByColumn,
+        issueList: _.sortBy(issueList, [sortByColumn]).reverse(),
+        direction: "ascending"
+      });
+    }
+
+    this.setState({
+      sortByColumn: sortByColumn,
+      issueList: _.sortBy(issueList, [sortByColumn]),
+      direction: "descending"
+    });
+  };
+
   handleNotes = (event, { value }) => {
     this.setState({
       notes: value
