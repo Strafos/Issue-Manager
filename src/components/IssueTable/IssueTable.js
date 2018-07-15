@@ -190,7 +190,7 @@ class IssueTable extends Component {
     <div>
       {name}
       <a href={`/issue/${id}`}>
-        <Icon className="super" name="plus" size="small" />
+        <Icon color="red" className="super" name="plus" size="small" />
       </a>
     </div>
   );

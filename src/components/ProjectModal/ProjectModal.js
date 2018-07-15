@@ -55,7 +55,7 @@ class ProjectModal extends Component {
         trigger={
           <Button icon labelPosition="left" onClick={this.handleOpen} primary>
             New Project
-            <Icon name="plus" />
+            <Icon color="red" name="plus" />
           </Button>
         }
       >

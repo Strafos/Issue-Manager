@@ -128,10 +128,10 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
-          <div className="foo" alternative>
+          <div className="Header" alternative>
             <Header size="huge" as="h1">
               <a href={"/"}>
-                <Icon name="paper plane" />
+                <Icon color="red" name="paper plane" />
               </a>
               Zaibo's Issue Manager
             </Header>
@@ -142,7 +142,8 @@ class App extends Component {
               <Grid.Column width={3}>
                 <Grid.Row>
                   <br />
-                  <Button.Group color="green" vertical>
+                  {/* <Button.Group color="grey" vertical> */}
+                  <Button.Group color="black" vertical>
                     <SprintModal sprints={sprints} />
                     <ProjectModal sprints={sprints} projects={projects} />
                     <IssueModal

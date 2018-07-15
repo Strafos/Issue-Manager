@@ -93,7 +93,7 @@ class IssueModal extends Component {
         open={modalOpen}
         trigger={
           <Button icon labelPosition="left" onClick={this.handleOpen} primary>
-            <Icon name="plus" />
+            <Icon color="red" name="plus" />
             New issue
           </Button>
         }

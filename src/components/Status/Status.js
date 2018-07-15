@@ -49,7 +49,11 @@ class Status extends Component {
             active={status === "In queue"}
             onClick={this.handleItemClick}
           >
-            <Icon inverted color="grey" name="clock outline" />
+            <Icon
+              inverted
+              color={status === "In queue" ? "red" : "grey"}
+              name="clock outline"
+            />
           </Menu.Item>
 
           <Menu.Item
@@ -57,14 +61,22 @@ class Status extends Component {
             active={status === "In progress"}
             onClick={this.handleItemClick}
           >
-            <Icon inverted color="grey" name="play" />
+            <Icon
+              inverted
+              color={status === "In progress" ? "red" : "grey"}
+              name="play"
+            />
           </Menu.Item>
           <Menu.Item
             name="Paused"
             active={status === "Paused"}
             onClick={this.handleItemClick}
           >
-            <Icon inverted color="grey" name="pause" />
+            <Icon
+              inverted
+              color={status === "Paused" ? "red" : "grey"}
+              name="pause"
+            />
           </Menu.Item>
 
           <Menu.Item
@@ -72,18 +84,17 @@ class Status extends Component {
             active={status === "Done"}
             onClick={this.handleItemClick}
           >
-            <Icon color="grey" inverted name="check" />
+            <Icon
+              color={status === "Done" ? "red" : "grey"}
+              inverted
+              name="check"
+            />
           </Menu.Item>
         </Menu>
         {"     "}
         <Menu icon="labeled" compact size="mini">
-          <Menu.Item
-            name="block"
-            color="red"
-            active={blocked}
-            onClick={this.handleBlock}
-          >
-            <Icon inverted name="ban" />
+          <Menu.Item name="block" active={blocked} onClick={this.handleBlock}>
+            <Icon inverted color={blocked ? "red" : "grey"} name="ban" />
           </Menu.Item>
         </Menu>
       </div>

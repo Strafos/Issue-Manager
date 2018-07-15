@@ -120,7 +120,7 @@ class SprintModal extends Component {
         trigger={
           <Button icon labelPosition="left" onClick={this.handleOpen} primary>
             New Sprint
-            <Icon name="plus" />
+            <Icon color="red" name="plus" />
           </Button>
         }
       >
