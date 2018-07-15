@@ -57,7 +57,7 @@ class Status extends Component {
             active={status === "In progress"}
             onClick={this.handleItemClick}
           >
-            <Icon inverted name="play" />
+            <Icon inverted color="grey" name="play" />
           </Menu.Item>
           <Menu.Item
             name="Paused"

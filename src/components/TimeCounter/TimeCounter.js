@@ -93,7 +93,7 @@ class TimeCounter extends Component {
           </Modal.Content>
         </Modal>
         <Button icon onClick={this.handleClick}>
-          <Icon name={inc ? "plus" : "minus"} />
+          <Icon inverted name={inc ? "plus" : "minus"} />
         </Button>
         <Button as="div" labelPosition="right" onClick={this.handleOpen}>
           <Label as="a" basic pointing="left">
