@@ -15,6 +15,13 @@ class IssueModal extends Component {
     modalOpen: false
   };
 
+  componentWillReceiveProps(nextProps) {
+    const { selectedSprint } = nextProps;
+    this.setState({
+      sprintId: selectedSprint && selectedSprint.id
+    });
+  }
+
   handleOpen = () =>
     this.setState({
       modalOpen: true

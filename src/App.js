@@ -74,6 +74,10 @@ class App extends Component {
         this.setState({
           selectedIssue: match[2]
         });
+      } else {
+        this.setState({
+          selectedSprint: this.getDefaultSprint(sprints)
+        });
       }
     });
   }
