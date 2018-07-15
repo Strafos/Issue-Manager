@@ -131,7 +131,7 @@ class App extends Component {
           <div className="foo" alternative>
             <Header size="huge" as="h1">
               <a href={"/"}>
-                <Icon name="trash alternate outline" />
+                <Icon name="paper plane" />
               </a>
               Zaibo's Issue Manager
             </Header>
