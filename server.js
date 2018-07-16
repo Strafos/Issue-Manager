@@ -10,8 +10,13 @@ const port = process.env.PORT || 5000;
 app.post("/createSprint", (req, res) => {
   const { name, startDate, endDate } = req.body;
   const query = `INSERT INTO sprints values(null, "${name}", "${startDate}", "${endDate}", "")`;
-  db.insert(query);
-  res.send({ dbconn: "Success" });
+  db.insert(query)
+    .then(() => {
+      res.send({ status: "Success" });
+    })
+    .catch(err => {
+      res.send({ status: "Failure" });
+    });
 });
 
 app.post("/createIssue", (req, res) => {
@@ -73,8 +78,13 @@ app.put("/setStatus/:id", (req, res) => {
   const query = `UPDATE issues SET status="${status}" where id=${
     req.params.id
   }`;
-  console.log(query);
-  db.insert(query);
+  db.insert(query)
+    .then(() => {
+      res.send({ status: "Success" });
+    })
+    .catch(err => {
+      res.send({ status: "Failure" });
+    });
 });
 
 app.put("/setBlocked/:id", (req, res) => {
@@ -82,22 +92,37 @@ app.put("/setBlocked/:id", (req, res) => {
   const query = `UPDATE issues SET blocked="${blocked}" where id=${
     req.params.id
   }`;
-  db.insert(query);
-  res.send({ dbconn: "Success" });
+  db.insert(query)
+    .then(() => {
+      res.send({ status: "Success" });
+    })
+    .catch(err => {
+      res.send({ status: "Failure" });
+    });
 });
 
 app.put("/setTime/:id", (req, res) => {
   const { stat, time } = req.body;
   const query = `UPDATE issues SET ${stat}="${time}" where id=${req.params.id}`;
-  db.insert(query);
-  res.send({ dbconn: "Success" });
+  db.insert(query)
+    .then(() => {
+      res.send({ status: "Success" });
+    })
+    .catch(err => {
+      res.send({ status: "Failure" });
+    });
 });
 
 app.post("/createProject", (req, res) => {
   const { name } = req.body;
   const query = `INSERT INTO projects values(null, "${name}")`;
-  db.insert(query);
-  res.send({ dbconn: "Success" });
+  db.insert(query)
+    .then(() => {
+      res.send({ status: "Success" });
+    })
+    .catch(err => {
+      res.send({ status: "Failure" });
+    });
 });
 
 app.get("/getProjects", (req, res) => {
@@ -114,8 +139,13 @@ app.get("/getProjects", (req, res) => {
 app.put("/updateNotes/:id", (req, res) => {
   const { notes } = req.body;
   const query = `UPDATE sprints SET notes="${notes}" where id=${req.params.id}`;
-  console.log(query);
-  db.insert(query);
+  db.insert(query)
+    .then(() => {
+      res.send({ status: "Success" });
+    })
+    .catch(err => {
+      res.send({ status: "Failure" });
+    });
 });
 
 app.put("/issue/:id", (req, res) => {
@@ -135,13 +165,24 @@ app.put("/issue/:id", (req, res) => {
     `status="${status}", time_estimate=${timeEstimate}, time_remaining=${timeRemaining}, ` +
     `time_spent=${timeSpent}, blocked="${blocked}", notes="${notes}" ` +
     `where id=${req.params.id}`;
-  console.log(query);
-  db.insert(query);
+  db.insert(query)
+    .then(() => {
+      res.send({ status: "Success" });
+    })
+    .catch(err => {
+      res.send({ status: "Failure" });
+    });
 });
 
 app.delete("/issue/:id", (req, res) => {
   const query = `DELETE FROM issues where id=${req.params.id}`;
-  db.insert(query);
+  db.insert(query)
+    .then(() => {
+      res.send({ status: "Success" });
+    })
+    .catch(err => {
+      res.send({ status: "Failure" });
+    });
 });
 
 app.get("/recent_issues", (req, res) => {
@@ -161,7 +202,13 @@ app.post("/recent_issue/:id", (req, res) => {
   const query = `INSERT INTO recent_issues VALUES(null, ${
     req.params.id
   }, "${name}")`;
-  db.insert(query);
+  db.insert(query)
+    .then(() => {
+      res.send({ status: "Success" });
+    })
+    .catch(err => {
+      res.send({ status: "Failure" });
+    });
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

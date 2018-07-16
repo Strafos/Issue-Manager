@@ -114,7 +114,6 @@ export const getIssue = id => {
 };
 
 export const setStatus = (id, status) => {
-  console.log(status);
   return fetch(`/setStatus/${id}`, {
     method: "PUT",
     headers: {
@@ -123,6 +122,9 @@ export const setStatus = (id, status) => {
     },
     body: JSON.stringify({ status })
   }).then(response => {
+    if (response.status === 500) {
+      return { status: "Failed" };
+    }
     return response.json();
   });
 };
