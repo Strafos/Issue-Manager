@@ -35,7 +35,7 @@ app.post("/issue", (req, res) => {
     `INSERT INTO issues values(null, ` +
     `${sprintId}, "${name}", "${status}", ` +
     `${timeEstimate}, ${timeRemaining}, ` +
-    `${projectId}, "${blocked}", ${timeSpent}, "${notes}")`;
+    `${projectId}, "${blocked}", ${timeSpent}, "${notes}", 0)`;
   db.insert(query);
   res.send({ dbconn: "Success" });
 });
@@ -51,7 +51,7 @@ app.get("/sprints", (req, res) => {
     });
 });
 
-app.get("/sprint/:id", (req, res) => {
+app.get("/Sprint/:id", (req, res) => {
   const query = `SELECT * FROM issues where sprint_id=${req.params.id}`;
   db.read(query)
     .then(response => {
@@ -62,7 +62,7 @@ app.get("/sprint/:id", (req, res) => {
     });
 });
 
-app.get("/issue/:id", (req, res) => {
+app.get("/Issue/:id", (req, res) => {
   const query = `SELECT * FROM issues where id=${req.params.id}`;
   db.read(query)
     .then(response => {
@@ -139,6 +139,18 @@ app.get("/projects", (req, res) => {
 app.put("/sprint/:id/notes", (req, res) => {
   const { notes } = req.body;
   const query = `UPDATE sprints SET notes="${notes}" where id=${req.params.id}`;
+  db.insert(query)
+    .then(() => {
+      res.send({ status: "Success" });
+    })
+    .catch(err => {
+      res.send({ status: "Failure" });
+    });
+});
+
+app.put("/issue/:id/notes", (req, res) => {
+  const { notes } = req.body;
+  const query = `UPDATE issues SET notes="${notes}" where id=${req.params.id}`;
   db.insert(query)
     .then(() => {
       res.send({ status: "Success" });

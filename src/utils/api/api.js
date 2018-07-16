@@ -65,7 +65,7 @@ export const getProjects = () => {
 };
 
 export const getSprint = id => {
-  return fetch(`/sprint/${id}`, {
+  return fetch(`/Sprint/${id}`, {
     method: "GET",
     headers: {
       Accept: "application/json",
@@ -102,7 +102,7 @@ export const getRecentIssues = () => {
 };
 
 export const getIssue = id => {
-  return fetch(`/issue/${id}`, {
+  return fetch(`/Issue/${id}`, {
     method: "GET",
     headers: {
       Accept: "application/json",
@@ -155,8 +155,21 @@ export const setTime = (id, stat, time) => {
   });
 };
 
-export const updateNotes = (notes, id) => {
+export const updateSprintNotes = (notes, id) => {
   return fetch(`/sprint/${id}/notes`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ notes })
+  }).then(response => {
+    return response.json();
+  });
+};
+
+export const updateIssueNotes = (id, notes) => {
+  return fetch(`/issue/${id}/notes`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -202,6 +215,7 @@ export default {
   getProjects,
   getIssue,
   setStatus,
-  updateNotes,
+  updateSprintNotes,
+  updateIssueNotes,
   updateIssue
 };
