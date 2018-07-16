@@ -72,7 +72,10 @@ class SprintDisplay extends Component {
           issues.map(i => i.time_estimate).reduce((a, b) => a + b),
         totalTimeSpent:
           issues.length > 0 &&
-          issues.map(i => i.time_spent).reduce((a, b) => a + b),
+          issues
+            .filter(i => !i.bad)
+            .map(i => i.time_spent)
+            .reduce((a, b) => a + b),
         totalTimeRemaining:
           issues.length > 0 &&
           issues.map(i => i.time_remaining).reduce((a, b) => a + b)
@@ -95,6 +98,22 @@ class SprintDisplay extends Component {
     const options = { month: "2-digit", day: "2-digit", year: "2-digit" };
     const lastMonday = d.toLocaleDateString("en-US", options);
     return sprints.find(sprint => sprint.start_date === lastMonday);
+  };
+
+  handleTimeTotals = (timeStat, delta) => {
+    if (timeStat === "time_spent") {
+      this.setState({
+        totalTimeSpent: this.state.totalTimeSpent + delta
+      });
+    } else if (timeStat === "time_remaining") {
+      this.setState({
+        totalTimeRemaining: this.state.totalTimeRemaining + delta
+      });
+    } else if (timeStat === "time_estimate") {
+      this.setState({
+        totalTimeEstimate: this.state.totalTimeEstimate + delta
+      });
+    }
   };
 
   handleStatusSort = () => {
@@ -188,7 +207,6 @@ class SprintDisplay extends Component {
   };
 
   projectedProgress = () => {
-    console.log("called");
     const d = new Date();
     const dateDiff = ((d.getDay() - 8) % 7) + 8;
 
@@ -258,6 +276,7 @@ class SprintDisplay extends Component {
           </Table.Cell>
           <Table.Cell textAlign="center" collapsing>
             <TimeCounter
+              timeTotals={this.handleTimeTotals}
               issueId={id}
               inc={true}
               stat="time_spent"
@@ -266,6 +285,7 @@ class SprintDisplay extends Component {
           </Table.Cell>
           <Table.Cell textAlign="center" collapsing>
             <TimeCounter
+              timeTotals={this.handleTimeTotals}
               issueId={id}
               inc={false}
               stat="time_remaining"
@@ -303,19 +323,31 @@ class SprintDisplay extends Component {
 
     return (
       <div>
+        <Header floated="left" as="h2">
+          {selectedSprint && selectedSprint.name}
+        </Header>
+        <br />
+        <br />
         <Progress
-          percent={Math.round((totalTimeSpent / totalTimeEstimate) * 100)}
+          percent={Math.round((totalTimeSpent / 45) * 100)}
           progress
-          label="Progress"
+          color="olive"
+          label="Time Spent"
+        />
+        <Progress
+          percent={Math.round(
+            (1 - totalTimeRemaining / totalTimeEstimate) * 100
+          )}
+          progress
+          color="olive"
+          label="Task Progress"
         />
         <Progress
           percent={this.projectedProgress()}
           progress
+          color="teal"
           label="Projected"
         />
-        <Header floated="left" as="h2">
-          {selectedSprint && selectedSprint.name}
-        </Header>
         <Table sortable celled size="large" compact>
           <Table.Header>
             <Table.Row>

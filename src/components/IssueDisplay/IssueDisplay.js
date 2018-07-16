@@ -60,7 +60,8 @@ class IssueDisplay extends Component {
         timeSpent: issue.time_spent,
         timeRemaining: issue.time_remaining,
         notes: issue.notes,
-        blocked: issue.blocked
+        blocked: issue.blocked,
+        bad: issue.bad
       });
       issueId && this.addRecentIssue(issueId, issue.name);
     });
@@ -86,7 +87,8 @@ class IssueDisplay extends Component {
       timeRemaining,
       timeSpent,
       notes,
-      blocked
+      blocked,
+      bad
     } = this.state;
     const requestObj = {
       name,
@@ -97,7 +99,8 @@ class IssueDisplay extends Component {
       timeRemaining,
       timeSpent,
       notes,
-      blocked
+      blocked,
+      bad
     };
     updateIssue(requestObj, issueId).then(res => {
       if (!res || res.status !== "Success") {
@@ -231,7 +234,8 @@ class IssueDisplay extends Component {
       timeSpent,
       blocked,
       modalOpen,
-      showMessage
+      showMessage,
+      bad
     } = this.state;
     const { sprints, projects } = this.props;
 
@@ -282,6 +286,24 @@ class IssueDisplay extends Component {
               projects={projects}
               onChange={this.handleProjectSelect}
             />
+          </Form.Field>
+          <Form.Field>
+            <label>Type</label>
+            <Button.Group>
+              <Button
+                color={!bad ? "red" : "black"}
+                onClick={() => this.setState({ bad: 0 })}
+              >
+                <Icon color={!bad ? "black" : "red"} name="thumbs up" />
+              </Button>
+              <Button.Or />
+              <Button
+                color={bad ? "red" : "black"}
+                onClick={() => this.setState({ bad: 1 })}
+              >
+                <Icon color={bad ? "black" : "red"} name="thumbs down" />
+              </Button>
+            </Button.Group>
           </Form.Field>
           <Form.Field width={3}>
             <label>Status</label>

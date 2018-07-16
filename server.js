@@ -158,20 +158,19 @@ app.put("/issue/:id", (req, res) => {
     timeRemaining,
     timeSpent,
     blocked,
-    notes
+    notes,
+    bad
   } = req.body;
   const query =
     `UPDATE issues SET name="${name}", sprint_id=${sprintId}, project_id=${projectId}, ` +
     `status="${status}", time_estimate=${timeEstimate}, time_remaining=${timeRemaining}, ` +
-    `time_spent=${timeSpent}, blocked="${blocked}", notes="${notes}" ` +
+    `time_spent=${timeSpent}, blocked="${blocked}", notes="${notes}", bad=${bad} ` +
     `where id=${req.params.id}`;
   db.insert(query)
     .then(() => {
-      console.log("S");
       res.send({ status: "Success" });
     })
     .catch(err => {
-      console.log("F");
       res.send({ status: "Failure" });
     });
 });

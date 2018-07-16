@@ -18,18 +18,6 @@ class TimeCounter extends Component {
     });
   }
 
-  handleClick = () => {
-    const { issueId, inc, stat } = this.props;
-    const { time } = this.state;
-    let newTime = inc ? time + 1 : time - 1;
-    newTime = newTime < 0 ? 0 : newTime;
-    this.setState({
-      time: newTime,
-      openModal: false
-    });
-    setTime(issueId, stat, newTime);
-  };
-
   handleOpen = () => {
     this.setState({
       openModal: true
@@ -48,20 +36,51 @@ class TimeCounter extends Component {
     });
   };
 
+  // Time is composed of digits, so it must be positive
   handleValidate = () => {
     const { tempTime } = this.state;
     const digitRe = /^[0-9]+$/;
     return !tempTime.length > 0 || !digitRe.test(tempTime);
   };
 
+  handleClickSubmit = () => {
+    const { issueId, inc, stat } = this.props;
+    const { time } = this.state;
+    let newTime = inc ? time + 1 : time - 1;
+    newTime = newTime < 0 ? 0 : newTime;
+    const delta = newTime - time;
+
+    // Update total time in sprint display
+    this.props.timeTotals(stat, delta);
+
+    // Update time displayed in TimeCounter
+    this.setState({
+      time: newTime,
+      openModal: false
+    });
+
+    //Update time in database
+    setTime(issueId, stat, newTime);
+  };
+
   handleSubmit = () => {
     const { issueId, stat } = this.props;
-    const { tempTime } = this.state;
+    const { tempTime, time } = this.state;
+    const newTime = parseInt(tempTime, 10);
+
+    const delta = newTime - time;
+
+    // Update total time in sprint display
+    this.props.timeTotals(stat, delta);
+
+    // Update time displayed in TimeCounter
     this.setState({
-      time: parseInt(tempTime, 10)
+      time: newTime,
+      openModal: false
     });
-    setTime(issueId, stat, tempTime);
-    this.handleClose();
+
+    //Update time in database
+    setTime(issueId, stat, newTime);
   };
 
   render() {
@@ -92,7 +111,7 @@ class TimeCounter extends Component {
             </Form>
           </Modal.Content>
         </Modal>
-        <Button icon onClick={this.handleClick}>
+        <Button icon onClick={this.handleClickSubmit}>
           <Icon inverted color="red" name={inc ? "plus" : "minus"} />
         </Button>
         <Button as="div" labelPosition="right" onClick={this.handleOpen}>

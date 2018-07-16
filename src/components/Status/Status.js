@@ -29,7 +29,6 @@ class Status extends Component {
     const { issueId } = this.props;
     this.setState({ status: name });
     setStatus(issueId, name).then(res => {
-      console.log(res);
       if (!res || res.status !== "Success") {
         this.props.error("Failed to set new status");
       }
