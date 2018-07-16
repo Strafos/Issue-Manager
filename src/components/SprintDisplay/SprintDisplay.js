@@ -8,22 +8,26 @@ import {
   TextArea,
   Table,
   Header,
-  Progress,
-  Grid,
-  Container
+  Progress
 } from "semantic-ui-react";
 
 import Status from "../Status/Status";
 import TimeCounter from "../TimeCounter/TimeCounter";
 
-import { getSprint, updateNotes } from "../../utils/api/api";
+import {
+  getSprint,
+  updateIssueNotes,
+  updateSprintNotes
+} from "../../utils/api/api";
 
 class SprintDisplay extends Component {
   state = {
     selectedSprint: null,
     issueList: [],
     notes: "",
-    showNoteList: [],
+    showNoteList: {},
+    editNoteList: {},
+    issueNoteList: {},
     totalTimeSpent: 0,
     totalTimeRemaining: 0,
     totalTimeEstimate: 0,
@@ -61,14 +65,20 @@ class SprintDisplay extends Component {
 
     getSprint(id).then(issues => {
       const selectedSprint = sprints.find(spr => spr.id == id);
-      const noteList = {};
-      issues.map(issue => (noteList[issue.id] = false));
+      const showNoteList = {};
+      const editNoteList = {};
+      const issueNoteList = {};
+      issues.map(issue => (showNoteList[issue.id] = false));
+      issues.map(issue => (editNoteList[issue.id] = false));
+      issues.map(issue => (issueNoteList[issue.id] = issue.notes));
 
       // Issues, note toggle array, summing times for footer
       this.setState({
         selectedSprint,
         issueList: issues,
-        showNoteList: noteList,
+        showNoteList,
+        editNoteList,
+        issueNoteList,
         totalTimeEstimate:
           issues.length > 0 &&
           issues.map(i => i.time_estimate).reduce((a, b) => a + b),
@@ -186,16 +196,24 @@ class SprintDisplay extends Component {
     });
   };
 
-  handleNotes = (event, { value }) => {
+  handleSprintNotes = (event, { value }) => {
     this.setState({
       notes: value
     });
   };
 
-  handleSaveNotes = () => {
+  handleIssueNotes = (id, value) => {
+    const { issueNoteList } = this.state;
+    issueNoteList[id] = value;
+    this.setState({
+      issueNoteList
+    });
+  };
+
+  handleSaveSprintNotes = () => {
     const { notes, selectedSprint } = this.state;
     this.props.update(notes);
-    updateNotes(notes, selectedSprint.id).then(res => {
+    updateSprintNotes(notes, selectedSprint.id).then(res => {
       if (!res || res.status !== "Success") {
         this.props.error("Failed to set block status");
       }
@@ -208,6 +226,20 @@ class SprintDisplay extends Component {
     this.setState({
       showNoteList
     });
+  };
+
+  handleEditNotes = id => {
+    const { editNoteList } = this.state;
+    editNoteList[id] = !editNoteList[id];
+    this.setState({
+      editNoteList
+    });
+  };
+
+  handleSaveIssueNotes = (id, notes) => {
+    // this.handleIssueNotes(id, notes);
+    this.handleEditNotes(id);
+    updateIssueNotes(id, notes);
   };
 
   projectedProgress = () => {
@@ -237,7 +269,7 @@ class SprintDisplay extends Component {
   renderTextArea = () => {
     return (
       <TextArea
-        onChange={this.handleNotes}
+        onChange={this.handleSprintNotes}
         style={{ minHeight: 150 }}
         placeholder="Sprint notes..."
         value={this.state.notes}
@@ -313,8 +345,37 @@ class SprintDisplay extends Component {
         {this.state.showNoteList[id] && (
           <Table.Row>
             <Table.Cell colSpan="6">
-              <label className="bold">Notes: </label>
-              <div className="linebreak">{notes}</div>
+              {this.state.editNoteList[id] ? (
+                <Form>
+                  <TextArea
+                    onChange={(event, { value }) =>
+                      this.handleIssueNotes(id, value)
+                    }
+                    style={{ minHeight: 150 }}
+                    placeholder="Issue notes..."
+                    value={this.state.issueNoteList[id]}
+                  />
+                  <Button
+                    floated="left"
+                    color="red"
+                    onClick={() =>
+                      this.handleSaveIssueNotes(
+                        id,
+                        this.state.issueNoteList[id]
+                      )
+                    }
+                  >
+                    Save
+                  </Button>
+                </Form>
+              ) : (
+                <div
+                  onClick={() => this.handleEditNotes(id)}
+                  className="linebreak"
+                >
+                  {this.state.issueNoteList[id]}
+                </div>
+              )}
             </Table.Cell>
           </Table.Row>
         )}
@@ -343,6 +404,7 @@ class SprintDisplay extends Component {
           progress
           color="black"
           size="small"
+          label="Time Spent"
         />
         <Progress
           percent={Math.round(
@@ -420,7 +482,11 @@ class SprintDisplay extends Component {
         </Form>
         <br />
         <div>
-          <Button floated="left" color="green" onClick={this.handleSaveNotes}>
+          <Button
+            floated="left"
+            color="green"
+            onClick={this.handleSaveSprintNotes}
+          >
             Save notes
           </Button>
         </div>

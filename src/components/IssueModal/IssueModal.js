@@ -127,7 +127,6 @@ class IssueModal extends Component {
             </Form.Field>
           </Form>
         </Container>
-        <br />
         <Container textAlign="center">
           <Button
             onClick={this.handleSubmit}
