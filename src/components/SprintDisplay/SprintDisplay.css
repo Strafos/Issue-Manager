@@ -25,6 +25,14 @@
   vertical-align: super;
 }
 
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
 .bold {
   font-weight: bold;
 }

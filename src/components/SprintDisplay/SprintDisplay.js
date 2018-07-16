@@ -8,7 +8,9 @@ import {
   TextArea,
   Table,
   Header,
-  Progress
+  Progress,
+  Grid,
+  Container
 } from "semantic-ui-react";
 
 import Status from "../Status/Status";
@@ -207,21 +209,27 @@ class SprintDisplay extends Component {
   };
 
   projectedProgress = () => {
-    const d = new Date();
-    const dateDiff = ((d.getDay() - 8) % 7) + 8;
+    const { selectedSprint } = this.state;
+    const now = new Date();
+    const sprintEnd = new Date(selectedSprint && selectedSprint.end_date);
+    const delta = sprintEnd - now;
+
+    // Sprint has past, so set projected to 100%
+    if (delta / 1000 / 3600 / 24 < 0) {
+      return 100;
+    }
 
     // 5hrs per weekday, 10 hours per weekend
     const dateMap = {
-      0: 0,
       1: 5,
       2: 10,
       3: 15,
       4: 20,
       5: 25,
       6: 35,
-      7: 45
+      0: 45
     };
-    return Math.round((dateMap[dateDiff] / 45) * 100);
+    return Math.round((dateMap[new Date().getDay()] / 45) * 100);
   };
 
   renderTextArea = () => {
@@ -331,21 +339,25 @@ class SprintDisplay extends Component {
         <Progress
           percent={Math.round((totalTimeSpent / 45) * 100)}
           progress
-          color="olive"
-          label="Time Spent"
+          color="black"
+          size="small"
         />
         <Progress
           percent={Math.round(
             (1 - totalTimeRemaining / totalTimeEstimate) * 100
           )}
           progress
-          color="olive"
+          inverted
+          color="black"
           label="Task Progress"
+          size="small"
         />
         <Progress
           percent={this.projectedProgress()}
           progress
-          color="teal"
+          inverted
+          color="black"
+          size="small"
           label="Projected"
         />
         <Table sortable celled size="large" compact>
