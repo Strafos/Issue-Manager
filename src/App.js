@@ -101,7 +101,8 @@ class App extends Component {
 
   getDefaultSprint = sprints => {
     const d = new Date();
-    d.setDate(d.getDate() + ((1 + 7 - d.getDay()) % 7) - 7); // Current Monday
+    // d.setDate(d.getDate() + ((1 + 7 - d.getDay()) % 7) - 7); // Last Monday
+    d.setDate(d.getDate() + ((1 + 7 - d.getDay()) % 7)); // Last Monday
 
     const options = { month: "2-digit", day: "2-digit", year: "2-digit" };
     const lastMonday = d.toLocaleDateString("en-US", options);
@@ -141,6 +142,8 @@ class App extends Component {
       recentIssues,
       selectedIssue
     } = this.state;
+
+    console.log(selectedSprint);
 
     return (
       <Router>

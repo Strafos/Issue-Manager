@@ -95,7 +95,9 @@ class SprintDisplay extends Component {
 
   getDefaultSprint = sprints => {
     const d = new Date();
-    d.setDate(d.getDate() + ((1 + 7 - d.getDay()) % 7) - 7); // Current Monday
+
+    // If monday, gets current monday, else last monday
+    d.setDate(d.getDate() + ((1 + 7 - d.getDay()) % 7));
 
     const options = { month: "2-digit", day: "2-digit", year: "2-digit" };
     const lastMonday = d.toLocaleDateString("en-US", options);
@@ -347,7 +349,6 @@ class SprintDisplay extends Component {
             (1 - totalTimeRemaining / totalTimeEstimate) * 100
           )}
           progress
-          inverted
           color="black"
           label="Task Progress"
           size="small"
@@ -355,7 +356,6 @@ class SprintDisplay extends Component {
         <Progress
           percent={this.projectedProgress()}
           progress
-          inverted
           color="black"
           size="small"
           label="Projected"
