@@ -15,7 +15,11 @@ class StatusDisplay extends Component {
           active={status === "In queue"}
           onClick={statusChange}
         >
-          <Icon inverted color="grey" name="clock outline" />
+          <Icon
+            inverted
+            color={status === "In queue" ? "red" : "grey"}
+            name="clock"
+          />
         </Menu.Item>
 
         <Menu.Item
@@ -23,14 +27,22 @@ class StatusDisplay extends Component {
           active={status === "In progress"}
           onClick={statusChange}
         >
-          <Icon inverted color="grey" name="play" />
+          <Icon
+            inverted
+            color={status === "In progress" ? "red" : "grey"}
+            name="play"
+          />
         </Menu.Item>
         <Menu.Item
           name="Paused"
           active={status === "Paused"}
           onClick={statusChange}
         >
-          <Icon inverted color="grey" name="pause" />
+          <Icon
+            inverted
+            color={status === "Paused" ? "red" : "grey"}
+            name="pause"
+          />
         </Menu.Item>
 
         <Menu.Item
@@ -38,10 +50,14 @@ class StatusDisplay extends Component {
           active={status === "Done"}
           onClick={statusChange}
         >
-          <Icon color="grey" inverted name="check" />
+          <Icon
+            color={status === "Done" ? "red" : "grey"}
+            inverted
+            name="check"
+          />
         </Menu.Item>
         <Menu.Item name="block" active={blocked} onClick={blockedChange}>
-          <Icon inverted name="ban" />
+          <Icon inverted color={blocked ? "red" : "grey"} name="ban" />
         </Menu.Item>
       </Menu>
     );
