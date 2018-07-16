@@ -28,8 +28,11 @@ CREATE TABLE issues (
  status text NOT NULL,
  time_estimate integer NOT NULL,
  time_remaining integer NOT NULL,
+ time_spent integer NOT NULL DEFAULT 0,
  project_id integer,
  blocked integer DEFAULT 0,
+ notes TEXT default "",
+ bad integer NOT NULL DEFAULT 0,
  FOREIGN KEY (sprint_id) REFERENCES sprints(id)
  FOREIGN KEY (project_id) REFERENCES projects(id)
  FOREIGN KEY (status) REFERENCES status(id)
