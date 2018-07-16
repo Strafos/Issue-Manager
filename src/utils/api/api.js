@@ -1,5 +1,5 @@
 export const createSprint = async requestObj => {
-  const response = await fetch("/createSprint", {
+  const response = await fetch("/sprint", {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -15,7 +15,7 @@ export const createSprint = async requestObj => {
 };
 
 export const createIssue = async requestObj => {
-  const response = await fetch("/createIssue", {
+  const response = await fetch("/issue", {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -28,7 +28,7 @@ export const createIssue = async requestObj => {
 };
 
 export const createProject = async requestObj => {
-  const response = await fetch("/createProject", {
+  const response = await fetch("/project", {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -41,7 +41,7 @@ export const createProject = async requestObj => {
 };
 
 export const getSprints = () => {
-  return fetch("/getSprints", {
+  return fetch("/sprints", {
     method: "GET",
     headers: {
       Accept: "application/json",
@@ -53,7 +53,7 @@ export const getSprints = () => {
 };
 
 export const getProjects = () => {
-  return fetch("/getProjects", {
+  return fetch("/projects", {
     method: "GET",
     headers: {
       Accept: "application/json",
@@ -65,7 +65,7 @@ export const getProjects = () => {
 };
 
 export const getSprint = id => {
-  return fetch(`/getSprint/${id}`, {
+  return fetch(`/sprint/${id}`, {
     method: "GET",
     headers: {
       Accept: "application/json",
@@ -77,7 +77,7 @@ export const getSprint = id => {
 };
 
 export const addRecentIssue = (id, name) => {
-  return fetch(`/recent_issue/${id}`, {
+  return fetch(`/recentIssue/${id}`, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -90,7 +90,7 @@ export const addRecentIssue = (id, name) => {
 };
 
 export const getRecentIssues = () => {
-  return fetch(`/recent_issues`, {
+  return fetch(`/recentIssues`, {
     method: "GET",
     headers: {
       Accept: "application/json",
@@ -102,7 +102,7 @@ export const getRecentIssues = () => {
 };
 
 export const getIssue = id => {
-  return fetch(`/getIssue/${id}`, {
+  return fetch(`/issue/${id}`, {
     method: "GET",
     headers: {
       Accept: "application/json",
@@ -114,7 +114,7 @@ export const getIssue = id => {
 };
 
 export const setStatus = (id, status) => {
-  return fetch(`/setStatus/${id}`, {
+  return fetch(`/issue/${id}/status`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -130,7 +130,7 @@ export const setStatus = (id, status) => {
 };
 
 export const setBlocked = (id, blocked) => {
-  return fetch(`/setBlocked/${id}`, {
+  return fetch(`/issue/${id}/blocked`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -143,7 +143,7 @@ export const setBlocked = (id, blocked) => {
 };
 
 export const setTime = (id, stat, time) => {
-  return fetch(`/setTime/${id}`, {
+  return fetch(`/issue/${id}/time`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -156,7 +156,7 @@ export const setTime = (id, stat, time) => {
 };
 
 export const updateNotes = (notes, id) => {
-  return fetch(`/issue/${id}/notes`, {
+  return fetch(`/sprint/${id}/notes`, {
     method: "PUT",
     headers: {
       Accept: "application/json",

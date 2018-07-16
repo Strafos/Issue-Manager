@@ -7,7 +7,7 @@ const app = express();
 app.use(bodyParser.json());
 const port = process.env.PORT || 5000;
 
-app.post("/createSprint", (req, res) => {
+app.post("/sprint", (req, res) => {
   const { name, startDate, endDate } = req.body;
   const query = `INSERT INTO sprints values(null, "${name}", "${startDate}", "${endDate}", "")`;
   db.insert(query)
@@ -19,7 +19,7 @@ app.post("/createSprint", (req, res) => {
     });
 });
 
-app.post("/createIssue", (req, res) => {
+app.post("/issue", (req, res) => {
   const {
     sprintId,
     name,
@@ -40,7 +40,7 @@ app.post("/createIssue", (req, res) => {
   res.send({ dbconn: "Success" });
 });
 
-app.get("/getSprints", (req, res) => {
+app.get("/sprints", (req, res) => {
   const query = `SELECT * FROM sprints`;
   db.read(query)
     .then(response => {
@@ -51,7 +51,7 @@ app.get("/getSprints", (req, res) => {
     });
 });
 
-app.get("/getSprint/:id", (req, res) => {
+app.get("/sprint/:id", (req, res) => {
   const query = `SELECT * FROM issues where sprint_id=${req.params.id}`;
   db.read(query)
     .then(response => {
@@ -62,7 +62,7 @@ app.get("/getSprint/:id", (req, res) => {
     });
 });
 
-app.get("/getIssue/:id", (req, res) => {
+app.get("/issue/:id", (req, res) => {
   const query = `SELECT * FROM issues where id=${req.params.id}`;
   db.read(query)
     .then(response => {
@@ -73,7 +73,7 @@ app.get("/getIssue/:id", (req, res) => {
     });
 });
 
-app.put("/setStatus/:id", (req, res) => {
+app.put("/issue/:id/status", (req, res) => {
   const { status } = req.body;
   const query = `UPDATE issues SET status="${status}" where id=${
     req.params.id
@@ -87,7 +87,7 @@ app.put("/setStatus/:id", (req, res) => {
     });
 });
 
-app.put("/setBlocked/:id", (req, res) => {
+app.put("/issue/:id/blocked", (req, res) => {
   const { blocked } = req.body;
   const query = `UPDATE issues SET blocked="${blocked}" where id=${
     req.params.id
@@ -101,7 +101,7 @@ app.put("/setBlocked/:id", (req, res) => {
     });
 });
 
-app.put("/setTime/:id", (req, res) => {
+app.put("/issue/:id/time", (req, res) => {
   const { stat, time } = req.body;
   const query = `UPDATE issues SET ${stat}="${time}" where id=${req.params.id}`;
   db.insert(query)
@@ -113,7 +113,7 @@ app.put("/setTime/:id", (req, res) => {
     });
 });
 
-app.post("/createProject", (req, res) => {
+app.post("/project", (req, res) => {
   const { name } = req.body;
   const query = `INSERT INTO projects values(null, "${name}")`;
   db.insert(query)
@@ -125,7 +125,7 @@ app.post("/createProject", (req, res) => {
     });
 });
 
-app.get("/getProjects", (req, res) => {
+app.get("/projects", (req, res) => {
   const query = `SELECT * FROM projects`;
   db.read(query)
     .then(response => {
@@ -187,7 +187,7 @@ app.delete("/issue/:id", (req, res) => {
     });
 });
 
-app.get("/recent_issues", (req, res) => {
+app.get("/recentIssues", (req, res) => {
   const query =
     "SELECT DISTINCT issue_id, name FROM recent_issues ORDER BY id DESC LIMIT 5";
   db.read(query)
@@ -199,7 +199,7 @@ app.get("/recent_issues", (req, res) => {
     });
 });
 
-app.post("/recent_issue/:id", (req, res) => {
+app.post("/recentIssue/:id", (req, res) => {
   const { name } = req.body;
   const query = `INSERT INTO recent_issues VALUES(null, ${
     req.params.id

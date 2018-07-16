@@ -11,7 +11,7 @@ import SprintModal from "./components/SprintModal/SprintModal";
 import SprintDropDown from "./components/SprintDropDown/SprintDropDown";
 import RecentMenu from "./components/RecentMenu/RecentMenu";
 import IssueModal from "./components/IssueModal/IssueModal";
-import IssueTable from "./components/IssueTable/IssueTable";
+import SprintDisplay from "./components/SprintDisplay/SprintDisplay";
 import ProjectModal from "./components/ProjectModal/ProjectModal";
 import IssueDisplay from "./components/IssueDisplay/IssueDisplay";
 
@@ -120,11 +120,11 @@ class App extends Component {
     this.forceUpdate();
   };
 
-  renderIssueTable = () => {
+  renderSprintDisplay = () => {
     const { projects, selectedSprint } = this.state;
 
     return (
-      <IssueTable
+      <SprintDisplay
         projects={projects}
         selectedSprint={selectedSprint}
         sprintId={selectedSprint && selectedSprint.id}
@@ -199,7 +199,7 @@ class App extends Component {
                   path="/"
                   render={props => {
                     return (
-                      <IssueTable
+                      <SprintDisplay
                         projects={projects}
                         update={this.updateNotes}
                         sprints={sprints}
@@ -213,7 +213,7 @@ class App extends Component {
                   path="/sprint/:id?"
                   render={props => {
                     return (
-                      <IssueTable
+                      <SprintDisplay
                         projects={projects}
                         update={this.updateNotes}
                         error={this.setError}
