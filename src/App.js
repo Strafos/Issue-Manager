@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import "./App.css";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
-import { Icon, Header, Button, Grid } from "semantic-ui-react";
+import { Message, Icon, Header, Button, Grid } from "semantic-ui-react";
 import "react-datepicker/dist/react-datepicker.css";
 
 import "./semantic/dist/semantic.min.css";
@@ -23,7 +23,9 @@ class App extends Component {
     projects: [],
     selectedSprint: null,
     defaultSprint: null,
-    recentIssues: null
+    recentIssues: null,
+    errorMessage: "",
+    showErrorMessage: false
   };
 
   handleSprintIndex = index => {
@@ -47,6 +49,21 @@ class App extends Component {
   handleIssueMenuClick = (event, { index }) => {
     this.setState({
       selectedIssue: index
+    });
+  };
+
+  handleErrorMessage = () => {
+    return (
+      <Message negative>
+        <Message.Header>{this.state.errorMessage}</Message.Header>
+      </Message>
+    );
+  };
+
+  setError = message => {
+    this.setState({
+      showErrorMessage: true,
+      errorMessage: message
     });
   };
 
@@ -142,7 +159,6 @@ class App extends Component {
               <Grid.Column width={3}>
                 <Grid.Row>
                   <br />
-                  {/* <Button.Group color="grey" vertical> */}
                   <Button.Group color="black" vertical>
                     <SprintModal sprints={sprints} />
                     <ProjectModal sprints={sprints} projects={projects} />
@@ -177,6 +193,7 @@ class App extends Component {
                 </Grid.Row>
               </Grid.Column>
               <Grid.Column width={13}>
+                {this.state.showErrorMessage && this.handleErrorMessage()}
                 <Route
                   exact
                   path="/"
@@ -186,6 +203,7 @@ class App extends Component {
                         projects={projects}
                         update={this.updateNotes}
                         sprints={sprints}
+                        error={this.setError}
                         {...props}
                       />
                     );
@@ -198,6 +216,7 @@ class App extends Component {
                       <IssueTable
                         projects={projects}
                         update={this.updateNotes}
+                        error={this.setError}
                         sprints={sprints}
                         {...props}
                       />
@@ -210,6 +229,7 @@ class App extends Component {
                     return (
                       <IssueDisplay
                         projects={projects}
+                        error={this.setError}
                         sprints={sprints}
                         {...props}
                       />

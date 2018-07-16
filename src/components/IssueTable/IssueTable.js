@@ -163,8 +163,12 @@ class IssueTable extends Component {
 
   handleSaveNotes = () => {
     const { notes, selectedSprint } = this.state;
-    updateNotes(notes, selectedSprint.id);
     this.props.update(notes);
+    updateNotes(notes, selectedSprint.id).then(res => {
+      if (!res || res.status !== "Success") {
+        this.props.error("Failed to set block status");
+      }
+    });
   };
 
   handleShowNotes = id => {
@@ -218,7 +222,12 @@ class IssueTable extends Component {
             {this.mapProjectId(project_id)}
           </Table.Cell>
           <Table.Cell collapsing>
-            <Status issueId={id} blocked={blocked === "true"} status={status} />
+            <Status
+              error={this.props.error}
+              issueId={id}
+              blocked={blocked === "true"}
+              status={status}
+            />
           </Table.Cell>
           <Table.Cell textAlign="center" collapsing>
             <TimeCounter

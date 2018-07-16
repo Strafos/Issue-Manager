@@ -29,8 +29,9 @@ class Status extends Component {
     const { issueId } = this.props;
     this.setState({ status: name });
     setStatus(issueId, name).then(res => {
-      if (!res || res.status !== "success") {
-        this.props.error("Status failed to update");
+      console.log(res);
+      if (!res || res.status !== "Success") {
+        this.props.error("Failed to set new status");
       }
     });
   };
@@ -39,7 +40,11 @@ class Status extends Component {
     const { issueId } = this.props;
     const { blocked } = this.state;
     this.setState({ blocked: !blocked });
-    setBlocked(issueId, !blocked);
+    setBlocked(issueId, !blocked).then(res => {
+      if (!res || res.status !== "Success") {
+        this.props.error("Failed to set block status");
+      }
+    });
   };
 
   render() {

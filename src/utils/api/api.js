@@ -85,7 +85,7 @@ export const addRecentIssue = (id, name) => {
     },
     body: JSON.stringify({ name })
   }).then(response => {
-    return response;
+    return response.json();
   });
 };
 
@@ -156,7 +156,7 @@ export const setTime = (id, stat, time) => {
 };
 
 export const updateNotes = (notes, id) => {
-  return fetch(`/updateNotes/${id}`, {
+  return fetch(`/issue/${id}/notes`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -169,7 +169,6 @@ export const updateNotes = (notes, id) => {
 };
 
 export const updateIssue = (requestObj, id) => {
-  console.log(requestObj);
   return fetch(`/issue/${id}`, {
     method: "PUT",
     headers: {

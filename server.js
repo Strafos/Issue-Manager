@@ -136,7 +136,7 @@ app.get("/getProjects", (req, res) => {
     });
 });
 
-app.put("/updateNotes/:id", (req, res) => {
+app.put("/sprint/:id/notes", (req, res) => {
   const { notes } = req.body;
   const query = `UPDATE sprints SET notes="${notes}" where id=${req.params.id}`;
   db.insert(query)
@@ -167,9 +167,11 @@ app.put("/issue/:id", (req, res) => {
     `where id=${req.params.id}`;
   db.insert(query)
     .then(() => {
+      console.log("S");
       res.send({ status: "Success" });
     })
     .catch(err => {
+      console.log("F");
       res.send({ status: "Failure" });
     });
 });

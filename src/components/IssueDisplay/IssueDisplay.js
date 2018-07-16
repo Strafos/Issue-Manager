@@ -9,13 +9,11 @@ import {
   Form,
   TextArea,
   Message,
-  Header,
-  HeaderContent
+  Header
 } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
 import StatusDisplay from "../StatusDisplay/StatusDisplay";
-import TimeCounter from "../TimeCounter/TimeCounter";
 import SprintDropDown from "../SprintDropDown/SprintDropDown";
 import ProjectDropDown from "../ProjectDropDown/ProjectDropDown";
 
@@ -41,7 +39,8 @@ class IssueDisplay extends Component {
     notes: "",
     blocked: "false",
     modalOpen: false,
-    showMessage: false
+    showMessage: false,
+    message: ""
   };
 
   componentDidMount() {
@@ -100,15 +99,25 @@ class IssueDisplay extends Component {
       notes,
       blocked
     };
-    updateIssue(requestObj, issueId);
-    this.setState({
-      showMessage: true
+    updateIssue(requestObj, issueId).then(res => {
+      if (!res || res.status !== "Success") {
+        this.props.error("Failed to update issue");
+      } else {
+        this.setState({
+          showMessage: true,
+          message: "Issue updated successfully :P"
+        });
+      }
     });
   };
 
   handleDelete = () => {
     this.handleModalClose();
-    deleteIssue(this.state.issueId);
+    deleteIssue(this.state.issueId).then(res => {
+      if (!res || res.status !== "Success") {
+        this.props.error("Failed to delete issue");
+      }
+    });
   };
 
   handleModalOpen = () => {
@@ -184,8 +193,11 @@ class IssueDisplay extends Component {
   };
 
   addRecentIssue = (id, name) => {
-    console.log("foo");
-    addRecentIssue(id, name);
+    addRecentIssue(id, name).then(res => {
+      if (!res || res.status !== "Success") {
+        this.props.error("Failed to add recent issue");
+      }
+    });
   };
 
   renderTextArea = () => {
@@ -199,17 +211,16 @@ class IssueDisplay extends Component {
     );
   };
 
-  renderMessage = () => {
+  renderMessage = message => {
     return (
       <Message positive onDismiss={this.handleMessageClose}>
-        <Message.Header>Save successful :P</Message.Header>
+        <Message.Header>{message}</Message.Header>
       </Message>
     );
   };
 
   render() {
     const {
-      issueId,
       editName,
       name,
       sprintId,
@@ -226,7 +237,7 @@ class IssueDisplay extends Component {
 
     return (
       <div>
-        {showMessage && this.renderMessage()}
+        {showMessage && this.renderMessage(this.state.message)}
         <div className="Left">
           {editName ? (
             <Form>
