@@ -33,6 +33,7 @@ class Status extends Component {
         this.props.error("Failed to set new status");
       }
     });
+    this.props.update(issueId, name);
   };
 
   handleBlock = () => {
@@ -60,7 +61,7 @@ class Status extends Component {
             <Icon
               inverted
               color={status === "In queue" ? "red" : "grey"}
-              name="clock"
+              name="clock outline"
             />
           </Menu.Item>
 

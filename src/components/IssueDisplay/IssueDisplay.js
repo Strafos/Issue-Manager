@@ -144,6 +144,12 @@ class IssueDisplay extends Component {
     });
   };
 
+  handleProjectSelect = (event, { value }) => {
+    this.setState({
+      projectId: value
+    });
+  };
+
   handleName = (event, { value }) => {
     this.setState({
       name: value
