@@ -13,6 +13,9 @@ class ProjectDropDown extends Component {
 
   render() {
     const { projects, value, onChange } = this.props;
+
+    !projects.find(p => p.id === 0) && projects.push({ name: "None", id: 0 });
+
     return (
       <Dropdown
         placeholder="Select Project"
