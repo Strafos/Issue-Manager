@@ -33,6 +33,7 @@ CREATE TABLE issues (
  blocked integer DEFAULT 0,
  notes TEXT default "",
  bad integer NOT NULL DEFAULT 0,
+ show_notes integer NOT NULL DEFAULT 0,
  FOREIGN KEY (sprint_id) REFERENCES sprints(id)
  FOREIGN KEY (project_id) REFERENCES projects(id)
  FOREIGN KEY (status) REFERENCES status(id)
