@@ -101,8 +101,10 @@ class App extends Component {
 
   getDefaultSprint = sprints => {
     const d = new Date();
-    // d.setDate(d.getDate() + ((1 + 7 - d.getDay()) % 7) - 7); // Last Monday
-    d.setDate(d.getDate() + ((1 + 7 - d.getDay()) % 7)); // Last Monday
+    if (d.getDay() !== 1) {
+      // Get last monday unless today is Monday
+      d.setDate(d.getDate() + ((1 + 7 - d.getDay()) % 7) - 7);
+    }
 
     const options = { month: "2-digit", day: "2-digit", year: "2-digit" };
     const lastMonday = d.toLocaleDateString("en-US", options);
@@ -143,12 +145,10 @@ class App extends Component {
       selectedIssue
     } = this.state;
 
-    console.log(selectedSprint);
-
     return (
       <Router>
         <div className="App">
-          <div className="Header" alternative>
+          <div className="Header">
             <Header size="huge" as="h1">
               <a href={"/"}>
                 <Icon color="red" name="paper plane" />
