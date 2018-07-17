@@ -110,6 +110,9 @@ class IssueDisplay extends Component {
           showMessage: true,
           message: "Issue updated successfully :P"
         });
+        this.timeout = setTimeout(() => {
+          this.setState({ showMessage: false });
+        }, 2500);
       }
     });
   };
@@ -193,6 +196,7 @@ class IssueDisplay extends Component {
     this.setState({
       showMessage: false
     });
+    clearTimeout(this.timeout);
   };
 
   addRecentIssue = (id, name) => {
@@ -214,14 +218,6 @@ class IssueDisplay extends Component {
     );
   };
 
-  renderMessage = message => {
-    return (
-      <Message positive onDismiss={this.handleMessageClose}>
-        <Message.Header>{message}</Message.Header>
-      </Message>
-    );
-  };
-
   render() {
     const {
       editName,
@@ -238,10 +234,17 @@ class IssueDisplay extends Component {
       bad
     } = this.state;
     const { sprints, projects } = this.props;
+    console.log(showMessage);
 
     return (
       <div>
-        {showMessage && this.renderMessage(this.state.message)}
+        <Message
+          hidden={!showMessage}
+          positive
+          onDismiss={this.handleMessageClose}
+        >
+          <Message.Header>{this.state.message}</Message.Header>
+        </Message>
         <div className="Left">
           {editName ? (
             <Form>

@@ -373,7 +373,7 @@ class SprintDisplay extends Component {
                   onClick={() => this.handleEditNotes(id)}
                   className="linebreak"
                 >
-                  {this.state.issueNoteList[id]}
+                  {this.state.issueNoteList[id] || "Notes: "}
                 </div>
               )}
             </Table.Cell>
@@ -484,7 +484,7 @@ class SprintDisplay extends Component {
         <div>
           <Button
             floated="left"
-            color="green"
+            color="red"
             onClick={this.handleSaveSprintNotes}
           >
             Save notes

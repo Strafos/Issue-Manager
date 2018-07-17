@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import "./RecentMenu.css";
-import { Menu, Grid, Button, Modal, Input, Form } from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import { Menu, Container, Button } from "semantic-ui-react";
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -40,7 +39,7 @@ class RecentMenu extends Component {
     });
 
     return (
-      <div>
+      <div className="center">
         <Menu vertical>
           <Menu.Item>
             <Menu.Header>Recent Sprints</Menu.Header>
