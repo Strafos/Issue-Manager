@@ -39,6 +39,15 @@ CREATE TABLE issues (
  FOREIGN KEY (status) REFERENCES status(id)
 );
 
+CREATE TABLE timelog (
+ id integer PRIMARY KEY AUTOINCREMENT,
+ issue_id integer NOT NULL,
+ sprint_id integer NOT NULL,
+ time_delta integer NOT NULL DEFAULT 0,
+ time_stat text NOT NULL,
+ created_at text NOT NULL
+)
+
 CREATE TABLE projects (
  id integer PRIMARY KEY AUTOINCREMENT,
  name text NOT NULL
