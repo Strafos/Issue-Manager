@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./TimeCounter.css";
 import { Button, Modal, Form, Input, Label, Icon } from "semantic-ui-react";
 
-import { setTime } from "../../utils/api/api";
+import { setTime, createTimeLog } from "../../utils/api/api";
 
 class TimeCounter extends Component {
   state = {
@@ -43,12 +43,22 @@ class TimeCounter extends Component {
     return !tempTime.length > 0 || !digitRe.test(tempTime);
   };
 
-  handleClickSubmit = () => {
+  // Click from an icon
+  handleIconClick = () => {
     const { issueId, inc, stat } = this.props;
     const { time } = this.state;
     let newTime = inc ? time + 1 : time - 1;
     newTime = newTime < 0 ? 0 : newTime;
     const delta = newTime - time;
+
+    //Log time delta
+    const reqObj = {
+      issueId,
+      delta,
+      stat,
+      createdAt: new Date().toISOString()
+    };
+    createTimeLog(reqObj);
 
     // Update total time in sprint display
     this.props.timeTotals(stat, delta);
@@ -69,6 +79,15 @@ class TimeCounter extends Component {
     const newTime = parseInt(tempTime, 10);
 
     const delta = newTime - time;
+
+    // Log time delta
+    const reqObj = {
+      issueId,
+      delta,
+      stat,
+      createdAt: new Date().toISOString()
+    };
+    createTimeLog(reqObj);
 
     // Update total time in sprint display
     this.props.timeTotals(stat, delta);
@@ -111,7 +130,7 @@ class TimeCounter extends Component {
             </Form>
           </Modal.Content>
         </Modal>
-        <Button icon onClick={this.handleClickSubmit}>
+        <Button icon onClick={this.handleIconClick}>
           <Icon inverted color="red" name={inc ? "plus" : "minus"} />
         </Button>
         <Button as="div" labelPosition="right" onClick={this.handleOpen}>

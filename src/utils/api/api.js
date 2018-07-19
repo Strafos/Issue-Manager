@@ -27,6 +27,31 @@ export const createIssue = async requestObj => {
   return await response;
 };
 
+export const createTimeLog = async requestObj => {
+  const response = await fetch("/log", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(requestObj)
+  });
+
+  return await response;
+};
+
+export const getTimeLogs = id => {
+  return fetch(`/log/${id}`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    }
+  }).then(response => {
+    return response.json();
+  });
+};
+
 export const createProject = async requestObj => {
   const response = await fetch("/project", {
     method: "POST",
@@ -206,10 +231,24 @@ export const deleteIssue = id => {
   });
 };
 
+export const updateShowNotes = (id, bool) => {
+  return fetch(`/issue/${id}/showNotes`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ bool })
+  }).then(response => {
+    return response.json();
+  });
+};
+
 export default {
   createSprint,
   createIssue,
   createProject,
+  createTimeLog,
   getSprints,
   getSprint,
   getProjects,
@@ -217,5 +256,6 @@ export default {
   setStatus,
   updateSprintNotes,
   updateIssueNotes,
-  updateIssue
+  updateIssue,
+  updateShowNotes
 };

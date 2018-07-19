@@ -21,7 +21,8 @@ import {
   getIssue,
   addRecentIssue,
   updateIssue,
-  deleteIssue
+  deleteIssue,
+  createTimeLog
 } from "../../utils/api/api";
 
 class IssueDisplay extends Component {
@@ -35,7 +36,9 @@ class IssueDisplay extends Component {
     status: "",
     timeEstimate: 0,
     timeSpent: 0,
+    timeSpentDelta: 0,
     timeRemaining: 0,
+    timeRemainingDelta: 0,
     notes: "",
     blocked: "false",
     modalOpen: false,
@@ -88,8 +91,11 @@ class IssueDisplay extends Component {
       timeSpent,
       notes,
       blocked,
-      bad
+      bad,
+      timeSpentDelta,
+      timeRemainingDelta
     } = this.state;
+
     const requestObj = {
       name,
       sprintId,
@@ -102,6 +108,7 @@ class IssueDisplay extends Component {
       blocked,
       bad
     };
+
     updateIssue(requestObj, issueId).then(res => {
       if (!res || res.status !== "Success") {
         this.props.error("Failed to update issue");
@@ -114,6 +121,27 @@ class IssueDisplay extends Component {
           this.setState({ showMessage: false });
         }, 2500);
       }
+    });
+
+    const timeSpentRequestObj = {
+      issueId,
+      delta: timeSpentDelta,
+      stat: "time_spent",
+      createdAt: new Date().toISOString()
+    };
+    timeSpentDelta > 0 && createTimeLog(timeSpentRequestObj);
+
+    const timeRemainingRequestObj = {
+      issueId,
+      delta: this.state.timeRemainingDelta,
+      stat: "time_remaining",
+      createdAt: new Date().toISOString()
+    };
+    timeRemainingDelta !== 0 && createTimeLog(timeRemainingRequestObj);
+
+    this.setState({
+      timeSpentDelta: 0,
+      timeRemainingDelta: 0
     });
   };
 
@@ -169,20 +197,26 @@ class IssueDisplay extends Component {
   };
 
   handleTimeRemaining = (event, { value }) => {
+    const { timeRemaining, timeRemainingDelta } = this.state;
+    const time = parseInt(value, 10) || 0;
     this.setState({
-      timeRemaining: value
+      timeRemainingDelta: timeRemainingDelta + time - timeRemaining,
+      timeRemaining: time
+    });
+  };
+
+  handleTimeSpent = (event, { value }) => {
+    const { timeSpent, timeSpentDelta } = this.state;
+    const time = parseInt(value, 10) || 0;
+    this.setState({
+      timeSpentDelta: timeSpentDelta + time - timeSpent,
+      timeSpent: time
     });
   };
 
   handleTimeEstimate = (event, { value }) => {
     this.setState({
       timeEstimate: value
-    });
-  };
-
-  handleTimeSpent = (event, { value }) => {
-    this.setState({
-      timeSpent: value
     });
   };
 
@@ -240,7 +274,6 @@ class IssueDisplay extends Component {
       bad
     } = this.state;
     const { sprints, projects } = this.props;
-    console.log(showMessage);
 
     return (
       <div>

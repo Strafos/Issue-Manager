@@ -17,7 +17,8 @@ import TimeCounter from "../TimeCounter/TimeCounter";
 import {
   getSprint,
   updateIssueNotes,
-  updateSprintNotes
+  updateSprintNotes,
+  updateShowNotes
 } from "../../utils/api/api";
 
 class SprintDisplay extends Component {
@@ -28,6 +29,7 @@ class SprintDisplay extends Component {
     showNoteList: {},
     editNoteList: {},
     issueNoteList: {},
+    issueStatusList: {},
     totalTimeSpent: 0,
     totalTimeRemaining: 0,
     totalTimeEstimate: 0,
@@ -68,7 +70,7 @@ class SprintDisplay extends Component {
       const showNoteList = {};
       const editNoteList = {};
       const issueNoteList = {};
-      issues.map(issue => (showNoteList[issue.id] = false));
+      issues.map(issue => (showNoteList[issue.id] = !!issue.show_notes));
       issues.map(issue => (editNoteList[issue.id] = false));
       issues.map(issue => (issueNoteList[issue.id] = issue.notes));
 
@@ -105,9 +107,10 @@ class SprintDisplay extends Component {
 
   getDefaultSprint = sprints => {
     const d = new Date();
-
-    // If monday, gets current monday, else last monday
-    d.setDate(d.getDate() + ((1 + 7 - d.getDay()) % 7));
+    if (d.getDay() !== 1) {
+      // Get last monday unless today is Monday
+      d.setDate(d.getDate() + ((1 + 7 - d.getDay()) % 7) - 7);
+    }
 
     const options = { month: "2-digit", day: "2-digit", year: "2-digit" };
     const lastMonday = d.toLocaleDateString("en-US", options);
@@ -139,6 +142,16 @@ class SprintDisplay extends Component {
       direction: "ascending",
       sortByColumn: "status"
     });
+  };
+
+  updateStatus = (id, status) => {
+    const { issueList } = this.state;
+    const idx = issueList.findIndex(issue => issue.id === id);
+    issueList[idx].status = status;
+    this.setState({
+      issueList
+    });
+    this.handleStatusSort();
   };
 
   handleSort = clickedColumn => () => {
@@ -226,6 +239,7 @@ class SprintDisplay extends Component {
     this.setState({
       showNoteList
     });
+    updateShowNotes(id, showNoteList[id] ? 1 : 0);
   };
 
   handleEditNotes = id => {
@@ -295,8 +309,7 @@ class SprintDisplay extends Component {
       time_estimate,
       time_remaining,
       project_id,
-      blocked,
-      notes
+      blocked
     } = issue;
 
     return (
@@ -310,6 +323,7 @@ class SprintDisplay extends Component {
           </Table.Cell>
           <Table.Cell collapsing>
             <Status
+              update={this.updateStatus}
               error={this.props.error}
               issueId={id}
               blocked={blocked === "true"}

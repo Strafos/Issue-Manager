@@ -14,6 +14,7 @@ import IssueModal from "./components/IssueModal/IssueModal";
 import SprintDisplay from "./components/SprintDisplay/SprintDisplay";
 import ProjectModal from "./components/ProjectModal/ProjectModal";
 import IssueDisplay from "./components/IssueDisplay/IssueDisplay";
+import SprintGraphPage from "./components/SprintGraphPage/SprintGraphPage";
 
 import { getSprints, getProjects, getRecentIssues } from "./utils/api/api";
 
@@ -213,6 +214,7 @@ class App extends Component {
                   }}
                 />
                 <Route
+                  exact
                   path="/sprint/:id?"
                   render={props => {
                     return (
@@ -236,6 +238,21 @@ class App extends Component {
                         sprints={sprints}
                         {...props}
                       />
+                    );
+                  }}
+                />
+                <Route
+                  path="/sprint/graph/:id?"
+                  render={props => {
+                    return (
+                      sprints.length > 0 && (
+                        <SprintGraphPage
+                          projects={projects}
+                          error={this.setError}
+                          sprints={sprints}
+                          {...props}
+                        />
+                      )
                     );
                   }}
                 />
