@@ -35,7 +35,7 @@ class TimeSpentGraph extends Component {
       const timestamp = new Date(log.created_at);
       timeSpentData.push({
         x: timestamp,
-        y: total
+        y: total + 10
       });
     });
 
@@ -107,7 +107,7 @@ class TimeSpentGraph extends Component {
             data={timeSpentData}
           />
           {hoveredNode ? (
-            <Hint hoveredNode={hoveredNode}>
+            <Hint value={hoveredNode}>
               <div
                 style={{
                   background: "black",

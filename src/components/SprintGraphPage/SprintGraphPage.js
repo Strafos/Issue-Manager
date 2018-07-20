@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { Header, Button, Loader } from "semantic-ui-react";
+import { Header, Grid, Loader } from "semantic-ui-react";
 
 import { getSprint, getTimeLogs } from "../../utils/api/api";
 import TimeRemainingGraph from "./Graphs/TimeRemainingGraph";
+import TimeRemainingMiniGraph from "./Graphs/TimeRemainingMiniGraph";
 import TimeSpentGraph from "./Graphs/TimeSpentGraph";
 
 class SprintGraphPage extends Component {
@@ -49,32 +50,43 @@ class SprintGraphPage extends Component {
       timeSpentLogs
     } = this.state;
 
-    console.log(totalTimeEstimate);
-    console.log(selectedSprint);
-    console.log(timeRemainingLogs);
-
     if (
       !timeRemainingLogs ||
       !timeSpentLogs ||
       !totalTimeEstimate ||
       !selectedSprint
     ) {
-      return <Button content="WTF?" />;
+      return (
+        <Loader active inline>
+          Loading
+        </Loader>
+      );
     }
 
-    console.log(timeRemainingLogs);
-    console.log(selectedSprint);
-    console.log(totalTimeEstimate);
-
     return (
-      <div>
-        <TimeRemainingGraph
-          logs={timeRemainingLogs}
-          sprint={selectedSprint}
-          totalTimeEstimate={totalTimeEstimate}
-        />
-        <TimeSpentGraph logs={timeSpentLogs} sprint={selectedSprint} />
-      </div>
+      <Grid divided="vertically">
+        <Grid.Row columns={2}>
+          <Grid.Column>
+            <Header as="h2">Time Spent</Header>
+            <TimeSpentGraph logs={timeSpentLogs} sprint={selectedSprint} />
+          </Grid.Column>
+          <Grid.Column>
+            <Header as="h2">Time Remaining</Header>
+            <TimeRemainingMiniGraph
+              // <TimeRemainingGraph
+              logs={timeRemainingLogs}
+              sprint={selectedSprint}
+              totalTimeEstimate={totalTimeEstimate}
+            />
+          </Grid.Column>
+        </Grid.Row>
+
+        <Grid.Row columns={3}>
+          <Grid.Column>{"foo"}</Grid.Column>
+          <Grid.Column>{"bar"}</Grid.Column>
+          <Grid.Column>{"baz"}</Grid.Column>
+        </Grid.Row>
+      </Grid>
     );
   }
 }

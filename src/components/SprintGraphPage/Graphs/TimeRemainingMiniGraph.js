@@ -1,9 +1,16 @@
 import React, { Component } from "react";
 import { Segment, Loader } from "semantic-ui-react";
 
-import { XYPlot, XAxis, YAxis, Hint, LineMarkSeries } from "react-vis";
+import {
+  XYPlot,
+  XAxis,
+  YAxis,
+  Hint,
+  LineMarkSeries,
+  LineSeries
+} from "react-vis";
 
-class TimeRemainingGraph extends Component {
+class TimeRemainingMiniGraph extends Component {
   state = {
     timeRemainingProjection: null,
     timeRemainingData: null,
@@ -95,23 +102,41 @@ class TimeRemainingGraph extends Component {
       );
     }
 
+    const lastPoint = timeRemainingData[timeRemainingData.length - 1];
+
     return (
-      <XYPlot width={600} height={400}>
-        <XAxis xType="time" position="start" tickTotal={7} />
-        <YAxis tickTotal={10} />
-        <LineMarkSeries
+      <XYPlot width={325} height={225}>
+        <LineSeries
           color="white"
+          // size="3"
           onValueMouseOver={hoveredNode => this.setState({ hoveredNode })}
           onValueMouseOut={() => this.setState({ hoveredNode: null })}
           data={timeRemainingProjection}
         />
         <LineMarkSeries
           color="red"
-          size="3"
+          size="1"
           onValueMouseOver={hoveredNode => this.setState({ hoveredNode })}
           onValueMouseOut={() => this.setState({ hoveredNode: null })}
           data={timeRemainingData}
         />
+        <Hint value={lastPoint}>
+          <div
+            style={{
+              background: "black",
+              textAlign: "left",
+              padding: "5px",
+              borderRadius: "5px"
+            }}
+          >
+            <p>{"Hours: " + Math.round(lastPoint.y)}</p>
+            {"Time: " +
+              lastPoint.x.toLocaleTimeString() +
+              " on " +
+              lastPoint.x.toDateString()}
+          </div>
+        </Hint>
+
         {hoveredNode ? (
           <Hint value={hoveredNode}>
             <div
@@ -135,4 +160,4 @@ class TimeRemainingGraph extends Component {
   }
 }
 
-export default TimeRemainingGraph;
+export default TimeRemainingMiniGraph;

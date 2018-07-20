@@ -2,7 +2,14 @@ import React, { Component } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
-import { Message, Icon, Header, Button, Grid } from "semantic-ui-react";
+import {
+  Message,
+  Icon,
+  Divider,
+  Header,
+  Button,
+  Grid
+} from "semantic-ui-react";
 import "react-datepicker/dist/react-datepicker.css";
 
 import "./semantic/dist/semantic.min.css";
@@ -149,14 +156,13 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
-          <div className="Header">
-            <Header size="huge" as="h1">
-              <a href={"/"}>
-                <Icon color="red" name="paper plane" />
-              </a>
-              Zaibo's Issue Manager
-            </Header>
-          </div>
+          <Header size="huge" as="h1">
+            <a href={"/"}>
+              <Icon color="red" name="paper plane" />
+            </a>
+            Zaibo's Issue Manager
+          </Header>
+          <Divider />
           <Grid columns={2} divided>
             <Grid.Row />
             <Grid.Row>
