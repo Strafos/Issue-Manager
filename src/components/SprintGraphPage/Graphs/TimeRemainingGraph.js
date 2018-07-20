@@ -7,17 +7,27 @@ class TimeRemainingGraph extends Component {
   state = {
     timeRemainingProjection: null,
     timeRemainingData: null,
-    value: null
+    hoveredNode: null
   };
 
-  constructTimeRemaining = (
-    timeRemainingLogs,
-    selectedSprint,
-    totalTimeEstimate
-  ) => {
+  componentDidMount() {
+    const { logs, sprint, totalTimeEstimate } = this.props;
+    if ((logs, sprint, totalTimeEstimate)) {
+      this.constructTimeRemaining(logs, sprint, totalTimeEstimate);
+      this.constructProjectedTimeRemaining(sprint, totalTimeEstimate);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { logs, sprint, totalTimeEstimate } = nextProps;
+    this.constructTimeRemaining(logs, sprint, totalTimeEstimate);
+    this.constructProjectedTimeRemaining(sprint, totalTimeEstimate);
+  }
+
+  constructTimeRemaining = (logs, sprint, totalTimeEstimate) => {
     const timeRemainingData = [];
 
-    const startDate = new Date(selectedSprint.start_date);
+    const startDate = new Date(sprint.start_date);
     const day = new Date(startDate.getTime());
     day.setDate(startDate.getDate());
     timeRemainingData.push({
@@ -26,7 +36,7 @@ class TimeRemainingGraph extends Component {
     });
 
     let total = totalTimeEstimate;
-    timeRemainingLogs.forEach(log => {
+    logs.forEach(log => {
       total = total + log.time_delta;
       const timestamp = new Date(log.created_at);
       timeRemainingData.push({ x: timestamp, y: total });
@@ -37,8 +47,8 @@ class TimeRemainingGraph extends Component {
     });
   };
 
-  constructProjectedTimeRemaining = (selectedSprint, totalTimeEstimate) => {
-    const startDate = new Date(selectedSprint.start_date);
+  constructProjectedTimeRemaining = (sprint, totalTimeEstimate) => {
+    const startDate = new Date(sprint.start_date);
     const dateMap = {
       1: 1,
       2: 8 / 9,
@@ -71,14 +81,17 @@ class TimeRemainingGraph extends Component {
   };
 
   render() {
-    const { timeRemainingProjection, timeRemainingData } = this.state;
+    const {
+      hoveredNode,
+      timeRemainingProjection,
+      timeRemainingData
+    } = this.state;
+
+    console.log(timeRemainingData);
+    console.log(timeRemainingProjection);
 
     if (!timeRemainingData || !timeRemainingProjection) {
-      return (
-        // <Segment>
-        <Loader />
-        // </Segment>
-      );
+      return <Loader />;
     }
 
     return (
@@ -87,19 +100,19 @@ class TimeRemainingGraph extends Component {
         <YAxis tickTotal={10} />
         <LineMarkSeries
           color="white"
-          onValueMouseOver={value => this.setState({ value })}
-          onValueMouseOut={() => this.setState({ value: null })}
+          onValueMouseOver={hoveredNode => this.setState({ hoveredNode })}
+          onValueMouseOut={() => this.setState({ hoveredNode: null })}
           data={timeRemainingProjection}
         />
         <LineMarkSeries
           color="red"
-          size={3}
-          onValueMouseOver={value => this.setState({ value })}
-          onValueMouseOut={() => this.setState({ value: null })}
+          size="3"
+          onValueMouseOver={hoveredNode => this.setState({ hoveredNode })}
+          onValueMouseOut={() => this.setState({ hoveredNode: null })}
           data={timeRemainingData}
         />
-        {value ? (
-          <Hint value={value}>
+        {hoveredNode ? (
+          <Hint hoveredNode={hoveredNode}>
             <div
               style={{
                 background: "black",
@@ -108,11 +121,11 @@ class TimeRemainingGraph extends Component {
                 borderRadius: "5px"
               }}
             >
-              <p>{"Hours: " + value.y}</p>
+              <p>{"Hours: " + Math.round(hoveredNode.y)}</p>
               {"Time: " +
-                value.x.toLocaleTimeString() +
+                hoveredNode.x.toLocaleTimeString() +
                 " on " +
-                value.x.toDateString()}
+                hoveredNode.x.toDateString()}
             </div>
           </Hint>
         ) : null}
