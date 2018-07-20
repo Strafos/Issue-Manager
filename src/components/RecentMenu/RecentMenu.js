@@ -9,6 +9,7 @@ class RecentMenu extends Component {
     const { selectedSprint } = this.props;
     return (
       <Menu.Item
+        key={sprint.id}
         content={sprint.name}
         index={sprint.id}
         active={selectedSprint && selectedSprint.name === sprint.name}
@@ -22,6 +23,7 @@ class RecentMenu extends Component {
     const { selectedIssue } = this.props;
     return (
       <Menu.Item
+        key={issue.issue_id}
         content={issue.name}
         index={issue.issue_id}
         active={selectedIssue && selectedIssue == issue.issue_id}
