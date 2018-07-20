@@ -105,10 +105,10 @@ class TimeRemainingMiniGraph extends Component {
     const lastPoint = timeRemainingData[timeRemainingData.length - 1];
 
     return (
-      <XYPlot width={325} height={225}>
-        <LineSeries
+      <XYPlot width={275} height={225}>
+        <LineMarkSeries
           color="white"
-          // size="3"
+          size="3"
           onValueMouseOver={hoveredNode => this.setState({ hoveredNode })}
           onValueMouseOut={() => this.setState({ hoveredNode: null })}
           data={timeRemainingProjection}
@@ -120,22 +120,25 @@ class TimeRemainingMiniGraph extends Component {
           onValueMouseOut={() => this.setState({ hoveredNode: null })}
           data={timeRemainingData}
         />
-        <Hint value={lastPoint}>
-          <div
-            style={{
-              background: "black",
-              textAlign: "left",
-              padding: "5px",
-              borderRadius: "5px"
-            }}
-          >
-            <p>{"Hours: " + Math.round(lastPoint.y)}</p>
-            {"Time: " +
-              lastPoint.x.toLocaleTimeString() +
-              " on " +
-              lastPoint.x.toDateString()}
-          </div>
-        </Hint>
+
+        {!hoveredNode ? (
+          <Hint value={lastPoint}>
+            <div
+              style={{
+                background: "black",
+                textAlign: "left",
+                padding: "5px",
+                borderRadius: "5px"
+              }}
+            >
+              <p>{"Hours: " + Math.round(lastPoint.y)}</p>
+              {"Time: " +
+                lastPoint.x.toLocaleTimeString() +
+                " on " +
+                lastPoint.x.toDateString()}
+            </div>
+          </Hint>
+        ) : null}
 
         {hoveredNode ? (
           <Hint value={hoveredNode}>

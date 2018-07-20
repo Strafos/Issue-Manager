@@ -8,7 +8,8 @@ import {
   Divider,
   Header,
   Button,
-  Grid
+  Grid,
+  Loader
 } from "semantic-ui-react";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -22,8 +23,15 @@ import SprintDisplay from "./components/SprintDisplay/SprintDisplay";
 import ProjectModal from "./components/ProjectModal/ProjectModal";
 import IssueDisplay from "./components/IssueDisplay/IssueDisplay";
 import SprintGraphPage from "./components/SprintGraphPage/SprintGraphPage";
+import TimeRemainingMiniGraph from "./components/SprintGraphPage/Graphs/TimeRemainingMiniGraph";
 
-import { getSprints, getProjects, getRecentIssues } from "./utils/api/api";
+import {
+  getSprint,
+  getSprints,
+  getProjects,
+  getTimeLogs,
+  getRecentIssues
+} from "./utils/api/api";
 
 class App extends Component {
   state = {
@@ -90,22 +98,64 @@ class App extends Component {
       const pathRe = /\/(.*)\/(.*)/g;
       const match = pathRe.exec(path);
       if (match && match[1] === "sprint") {
-        this.setState({
-          selectedSprint: match
-            ? sprints.find(sprint => sprint.id == match[2])
-            : this.getDefaultSprint(sprints)
-        });
+        this.setState(
+          {
+            selectedSprint: match
+              ? sprints.find(sprint => sprint.id == match[2])
+              : this.getDefaultSprint(sprints)
+          },
+          () => {
+            this.getLogs(this.state.selectedSprint.id);
+            this.sumTimes(this.state.selectedSprint.id);
+          }
+        );
       } else if (match && match[1] === "issue") {
         this.setState({
           selectedIssue: match[2]
         });
       } else {
-        this.setState({
-          selectedSprint: this.getDefaultSprint(sprints)
-        });
+        this.setState(
+          {
+            selectedSprint: this.getDefaultSprint(sprints)
+          },
+          () => {
+            this.getLogs(this.state.selectedSprint.id);
+            this.sumTimes(this.state.selectedSprint.id);
+          }
+        );
       }
     });
   }
+
+  getLogs = sprintId => {
+    getTimeLogs(sprintId).then(logs => {
+      this.setState({
+        timeSpentLogs: logs.filter(log => log.time_stat === "time_spent"),
+        timeRemainingLogs: logs.filter(
+          log => log.time_stat === "time_remaining"
+        )
+      });
+    });
+  };
+
+  sumTimes = sprintId => {
+    getSprint(sprintId).then(issues => {
+      this.setState({
+        totalTimeEstimate:
+          issues.length > 0 &&
+          issues.map(i => i.time_estimate).reduce((a, b) => a + b),
+        totalTimeSpent:
+          issues.length > 0 &&
+          issues
+            .filter(i => !i.bad)
+            .map(i => i.time_spent)
+            .reduce((a, b) => a + b),
+        totalTimeRemaining:
+          issues.length > 0 &&
+          issues.map(i => i.time_remaining).reduce((a, b) => a + b)
+      });
+    });
+  };
 
   getDefaultSprint = sprints => {
     const d = new Date();
@@ -150,8 +200,28 @@ class App extends Component {
       projects,
       selectedSprint,
       recentIssues,
-      selectedIssue
+      selectedIssue,
+      timeRemainingLogs,
+      timeSpentLogs,
+      totalTimeEstimate
     } = this.state;
+
+    console.log(selectedSprint);
+    console.log(totalTimeEstimate);
+    console.log(timeSpentLogs);
+
+    if (
+      !timeRemainingLogs ||
+      !timeSpentLogs ||
+      !totalTimeEstimate ||
+      !selectedSprint
+    ) {
+      return (
+        <Loader active inline>
+          Loading
+        </Loader>
+      );
+    }
 
     return (
       <Router>
@@ -192,6 +262,11 @@ class App extends Component {
                       recentIssues={recentIssues}
                     />
                   </div>
+                  <TimeRemainingMiniGraph
+                    logs={timeRemainingLogs}
+                    sprint={selectedSprint}
+                    totalTimeEstimate={totalTimeEstimate}
+                  />
                 </Grid.Row>
                 <br />
                 <Grid.Row>

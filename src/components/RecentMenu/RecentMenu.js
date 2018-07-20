@@ -51,7 +51,7 @@ class RecentMenu extends Component {
             </Menu.Menu>
           </Menu.Item>
         </Menu>
-        <Menu vertical>
+        {/* <Menu vertical>
           <Menu.Item>
             <Menu.Header>Recent Issues</Menu.Header>
 
@@ -60,7 +60,7 @@ class RecentMenu extends Component {
                 recentIssues.map(issue => this.renderIssue(issue))}
             </Menu.Menu>
           </Menu.Item>
-        </Menu>
+        </Menu> */}
       </div>
     );
   }
