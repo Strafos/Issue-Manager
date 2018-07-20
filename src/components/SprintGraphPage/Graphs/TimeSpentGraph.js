@@ -1,66 +1,11 @@
 import React, { Component } from "react";
 import { Segment, Loader } from "semantic-ui-react";
 
+import { XYPlot, XAxis, YAxis, Hint, LineMarkSeries } from "react-vis";
+
 import { getSprint, getTimeLogs } from "../../utils/api/api";
-import TimeRemainingGraph from "./Graphs/TimeRemainingGraph";
 
-class SprintGraphPage extends Component {
-  state = {
-    selectedSprint: null,
-    sprints: null
-  };
-
-  componentDidMount() {
-    getTimeLogs(this.props.match.params.id).then(logs => {
-      this.setState(
-        {
-          timeSpentLogs: logs.filter(log => log.time_stat === "time_spent"),
-          timeRemainingLogs: logs.filter(
-            log => log.time_stat === "time_remaining"
-          )
-        },
-        this.constructTimeSpent
-      );
-    });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { match, sprints } = nextProps;
-
-    const sprintId = match.params.id;
-    const selectedSprint = sprints.find(sprint => sprint.id == sprintId);
-
-    this.setState(
-      {
-        selectedSprint
-      },
-      this.constructProjectedTimeSpent
-    );
-
-    getSprint(sprintId).then(issues => {
-      this.setState(
-        {
-          totalTimeEstimate:
-            issues.length > 0 &&
-            issues.map(i => i.time_estimate).reduce((a, b) => a + b),
-          totalTimeSpent:
-            issues.length > 0 &&
-            issues
-              .filter(i => !i.bad)
-              .map(i => i.time_spent)
-              .reduce((a, b) => a + b),
-          totalTimeRemaining:
-            issues.length > 0 &&
-            issues.map(i => i.time_remaining).reduce((a, b) => a + b)
-        },
-        () => {
-          this.constructProjectedTimeRemaining();
-          this.constructTimeRemaining();
-        }
-      );
-    });
-  }
-
+class TimeRemainingGraph extends Component {
   constructTimeSpent = () => {
     const { timeSpentLogs, selectedSprint } = this.state;
     const startDate = new Date(selectedSprint.start_date);
@@ -180,8 +125,7 @@ class SprintGraphPage extends Component {
       timeSpentData,
       value,
       timeRemainingProjection,
-      timeRemainingData,
-      timeRemainingLogs
+      timeRemainingData
     } = this.state;
 
     if (!timeSpentProjection) {
@@ -194,11 +138,7 @@ class SprintGraphPage extends Component {
 
     return (
       <div>
-        <TimeRemainingGraph
-          logs={timeRemainingLogs}
-          timeRemainingProjection={timeRemainingProjection}
-        />
-        {/* <XYPlot width={600} height={400}>
+        <XYPlot width={600} height={400}>
           <XAxis xType="time" position="start" tickTotal={7} />
           <YAxis tickTotal={10} />
           <LineMarkSeries
@@ -267,10 +207,10 @@ class SprintGraphPage extends Component {
               </div>
             </Hint>
           ) : null}
-        </XYPlot> */}
+        </XYPlot>
       </div>
     );
   }
 }
 
-export default SprintGraphPage;
+export default TimeRemainingGraph;
