@@ -56,6 +56,55 @@ class SprintDisplay extends Component {
     return sprint;
   };
 
+  componentDidMount() {
+    const { match, sprints } = this.props;
+
+    const defaultSprint = this.getDefaultSprint(sprints);
+    const defaultSprintId = defaultSprint ? defaultSprint.id : null;
+
+    // If the id is part of the url params, use that, otherwise, display default sprint
+    const id = match.params.id ? match.params.id : defaultSprintId;
+
+    getSprint(id).then(issues => {
+      const selectedSprint = sprints.find(spr => spr.id == id);
+      const showNoteList = {};
+      const editNoteList = {};
+      const issueNoteList = {};
+      issues.map(issue => (showNoteList[issue.id] = !!issue.show_notes));
+      issues.map(issue => (editNoteList[issue.id] = false));
+      issues.map(issue => (issueNoteList[issue.id] = issue.notes));
+
+      // Issues, note toggle array, summing times for footer
+      this.setState({
+        selectedSprint,
+        issueList: issues,
+        showNoteList,
+        editNoteList,
+        issueNoteList,
+        totalTimeEstimate:
+          issues.length > 0 &&
+          issues.map(i => i.time_estimate).reduce((a, b) => a + b),
+        totalTimeSpent:
+          issues.length > 0 &&
+          issues
+            .filter(i => !i.bad)
+            .map(i => i.time_spent)
+            .reduce((a, b) => a + b),
+        totalTimeRemaining:
+          issues.length > 0 &&
+          issues.map(i => i.time_remaining).reduce((a, b) => a + b)
+      });
+
+      // SPRINT notes
+      this.setState({
+        notes: selectedSprint ? selectedSprint.notes : ""
+      });
+
+      // Want to sort by status by default
+      this.handleStatusSort();
+    });
+  }
+
   componentWillReceiveProps(nextProps) {
     const { match, sprints } = nextProps;
 
@@ -405,6 +454,8 @@ class SprintDisplay extends Component {
       totalTimeRemaining,
       totalTimeEstimate
     } = this.state;
+
+    console.log(issueList);
 
     return (
       <div>

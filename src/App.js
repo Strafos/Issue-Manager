@@ -24,6 +24,7 @@ import ProjectModal from "./components/ProjectModal/ProjectModal";
 import IssueDisplay from "./components/IssueDisplay/IssueDisplay";
 import SprintGraphPage from "./components/SprintGraphPage/SprintGraphPage";
 import TimeRemainingMiniGraph from "./components/SprintGraphPage/Graphs/TimeRemainingMiniGraph";
+import TimeSpentMiniGraph from "./components/SprintGraphPage/Graphs/TimeSpentMiniGraph";
 
 import {
   getSprint,
@@ -206,10 +207,6 @@ class App extends Component {
       totalTimeEstimate
     } = this.state;
 
-    console.log(selectedSprint);
-    console.log(totalTimeEstimate);
-    console.log(timeSpentLogs);
-
     if (
       !timeRemainingLogs ||
       !timeSpentLogs ||
@@ -262,10 +259,15 @@ class App extends Component {
                       recentIssues={recentIssues}
                     />
                   </div>
+                  <br />
                   <TimeRemainingMiniGraph
                     logs={timeRemainingLogs}
                     sprint={selectedSprint}
                     totalTimeEstimate={totalTimeEstimate}
+                  />
+                  <TimeSpentMiniGraph
+                    logs={timeSpentLogs}
+                    sprint={selectedSprint}
                   />
                 </Grid.Row>
                 <br />

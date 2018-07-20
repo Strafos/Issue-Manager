@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { Header, Grid, Loader } from "semantic-ui-react";
+import { Header, Grid, Divider, Loader } from "semantic-ui-react";
 
 import { getSprint, getTimeLogs } from "../../utils/api/api";
 import TimeRemainingGraph from "./Graphs/TimeRemainingGraph";
 import TimeRemainingMiniGraph from "./Graphs/TimeRemainingMiniGraph";
 import TimeSpentGraph from "./Graphs/TimeSpentGraph";
+import DayBarGraph from "./Graphs/DayBarGraph";
 
 class SprintGraphPage extends Component {
   state = {
@@ -13,12 +14,30 @@ class SprintGraphPage extends Component {
   };
 
   componentDidMount() {
-    getTimeLogs(this.props.match.params.id).then(logs => {
+    const { match, sprints } = this.props;
+    const sprintId = match.params.id;
+
+    getTimeLogs(sprintId).then(logs => {
       this.setState({
         timeSpentLogs: logs.filter(log => log.time_stat === "time_spent"),
         timeRemainingLogs: logs.filter(
           log => log.time_stat === "time_remaining"
         )
+      });
+    });
+
+    const selectedSprint = sprints.find(sprint => sprint.id == sprintId);
+
+    this.setState({
+      selectedSprint
+    });
+
+    getSprint(sprintId).then(issues => {
+      this.setState({
+        totalTimeEstimate:
+          issues.length > 0 &&
+          issues.map(i => i.time_estimate).reduce((a, b) => a + b),
+        issues
       });
     });
   }
@@ -47,7 +66,8 @@ class SprintGraphPage extends Component {
       timeRemainingLogs,
       selectedSprint,
       totalTimeEstimate,
-      timeSpentLogs
+      timeSpentLogs,
+      issues
     } = this.state;
 
     if (
@@ -64,7 +84,7 @@ class SprintGraphPage extends Component {
     }
 
     return (
-      <Grid divided="vertically">
+      <Grid>
         <Grid.Row columns={2}>
           <Grid.Column>
             <Header as="h2">Time Spent</Header>
@@ -72,19 +92,43 @@ class SprintGraphPage extends Component {
           </Grid.Column>
           <Grid.Column>
             <Header as="h2">Time Remaining</Header>
-            <TimeRemainingMiniGraph
-              // <TimeRemainingGraph
+            <TimeRemainingGraph
               logs={timeRemainingLogs}
               sprint={selectedSprint}
               totalTimeEstimate={totalTimeEstimate}
             />
           </Grid.Column>
         </Grid.Row>
+        <Divider />
 
         <Grid.Row columns={3}>
-          <Grid.Column>{"foo"}</Grid.Column>
-          <Grid.Column>{"bar"}</Grid.Column>
-          <Grid.Column>{"baz"}</Grid.Column>
+          <Grid.Column>
+            <Header as="h2">Monday</Header>
+            <DayBarGraph logs={timeSpentLogs} issues={issues} day={1} />
+          </Grid.Column>
+          <Grid.Column>
+            <Header as="h2">Tuesday</Header>
+            <DayBarGraph logs={timeSpentLogs} issues={issues} day={2} />
+          </Grid.Column>
+          <Grid.Column>
+            <Header as="h2">Wednesday</Header>
+            <DayBarGraph logs={timeSpentLogs} issues={issues} day={3} />
+          </Grid.Column>
+        </Grid.Row>
+
+        <Grid.Row columns={3}>
+          <Grid.Column>
+            <Header as="h2">Thursday</Header>
+            <DayBarGraph logs={timeSpentLogs} issues={issues} day={4} />
+          </Grid.Column>
+          <Grid.Column>
+            <Header as="h2">Friday</Header>
+            <DayBarGraph logs={timeSpentLogs} issues={issues} day={5} />
+          </Grid.Column>
+          <Grid.Column>
+            <Header as="h2">Saturday</Header>
+            <DayBarGraph logs={timeSpentLogs} issues={issues} day={6} />
+          </Grid.Column>
         </Grid.Row>
       </Grid>
     );
