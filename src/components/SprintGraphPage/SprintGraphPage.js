@@ -130,6 +130,14 @@ class SprintGraphPage extends Component {
             <DayBarGraph logs={timeSpentLogs} issues={issues} day={6} />
           </Grid.Column>
         </Grid.Row>
+
+        <Grid.Row columns={3}>
+          <Grid.Column />
+          <Grid.Column>
+            <Header as="h2">Sunday</Header>
+            <DayBarGraph logs={timeSpentLogs} issues={issues} day={7} />
+          </Grid.Column>
+        </Grid.Row>
       </Grid>
     );
   }

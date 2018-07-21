@@ -277,7 +277,7 @@ class SprintDisplay extends Component {
     this.props.update(notes);
     updateSprintNotes(notes, selectedSprint.id).then(res => {
       if (!res || res.status !== "Success") {
-        this.props.error("Failed to set block status");
+        this.props.error("Failed to save notes");
       }
     });
   };

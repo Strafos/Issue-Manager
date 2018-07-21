@@ -19,7 +19,7 @@ class TimeRemainingMiniGraph extends Component {
 
   componentDidMount() {
     const { logs, sprint, totalTimeEstimate } = this.props;
-    if ((logs, sprint, totalTimeEstimate)) {
+    if (logs && sprint && totalTimeEstimate) {
       this.constructTimeRemaining(logs, sprint, totalTimeEstimate);
       this.constructProjectedTimeRemaining(sprint, totalTimeEstimate);
     }
@@ -27,8 +27,10 @@ class TimeRemainingMiniGraph extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { logs, sprint, totalTimeEstimate } = nextProps;
-    this.constructTimeRemaining(logs, sprint, totalTimeEstimate);
-    this.constructProjectedTimeRemaining(sprint, totalTimeEstimate);
+    if (logs && sprint && totalTimeEstimate) {
+      this.constructTimeRemaining(logs, sprint, totalTimeEstimate);
+      this.constructProjectedTimeRemaining(sprint, totalTimeEstimate);
+    }
   }
 
   constructTimeRemaining = (logs, sprint, totalTimeEstimate) => {
@@ -122,7 +124,10 @@ class TimeRemainingMiniGraph extends Component {
         />
 
         {!hoveredNode ? (
-          <Hint value={lastPoint}>
+          <Hint
+            value={lastPoint}
+            align={{ vertical: "bottom", horizontal: "left" }}
+          >
             <div
               style={{
                 background: "black",

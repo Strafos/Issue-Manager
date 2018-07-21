@@ -31,11 +31,20 @@ class DayBarGraph extends Component {
     this.constructTimeSpent(logs, issues, day);
   }
 
+  // Thought 1 am is technically the next day, we want to bucket with the previous day
+  // By offsetting 3 hours, up until 3am counts to previous day
+  getDayWithOffset = created_at => {
+    const d = new Date(created_at);
+
+    d.setHours(d.getHours() - 3);
+    return d.getDay();
+  };
+
   constructTimeSpent = (logs, issues, day) => {
     const timeSpentMap = {};
 
     logs
-      .filter(log => new Date(log.created_at).getDay() === day)
+      .filter(log => this.getDayWithOffset(log.created_at) === day)
       .forEach(log => {
         if (timeSpentMap[log.issue_id]) {
           timeSpentMap[log.issue_id] =
@@ -68,19 +77,17 @@ class DayBarGraph extends Component {
       );
     }
 
-    console.log(timeSpentData);
-
     return (
       <div>
         <XYPlot
           width={400}
-          height={80 * timeSpentData.length}
+          height={55 + 25 * timeSpentData.length}
           yType={"ordinal"}
           margin={{ left: 150 }}
         >
           <XAxis />
           <YAxis />
-          <HorizontalBarSeries data={timeSpentData} />
+          <HorizontalBarSeries color="grey" data={timeSpentData} />
         </XYPlot>
       </div>
     );

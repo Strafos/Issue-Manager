@@ -20,8 +20,10 @@ class TimeSpentMiniGraph extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { sprint, logs } = nextProps;
-    this.constructTimeSpent(sprint, logs);
-    this.constructProjectedTimeSpent(sprint);
+    if (sprint && logs) {
+      this.constructTimeSpent(sprint, logs);
+      this.constructProjectedTimeSpent(sprint);
+    }
   }
 
   constructTimeSpent = (sprint, logs) => {

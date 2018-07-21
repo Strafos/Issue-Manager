@@ -70,6 +70,30 @@ class IssueDisplay extends Component {
     });
   }
 
+  componentWillReceiveProps(nextProps) {
+    const issueId = nextProps.match.params.id;
+
+    getIssue(issueId).then(issues => {
+      const issue = issues[0];
+      this.setState({
+        selectedIssue: issue,
+        issueId: issueId,
+
+        name: issue.name,
+        sprintId: issue.sprint_id,
+        projectId: issue.project_id,
+        status: issue.status,
+        timeEstimate: issue.time_estimate,
+        timeSpent: issue.time_spent,
+        timeRemaining: issue.time_remaining,
+        notes: issue.notes,
+        blocked: issue.blocked,
+        bad: issue.bad
+      });
+      issueId && this.addRecentIssue(issueId, issue.name);
+    });
+  }
+
   sprintOptions = sprints =>
     sprints.map(sprint => {
       return {
