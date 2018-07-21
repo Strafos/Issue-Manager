@@ -9,8 +9,8 @@ const port = process.env.PORT || 5000;
 
 app.post("/sprint", (req, res) => {
   const { name, startDate, endDate } = req.body;
-  const query = `INSERT INTO sprints values(null, '${name}', '${startDate}', '${endDate}', '')`;
-  db.insert(query)
+  const query = `INSERT INTO sprints values(null, (?), (?), (?), '')`;
+  db.insert(query, [name, startDate, endDate])
     .then(() => {
       res.send({ status: "Success" });
     })
@@ -117,8 +117,8 @@ app.put("/issue/:id/showNotes", (req, res) => {
 
 app.put("/issue/:id/time", (req, res) => {
   const { stat, time } = req.body;
-  const query = `UPDATE issues SET ${stat}='${time}' where id=${req.params.id}`;
-  db.insert(query)
+  const query = `UPDATE issues SET ${stat}=(?) where id=(?)`;
+  db.insert(query, [time, req.params.id])
     .then(() => {
       res.send({ status: "Success" });
     })
@@ -129,8 +129,8 @@ app.put("/issue/:id/time", (req, res) => {
 
 app.post("/project", (req, res) => {
   const { name } = req.body;
-  const query = `INSERT INTO projects values(null, '${name}')`;
-  db.insert(query)
+  const query = `INSERT INTO projects values(null, (?))`;
+  db.insert(query, [name])
     .then(() => {
       res.send({ status: "Success" });
     })
@@ -177,10 +177,13 @@ app.get("/projects", (req, res) => {
     });
 });
 
+// updateNodes
 app.put("/sprint/:id/notes", (req, res) => {
   const { notes } = req.body;
-  const query = `UPDATE sprints SET notes='${notes}' where id=${req.params.id}`;
-  db.insert(query)
+  const query = "UPDATE sprints SET notes=(?) where id=(?)";
+  // const query = `UPDATE sprints SET notes='${notes}' where id=${req.params.id}`;
+  console.log(query);
+  db.insert(query, [notes, req.params.id])
     .then(() => {
       res.send({ status: "Success" });
     })
@@ -191,8 +194,8 @@ app.put("/sprint/:id/notes", (req, res) => {
 
 app.put("/issue/:id/notes", (req, res) => {
   const { notes } = req.body;
-  const query = `UPDATE issues SET notes='${notes}' where id=${req.params.id}`;
-  db.insert(query)
+  const query = "UPDATE issues SET notes=(?) where id=(?)";
+  db.insert(query, [notes, req.params.id])
     .then(() => {
       res.send({ status: "Success" });
     })
@@ -214,12 +217,29 @@ app.put("/issue/:id", (req, res) => {
     notes,
     bad
   } = req.body;
+  // const query =
+  //   `UPDATE issues SET name='${name}', sprint_id=${sprintId}, project_id=${projectId}, ` +
+  //   `status='${status}', time_estimate=${timeEstimate}, time_remaining=${timeRemaining}, ` +
+  //   `time_spent=${timeSpent}, blocked='${blocked}', notes='${notes}', bad=${bad} ` +
+  //   `where id=${req.params.id}`;
   const query =
-    `UPDATE issues SET name='${name}', sprint_id=${sprintId}, project_id=${projectId}, ` +
-    `status='${status}', time_estimate=${timeEstimate}, time_remaining=${timeRemaining}, ` +
-    `time_spent=${timeSpent}, blocked='${blocked}', notes='${notes}', bad=${bad} ` +
-    `where id=${req.params.id}`;
-  db.insert(query)
+    `UPDATE issues SET name=(?), sprint_id=(?), project_id=(?), ` +
+    `status=(?), time_estimate=(?), time_remaining=(?), ` +
+    `time_spent=(?), blocked=(?), notes=(?), bad=(?) ` +
+    `where id=(?)`;
+  db.insert(query, [
+    name,
+    sprintId,
+    projectId,
+    status,
+    timeEstimate,
+    timeRemaining,
+    timeSpent,
+    blocked,
+    notes,
+    bad,
+    req.params.id
+  ])
     .then(() => {
       res.send({ status: "Success" });
     })
@@ -253,10 +273,8 @@ app.get("/recentIssues", (req, res) => {
 
 app.post("/recentIssue/:id", (req, res) => {
   const { name } = req.body;
-  const query = `INSERT INTO recent_issues VALUES(null, ${
-    req.params.id
-  }, '${name}')`;
-  db.insert(query)
+  const query = `INSERT INTO recent_issues VALUES(null, ${req.params.id}, (?))`;
+  db.insert(query, [name])
     .then(() => {
       res.send({ status: "Success" });
     })
