@@ -207,18 +207,18 @@ class App extends Component {
       totalTimeEstimate
     } = this.state;
 
-    if (
-      !timeRemainingLogs ||
-      !timeSpentLogs ||
-      !totalTimeEstimate ||
-      !selectedSprint
-    ) {
-      return (
-        <Loader active inline>
-          Loading
-        </Loader>
-      );
-    }
+    // if (
+    //   !timeRemainingLogs ||
+    //   !timeSpentLogs ||
+    //   !totalTimeEstimate ||
+    //   !selectedSprint
+    // ) {
+    //   return (
+    //     <Loader active inline>
+    //       Loading
+    //     </Loader>
+    //   );
+    // }
 
     return (
       <Router>
@@ -260,15 +260,19 @@ class App extends Component {
                     />
                   </div>
                   <br />
-                  <TimeRemainingMiniGraph
-                    logs={timeRemainingLogs}
-                    sprint={selectedSprint}
-                    totalTimeEstimate={totalTimeEstimate}
-                  />
-                  <TimeSpentMiniGraph
-                    logs={timeSpentLogs}
-                    sprint={selectedSprint}
-                  />
+                  {selectedSprint && (
+                    <div>
+                      <TimeRemainingMiniGraph
+                        logs={timeRemainingLogs}
+                        sprint={selectedSprint}
+                        totalTimeEstimate={totalTimeEstimate}
+                      />
+                      <TimeSpentMiniGraph
+                        logs={timeSpentLogs}
+                        sprint={selectedSprint}
+                      />
+                    </div>
+                  )}
                 </Grid.Row>
                 <br />
                 <Grid.Row>
