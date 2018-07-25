@@ -40,6 +40,8 @@ class RecentMenu extends Component {
       return new Date(a.start_date) - new Date(b.start_date);
     });
 
+    const len = sprints.length;
+
     return (
       <div className="center">
         <Menu vertical>
@@ -47,7 +49,9 @@ class RecentMenu extends Component {
             <Menu.Header>Recent Sprints</Menu.Header>
 
             <Menu.Menu>
-              {sprints.slice(0, 3).map(sprint => this.renderSprints(sprint))}
+              {sprints
+                .slice(len - 3, len)
+                .map(sprint => this.renderSprints(sprint))}
             </Menu.Menu>
           </Menu.Item>
         </Menu>
