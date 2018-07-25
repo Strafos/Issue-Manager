@@ -37,7 +37,7 @@ class TimeSpentMiniGraph extends Component {
       const timestamp = new Date(log.created_at);
       timeSpentData.push({
         x: timestamp,
-        y: total + 10
+        y: total
       });
     });
 
@@ -123,7 +123,7 @@ class TimeSpentMiniGraph extends Component {
                   borderRadius: "5px"
                 }}
               >
-                <p>{"Hours: " + Math.round(lastPoint.y)}</p>
+                <p>{"Hours Spent: " + Math.round(lastPoint.y)}</p>
                 {"Time: " +
                   lastPoint.x.toLocaleTimeString() +
                   " on " +

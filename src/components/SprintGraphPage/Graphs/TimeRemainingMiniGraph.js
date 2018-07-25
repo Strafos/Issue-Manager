@@ -48,7 +48,7 @@ class TimeRemainingMiniGraph extends Component {
     logs.forEach(log => {
       total = total + log.time_delta;
       const timestamp = new Date(log.created_at);
-      timeRemainingData.push({ x: timestamp, y: total - 10 });
+      timeRemainingData.push({ x: timestamp, y: total });
     });
 
     this.setState({
@@ -136,7 +136,7 @@ class TimeRemainingMiniGraph extends Component {
                 borderRadius: "5px"
               }}
             >
-              <p>{"Hours: " + Math.round(lastPoint.y)}</p>
+              <p>{"Remaining Hours: " + Math.round(lastPoint.y)}</p>
               {"Time: " +
                 lastPoint.x.toLocaleTimeString() +
                 " on " +

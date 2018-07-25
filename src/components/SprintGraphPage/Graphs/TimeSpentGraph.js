@@ -35,7 +35,7 @@ class TimeSpentGraph extends Component {
       const timestamp = new Date(log.created_at);
       timeSpentData.push({
         x: timestamp,
-        y: total + 10
+        y: total
       });
     });
 

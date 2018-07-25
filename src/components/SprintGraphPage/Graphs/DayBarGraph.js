@@ -1,16 +1,7 @@
 import React, { Component } from "react";
 import { Segment, Loader, Dimmer } from "semantic-ui-react";
 
-import {
-  XAxis,
-  YAxis,
-  XYPlot,
-  HorizontalBarSeries,
-  VerticalGridLines,
-  HorizontalGridLines,
-  Hint,
-  LineMarkSeries
-} from "react-vis";
+import { XAxis, YAxis, XYPlot, HorizontalBarSeries } from "react-vis";
 
 class DayBarGraph extends Component {
   state = {
@@ -44,7 +35,7 @@ class DayBarGraph extends Component {
     const timeSpentMap = {};
 
     logs
-      .filter(log => this.getDayWithOffset(log.created_at) === day)
+      .filter(log => this.getDayWithOffset(log.created_at) === day % 7)
       .forEach(log => {
         if (timeSpentMap[log.issue_id]) {
           timeSpentMap[log.issue_id] =

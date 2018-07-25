@@ -3,7 +3,6 @@ import { Header, Grid, Divider, Loader } from "semantic-ui-react";
 
 import { getSprint, getTimeLogs } from "../../utils/api/api";
 import TimeRemainingGraph from "./Graphs/TimeRemainingGraph";
-import TimeRemainingMiniGraph from "./Graphs/TimeRemainingMiniGraph";
 import TimeSpentGraph from "./Graphs/TimeSpentGraph";
 import DayBarGraph from "./Graphs/DayBarGraph";
 

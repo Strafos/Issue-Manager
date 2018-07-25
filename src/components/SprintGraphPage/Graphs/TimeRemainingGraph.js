@@ -39,7 +39,7 @@ class TimeRemainingGraph extends Component {
     logs.forEach(log => {
       total = total + log.time_delta;
       const timestamp = new Date(log.created_at);
-      timeRemainingData.push({ x: timestamp, y: total - 10 });
+      timeRemainingData.push({ x: timestamp, y: total });
     });
 
     this.setState({
