@@ -1,3 +1,7 @@
+// API calls
+// server.js: API endpoints
+// database.js: sqlite3 interface
+
 export const createSprint = async requestObj => {
   const response = await fetch("/sprint", {
     method: "POST",

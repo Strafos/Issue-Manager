@@ -133,6 +133,7 @@ class IssueDisplay extends Component {
       bad
     };
 
+    // Save the updated issue in table
     updateIssue(requestObj, issueId).then(res => {
       if (!res || res.status !== "Success") {
         this.props.error("Failed to update issue");
@@ -147,6 +148,7 @@ class IssueDisplay extends Component {
       }
     });
 
+    // Add a timelog if time changed
     const timeSpentRequestObj = {
       issueId,
       delta: timeSpentDelta,
@@ -155,6 +157,7 @@ class IssueDisplay extends Component {
     };
     timeSpentDelta > 0 && createTimeLog(timeSpentRequestObj);
 
+    // Add a timelog if time changed
     const timeRemainingRequestObj = {
       issueId,
       delta: this.state.timeRemainingDelta,
@@ -163,6 +166,7 @@ class IssueDisplay extends Component {
     };
     timeRemainingDelta !== 0 && createTimeLog(timeRemainingRequestObj);
 
+    // Reset time change
     this.setState({
       timeSpentDelta: 0,
       timeRemainingDelta: 0
@@ -336,6 +340,7 @@ class IssueDisplay extends Component {
           )}
         </div>
         <br />
+
         <Form className="Left">
           <Form.Field width={3}>
             <label>Sprint</label>
@@ -345,14 +350,17 @@ class IssueDisplay extends Component {
               onChange={this.handleSprintSelect}
             />
           </Form.Field>
+
           <Form.Field width={3}>
             <label>Project</label>
+
             <ProjectDropDown
               value={projectId}
               projects={projects}
               onChange={this.handleProjectSelect}
             />
           </Form.Field>
+
           <Form.Field>
             <label>Type</label>
             <Button.Group>
@@ -362,7 +370,9 @@ class IssueDisplay extends Component {
               >
                 <Icon color={!bad ? "black" : "red"} name="thumbs up" />
               </Button>
+
               <Button.Or />
+
               <Button
                 color={bad ? "red" : "black"}
                 onClick={() => this.setState({ bad: 1 })}
@@ -371,6 +381,7 @@ class IssueDisplay extends Component {
               </Button>
             </Button.Group>
           </Form.Field>
+
           <Form.Field width={3}>
             <label>Status</label>
             <StatusDisplay
@@ -401,10 +412,12 @@ class IssueDisplay extends Component {
             />
           </Form.Group>
         </Form>
+
         <Form className="Left">
           <Form.Field control={this.renderTextArea} label="Issue Notes" />
         </Form>
         <br />
+
         <Grid columns={2}>
           <Grid.Column className="Left" width={8}>
             <Button onClick={this.handleSubmit} color="green">
@@ -424,9 +437,11 @@ class IssueDisplay extends Component {
               }
             >
               <Header icon="trash alternate outline" content="Delete Issue" />
+
               <Modal.Content>
                 <p>Are you sure you want to delete this issue?</p>
               </Modal.Content>
+
               <Modal.Actions>
                 <Button
                   basic

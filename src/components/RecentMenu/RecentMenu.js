@@ -55,6 +55,8 @@ class RecentMenu extends Component {
             </Menu.Menu>
           </Menu.Item>
         </Menu>
+
+        {/*For now, take out recent issues*/}
         {/* <Menu vertical>
           <Menu.Item>
             <Menu.Header>Recent Issues</Menu.Header>

@@ -3,10 +3,15 @@ const sqlite3 = require("sqlite3").verbose();
 
 const dbFile = path.normalize(path.join(__dirname, "/db/", "zim.db"));
 
+/**
+ * insert() handles all the non-select database queries
+ * returns Promise with the query
+ * Most frontend API calls don't care what is returned,
+ * but some check that the API was successful
+ */
 const insert = (query, params) => {
   let db = new sqlite3.Database(dbFile, sqlite3.OPEN_READWRITE, err => {
     if (err) {
-      console.log("a");
       return console.log(err.message);
     }
   });
@@ -30,12 +35,15 @@ const insert = (query, params) => {
   return prom;
 };
 
+/**
+ * Handle any SELECT queries on database
+ * returns a Promise obj with data
+ */
 const read = async query => {
   let db = new sqlite3.Database(dbFile, sqlite3.OPEN_READONLY, err => {
     if (err) {
       return console.log(err.message);
     }
-    // console.log("Connected to sim.db");
   });
 
   const prom = new Promise((resolve, reject) => {
@@ -52,7 +60,6 @@ const read = async query => {
     if (err) {
       console.error(err.message);
     }
-    // console.log("Close the database connection.");
   });
 
   return prom;

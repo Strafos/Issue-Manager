@@ -3,12 +3,17 @@ import React, { Component } from "react";
 import "./SprintDisplay.css";
 import {
   Icon,
+  Grid,
   Button,
+  Segment,
   Form,
   TextArea,
   Table,
   Header,
-  Progress
+  Progress,
+  Container,
+  Loader,
+  Divider
 } from "semantic-ui-react";
 
 import Status from "../Status/Status";
@@ -38,8 +43,8 @@ class SprintDisplay extends Component {
   };
 
   statusMap = {
-    "In queue": 0,
-    "In progress": 1,
+    "In queue": 1,
+    "In progress": 0,
     Paused: 2,
     Done: 3
   };
@@ -455,38 +460,66 @@ class SprintDisplay extends Component {
       totalTimeEstimate
     } = this.state;
 
-    console.log(issueList);
+    if (!selectedSprint) {
+      return <Loader active inline />;
+    }
 
     return (
       <div>
-        <Header floated="left" as="h2">
-          {selectedSprint && selectedSprint.name}
-        </Header>
+        {/* <Button color="black" floated="right">
+          <a href={`/sprint/graph/${selectedSprint.id}`}>{"Go to graph"}</a>
+        </Button>
         <br />
         <br />
-        <Progress
-          percent={Math.round((totalTimeSpent / 45) * 100)}
-          progress
-          color="black"
-          size="small"
-          label="Time Spent"
-        />
-        <Progress
-          percent={Math.round(
-            (1 - totalTimeRemaining / totalTimeEstimate) * 100
-          )}
-          progress
-          color="black"
-          label="Task Progress"
-          size="small"
-        />
-        <Progress
-          percent={this.projectedProgress()}
-          progress
-          color="black"
-          size="small"
-          label="Projected"
-        />
+        <Divider />
+        <br /> */}
+        <Grid verticalAlign="top" columns={2} stretched>
+          <Grid.Column textAlign="left" width={4}>
+            <Grid.Row>
+              <Header floated="left" as="h1">
+                {selectedSprint && selectedSprint.name}
+                <Header.Subheader>
+                  {"A silly goose jumped over the moon and fled earth"}
+                </Header.Subheader>
+              </Header>
+            </Grid.Row>
+            <Divider />
+            <Grid.Row>
+              <Button color="black" floated="left">
+                <a href={`/sprint/graph/${selectedSprint.id}`}>
+                  {"Go to graph"}
+                </a>
+              </Button>
+            </Grid.Row>
+          </Grid.Column>
+          <Grid.Column width={12}>
+            <Container>
+              <Progress
+                percent={Math.round((totalTimeSpent / 45) * 100)}
+                progress
+                color="black"
+                size="small"
+                label="Time Spent"
+              />
+              <Progress
+                percent={Math.round(
+                  (1 - totalTimeRemaining / totalTimeEstimate) * 100
+                )}
+                progress
+                color="black"
+                label="Task Progress"
+                size="small"
+              />
+              <Progress
+                percent={this.projectedProgress()}
+                progress
+                color="black"
+                size="small"
+                label="Projected"
+              />
+            </Container>
+          </Grid.Column>
+        </Grid>
         <Table sortable celled size="large" compact>
           <Table.Header>
             <Table.Row>

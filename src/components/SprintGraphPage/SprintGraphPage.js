@@ -6,6 +6,9 @@ import TimeRemainingGraph from "./Graphs/TimeRemainingGraph";
 import TimeSpentGraph from "./Graphs/TimeSpentGraph";
 import DayBarGraph from "./Graphs/DayBarGraph";
 
+// Shows the progress of the sprint through two main graphs
+// TimeRemaining and Time Spent
+// Also has a small bar graph for time spent on issue per day
 class SprintGraphPage extends Component {
   state = {
     selectedSprint: null,
@@ -16,6 +19,7 @@ class SprintGraphPage extends Component {
     const { match, sprints } = this.props;
     const sprintId = match.params.id;
 
+    // Use the id from URL to get all timelogs
     getTimeLogs(sprintId).then(logs => {
       this.setState({
         timeSpentLogs: logs.filter(log => log.time_stat === "time_spent"),
@@ -31,6 +35,7 @@ class SprintGraphPage extends Component {
       selectedSprint
     });
 
+    // Need to call getSprint to get total time estimate for graphs
     getSprint(sprintId).then(issues => {
       this.setState({
         totalTimeEstimate:

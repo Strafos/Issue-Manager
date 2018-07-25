@@ -5,9 +5,9 @@ import { XYPlot, XAxis, YAxis, Hint, LineMarkSeries } from "react-vis";
 
 class TimeRemainingGraph extends Component {
   state = {
-    timeRemainingProjection: null,
-    timeRemainingData: null,
-    hoveredNode: null
+    timeRemainingProjection: null, // Projection is expected benchmarks
+    timeRemainingData: null, // Data comes from parsed timelogs
+    hoveredNode: null // Hint appears when node is hovered over
   };
 
   componentDidMount() {
@@ -18,12 +18,15 @@ class TimeRemainingGraph extends Component {
     }
   }
 
+  // totalTimeEstimate is calculated after an async db call for issues
+  // using this method is hacky b/c it's deprecated, but at least it works
   componentWillReceiveProps(nextProps) {
     const { logs, sprint, totalTimeEstimate } = nextProps;
     this.constructTimeRemaining(logs, sprint, totalTimeEstimate);
     this.constructProjectedTimeRemaining(sprint, totalTimeEstimate);
   }
 
+  // Iterate through time logs to create datapoints for time remaining
   constructTimeRemaining = (logs, sprint, totalTimeEstimate) => {
     const timeRemainingData = [];
 
@@ -47,6 +50,9 @@ class TimeRemainingGraph extends Component {
     });
   };
 
+  // Projected benchmarks are specified by the dateMap
+  // On week days, reduce time remaining by 1/9
+  // On weekends, reduce time remaining by 2/9
   constructProjectedTimeRemaining = (sprint, totalTimeEstimate) => {
     const startDate = new Date(sprint.start_date);
     const dateMap = {
@@ -112,6 +118,7 @@ class TimeRemainingGraph extends Component {
           onValueMouseOut={() => this.setState({ hoveredNode: null })}
           data={timeRemainingData}
         />
+
         {hoveredNode ? (
           <Hint value={hoveredNode}>
             <div

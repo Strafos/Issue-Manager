@@ -2,15 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
-import {
-  Message,
-  Icon,
-  Divider,
-  Header,
-  Button,
-  Grid,
-  Loader
-} from "semantic-ui-react";
+import { Message, Header, Divider, Button, Grid } from "semantic-ui-react";
 import "react-datepicker/dist/react-datepicker.css";
 
 import "./semantic/dist/semantic.min.css";
@@ -23,7 +15,6 @@ import SprintDisplay from "./components/SprintDisplay/SprintDisplay";
 import ProjectModal from "./components/ProjectModal/ProjectModal";
 import IssueDisplay from "./components/IssueDisplay/IssueDisplay";
 import SprintGraphPage from "./components/SprintGraphPage/SprintGraphPage";
-import TimeRemainingMiniGraph from "./components/SprintGraphPage/Graphs/TimeRemainingMiniGraph";
 import TimeSpentMiniGraph from "./components/SprintGraphPage/Graphs/TimeSpentMiniGraph";
 
 import {
@@ -90,15 +81,19 @@ class App extends Component {
         recentIssues: issues
       });
     });
+
     getProjects().then(projects => {
       this.setState({ projects });
     });
+
     getSprints().then(sprints => {
       this.setState({ sprints });
       const path = window.location.pathname;
       const pathRe = /\/(.*)\/(.*)/g;
       const match = pathRe.exec(path);
+
       if (match && match[1] === "sprint") {
+        // If sprint is in the URL, then set selectedSprint
         this.setState(
           {
             selectedSprint: match
@@ -111,10 +106,12 @@ class App extends Component {
           }
         );
       } else if (match && match[1] === "issue") {
+        // If issue is in the URL, then set selectedIssue
         this.setState({
           selectedIssue: match[2]
         });
       } else {
+        // If neither, it's a graph page (?)
         this.setState(
           {
             selectedSprint: this.getDefaultSprint(sprints)
@@ -139,6 +136,7 @@ class App extends Component {
     });
   };
 
+  // Calculate totals for times
   sumTimes = sprintId => {
     getSprint(sprintId).then(issues => {
       this.setState({
@@ -158,6 +156,7 @@ class App extends Component {
     });
   };
 
+  // Calculate default sprint by getting the last Monday (unless today is Monday)
   getDefaultSprint = sprints => {
     const d = new Date();
     if (d.getDay() !== 1) {
@@ -202,34 +201,19 @@ class App extends Component {
       selectedSprint,
       recentIssues,
       selectedIssue,
-      timeRemainingLogs,
-      timeSpentLogs,
-      totalTimeEstimate
+      timeSpentLogs
     } = this.state;
-
-    // if (
-    //   !timeRemainingLogs ||
-    //   !timeSpentLogs ||
-    //   !totalTimeEstimate ||
-    //   !selectedSprint
-    // ) {
-    //   return (
-    //     <Loader active inline>
-    //       Loading
-    //     </Loader>
-    //   );
-    // }
 
     return (
       <Router>
         <div className="App">
-          <Header size="huge" as="h1">
+          {/* <Header size="huge" as="h1">
             <a href={"/"}>
               <Icon color="red" name="paper plane" />
             </a>
             Zaibo's Issue Manager
           </Header>
-          <Divider />
+          <Divider /> */}
           <Grid columns={2} divided>
             <Grid.Row />
             <Grid.Row>
@@ -248,6 +232,7 @@ class App extends Component {
                   </Button.Group>
                 </Grid.Row>
                 <br />
+
                 <Grid.Row>
                   <div className="center">
                     <RecentMenu
@@ -259,14 +244,9 @@ class App extends Component {
                       recentIssues={recentIssues}
                     />
                   </div>
-                  <br />
                   {selectedSprint && (
                     <div>
-                      <TimeRemainingMiniGraph
-                        logs={timeRemainingLogs}
-                        sprint={selectedSprint}
-                        totalTimeEstimate={totalTimeEstimate}
-                      />
+                      <br />
                       <TimeSpentMiniGraph
                         logs={timeSpentLogs}
                         sprint={selectedSprint}
@@ -274,6 +254,7 @@ class App extends Component {
                     </div>
                   )}
                 </Grid.Row>
+
                 <br />
                 <Grid.Row>
                   <SprintDropDown
@@ -283,6 +264,7 @@ class App extends Component {
                   />
                 </Grid.Row>
               </Grid.Column>
+
               <Grid.Column width={13}>
                 {this.state.showErrorMessage && this.handleErrorMessage()}
                 <Route
@@ -300,6 +282,7 @@ class App extends Component {
                     );
                   }}
                 />
+
                 <Route
                   exact
                   path="/sprint/:id?"
@@ -315,6 +298,7 @@ class App extends Component {
                     );
                   }}
                 />
+
                 <Route
                   path="/issue/:id?"
                   render={props => {
@@ -328,6 +312,7 @@ class App extends Component {
                     );
                   }}
                 />
+
                 <Route
                   path="/sprint/graph/:id?"
                   render={props => {
