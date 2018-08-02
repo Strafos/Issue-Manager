@@ -186,7 +186,12 @@ app.post("/log", (req, res) => {
 // Create timelog
 // search: createTimelog
 app.get("/log/:id", (req, res) => {
-  const query = `SELECT * FROM timelog where sprint_id=${req.params.id}`;
+  // const query = `SELECT * FROM timelog where sprint_id=${req.params.id}`;
+  const query =
+    `SELECT timelog.id, timelog.issue_id, timelog.sprint_id, ` +
+    `timelog.time_delta, timelog.time_stat, timelog.created_at, issues.name ` +
+    `FROM timelog INNER JOIN issues ON timelog.issue_id = issues.id ` +
+    `WHERE timelog.sprint_id=${req.params.id};`;
   db.read(query)
     .then(response => {
       res.send(response);

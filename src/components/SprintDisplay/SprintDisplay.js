@@ -17,6 +17,7 @@ import {
 
 import Status from "../Status/Status";
 import TimeCounter from "../TimeCounter/TimeCounter";
+import TimelogTable from "../TimelogTable/TimelogTable";
 
 import {
   getSprint,
@@ -42,6 +43,7 @@ class SprintDisplay extends Component {
     direction: null,
     editQuote: false,
     quote: "",
+    displayTimelogs: false,
   };
 
   statusMap = {
@@ -487,6 +489,7 @@ class SprintDisplay extends Component {
       totalTimeEstimate,
       editQuote,
       quote,
+      displayTimelogs,
     } = this.state;
 
     if (!selectedSprint) {
@@ -521,9 +524,18 @@ class SprintDisplay extends Component {
             <Grid.Row>
               <a href={`/sprint/graph/${selectedSprint.id}`}>
                 <Button color="black" floated="left">
-                  {"Go to graph"}
+                  {"Graphs"}
                 </Button>
               </a>
+              <Button
+                onClick={() =>
+                  this.setState({ displayTimelogs: !displayTimelogs })
+                }
+                color="black"
+                floated="left"
+              >
+                {displayTimelogs ? "Issues" : "TimeLogs"}
+              </Button>
             </Grid.Row>
           </Grid.Column>
           <Grid.Column width={12}>
@@ -554,61 +566,65 @@ class SprintDisplay extends Component {
             </Container>
           </Grid.Column>
         </Grid>
-        <Table sortable fixed celled size="large" compact>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell onClick={this.handleSort("name")} width={4}>
-                Name
-              </Table.HeaderCell>
-              <Table.HeaderCell
-                onClick={this.handleSort("project_id")}
-                width={3}
-              >
-                Project
-              </Table.HeaderCell>
-              <Table.HeaderCell onClick={this.handleSort("status")} width={6}>
-                Status
-              </Table.HeaderCell>
-              <Table.HeaderCell
-                onClick={this.handleSort("time_spent")}
-                width={2}
-                textAlign="center"
-              >
-                Time Spent
-              </Table.HeaderCell>
-              <Table.HeaderCell
-                onClick={this.handleSort("time_remaining")}
-                width={2}
-              >
-                Time Remaining
-              </Table.HeaderCell>
-              <Table.HeaderCell
-                onClick={this.handleSort("time_estimate")}
-                width={1}
-              >
-                Time Estimate
-              </Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          {issueList.map(this.renderIssue)}
-          <Table.Footer fullWidth>
-            <Table.Row>
-              <Table.HeaderCell colSpan="3" />
-              <Table.HeaderCell textAlign="center" colSpan="1">
-                {totalTimeSpent}
-                {" hours"}
-              </Table.HeaderCell>
-              <Table.HeaderCell textAlign="center" colSpan="1">
-                {totalTimeRemaining}
-                {" hours"}
-              </Table.HeaderCell>
-              <Table.HeaderCell textAlign="center" colSpan="1">
-                {totalTimeEstimate}
-                {" hours"}
-              </Table.HeaderCell>
-            </Table.Row>
-          </Table.Footer>
-        </Table>
+        {displayTimelogs ? (
+          <TimelogTable sprintId={selectedSprint && selectedSprint.id} />
+        ) : (
+          <Table sortable fixed celled size="large" compact>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell onClick={this.handleSort("name")} width={4}>
+                  Name
+                </Table.HeaderCell>
+                <Table.HeaderCell
+                  onClick={this.handleSort("project_id")}
+                  width={3}
+                >
+                  Project
+                </Table.HeaderCell>
+                <Table.HeaderCell onClick={this.handleSort("status")} width={6}>
+                  Status
+                </Table.HeaderCell>
+                <Table.HeaderCell
+                  onClick={this.handleSort("time_spent")}
+                  width={2}
+                  textAlign="center"
+                >
+                  Time Spent
+                </Table.HeaderCell>
+                <Table.HeaderCell
+                  onClick={this.handleSort("time_remaining")}
+                  width={2}
+                >
+                  Time Remaining
+                </Table.HeaderCell>
+                <Table.HeaderCell
+                  onClick={this.handleSort("time_estimate")}
+                  width={1}
+                >
+                  Time Estimate
+                </Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            {issueList.map(this.renderIssue)}
+            <Table.Footer fullWidth>
+              <Table.Row>
+                <Table.HeaderCell colSpan="3" />
+                <Table.HeaderCell textAlign="center" colSpan="1">
+                  {totalTimeSpent}
+                  {" hours"}
+                </Table.HeaderCell>
+                <Table.HeaderCell textAlign="center" colSpan="1">
+                  {totalTimeRemaining}
+                  {" hours"}
+                </Table.HeaderCell>
+                <Table.HeaderCell textAlign="center" colSpan="1">
+                  {totalTimeEstimate}
+                  {" hours"}
+                </Table.HeaderCell>
+              </Table.Row>
+            </Table.Footer>
+          </Table>
+        )}
         <Form>
           <Form.Field control={this.renderTextArea} label="Sprint Notes" />
         </Form>

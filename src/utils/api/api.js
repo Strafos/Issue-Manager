@@ -44,8 +44,8 @@ export const createTimeLog = async requestObj => {
   return await response;
 };
 
-export const getTimeLogs = id => {
-  return fetch(`/log/${id}`, {
+export const getTimeLogs = sprintId => {
+  return fetch(`/log/${sprintId}`, {
     method: "GET",
     headers: {
       Accept: "application/json",
