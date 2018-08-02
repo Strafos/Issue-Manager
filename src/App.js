@@ -305,7 +305,7 @@ class App extends Component {
                   }}
                 />
 
-                <Route
+                {/* <Route
                   path="/sprint/graph/:id?"
                   render={props => {
                     return (
@@ -319,7 +319,7 @@ class App extends Component {
                       )
                     );
                   }}
-                />
+                /> */}
               </Grid.Column>
             </Grid.Row>
           </Grid>

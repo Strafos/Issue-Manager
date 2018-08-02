@@ -1,5 +1,7 @@
 import _ from "lodash";
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
+
 import "./SprintDisplay.css";
 import {
   Icon,
@@ -17,6 +19,7 @@ import {
 
 import Status from "../Status/Status";
 import TimeCounter from "../TimeCounter/TimeCounter";
+import SprintGraphDisplay from "../SprintGraphDisplay/SprintGraphDisplay";
 import TimelogTable from "../TimelogTable/TimelogTable";
 
 import {
@@ -537,11 +540,14 @@ class SprintDisplay extends Component {
             </Grid.Row>
             <Divider />
             <Grid.Row>
-              <a href={`/sprint/graph/${selectedSprint.id}`}>
-                <Button color="black" floated="left">
-                  {"Graphs"}
-                </Button>
-              </a>
+              <Button
+                as={Link}
+                to={`/sprint/graph/${selectedSprint.id}`}
+                color="black"
+                floated="left"
+              >
+                {"Graphs"}
+              </Button>
               <Button
                 onClick={() =>
                   this.setState({ displayTimelogs: !displayTimelogs })
@@ -582,7 +588,11 @@ class SprintDisplay extends Component {
           </Grid.Column>
         </Grid>
         {displayTimelogs ? (
-          <TimelogTable sprintId={selectedSprint && selectedSprint.id} />
+          // <TimelogTable sprintId={selectedSprint && selectedSprint.id} />
+          <SprintGraphDisplay
+            // error={this.setError}
+            selectedSprint={selectedSprint}
+          />
         ) : (
           <Table sortable fixed celled size="large" compact>
             <Table.Header>
@@ -640,13 +650,7 @@ class SprintDisplay extends Component {
             </Table.Footer>
           </Table>
         )}
-        {/* <textarea
-          className="textArea"
-          onChange={this.handleSprintNotes}
-          // style={{ minHeight: 150, backgroundColor: "black" }}
-          placeholder="Sprint notes..."
-          value={this.state.notes}
-        /> */}
+
         <Form>
           <Form.Field control={this.renderTextArea} label="Sprint Notes" />
         </Form>

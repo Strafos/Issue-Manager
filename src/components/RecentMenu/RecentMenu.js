@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
+
 import "./RecentMenu.css";
 import { Menu, Container, Button } from "semantic-ui-react";
 
@@ -14,7 +16,8 @@ class RecentMenu extends Component {
         index={sprint.id}
         active={selectedSprint && selectedSprint.name === sprint.name}
         onClick={this.props.handleSprintMenuClick}
-        href={`/sprint/${sprint.id}`}
+        as={Link}
+        to={`/sprint/${sprint.id}`}
       />
     );
   };
@@ -28,7 +31,8 @@ class RecentMenu extends Component {
         index={issue.issue_id}
         active={selectedIssue && selectedIssue == issue.issue_id}
         onClick={this.props.handleIssueMenuClick}
-        href={`/issue/${issue.issue_id}`}
+        as={Link}
+        to={`/sprint/${issue.issue_id}`}
       />
     );
   };

@@ -57,8 +57,7 @@ class TodoList extends Component {
               {todoList && todoList.map(todo => this.renderTodo(todo))}
               <Menu.Item>
                 <Input
-                  // icon="plus"
-                  // iconPosition="left"
+                  style={{ backgroundColor: "black" }}
                   placeholder="Add todo..."
                   action={{
                     icon: "plus",

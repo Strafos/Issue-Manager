@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Dropdown } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 
 class SprintDropDown extends Component {
   sprintOptions = sprints =>
@@ -7,9 +8,21 @@ class SprintDropDown extends Component {
       return {
         text: sprint.name,
         key: sprint.id,
-        value: sprint.id
+        value: sprint.id,
       };
     });
+
+  renderItem = sprint => {
+    return (
+      <Dropdown.Item
+        as={Link}
+        to={`/sprint/${sprint.id}`}
+        text={sprint.name}
+        key={sprint.id}
+        value={sprint.id}
+      />
+    );
+  };
 
   render() {
     const { sprints, onChange, simple, value } = this.props;
@@ -21,8 +34,11 @@ class SprintDropDown extends Component {
         item
         simple={simple}
         onChange={onChange}
-        options={this.sprintOptions(sprints)}
-      />
+      >
+        <Dropdown.Menu>
+          {sprints.map(sprint => this.renderItem(sprint))}
+        </Dropdown.Menu>
+      </Dropdown>
     );
   }
 }

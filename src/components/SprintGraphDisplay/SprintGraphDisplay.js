@@ -9,15 +9,15 @@ import DayBarGraph from "./Graphs/DayBarGraph";
 // Shows the progress of the sprint through two main graphs
 // TimeRemaining and Time Spent
 // Also has a small bar graph for time spent on issue per day
-class SprintGraphPage extends Component {
+class SprintGraphDisplay extends Component {
   state = {
     selectedSprint: null,
     sprints: null,
   };
 
   componentDidMount() {
-    const { match, sprints } = this.props;
-    const sprintId = match.params.id;
+    const { selectedSprint } = this.props;
+    const sprintId = selectedSprint.id;
 
     // Use the id from URL to get all timelogs
     getTimeLogs(sprintId).then(logs => {
@@ -28,8 +28,6 @@ class SprintGraphPage extends Component {
         ),
       });
     });
-
-    const selectedSprint = sprints.find(sprint => sprint.id == sprintId);
 
     this.setState({
       selectedSprint,
@@ -47,10 +45,9 @@ class SprintGraphPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { match, sprints } = nextProps;
+    const { selectedSprint } = nextProps;
 
-    const sprintId = match.params.id;
-    const selectedSprint = sprints.find(sprint => sprint.id == sprintId);
+    const sprintId = selectedSprint.id;
 
     this.setState({
       selectedSprint,
@@ -147,4 +144,4 @@ class SprintGraphPage extends Component {
   }
 }
 
-export default SprintGraphPage;
+export default SprintGraphDisplay;
