@@ -614,7 +614,7 @@ class SprintDisplay extends Component {
                 </Table.HeaderCell>
                 <Table.HeaderCell
                   onClick={this.handleSort("time_estimate")}
-                  width={1}
+                  width={2}
                 >
                   Time Estimate
                 </Table.HeaderCell>

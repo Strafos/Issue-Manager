@@ -313,6 +313,18 @@ app.delete("/issue/:id", (req, res) => {
     });
 });
 
+// deleteissue
+app.delete("/timelog/:id", (req, res) => {
+  const query = `DELETE FROM timelog where id=${req.params.id}`;
+  db.insert(query)
+    .then(() => {
+      res.send({ status: "Success" });
+    })
+    .catch(err => {
+      res.send({ status: "Failure" });
+    });
+});
+
 app.get("/recentIssues", (req, res) => {
   const query =
     "SELECT DISTINCT issue_id, name FROM recent_issues ORDER BY id DESC LIMIT 5";

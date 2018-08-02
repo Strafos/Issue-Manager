@@ -248,6 +248,18 @@ export const deleteIssue = id => {
   });
 };
 
+export const deleteLog = id => {
+  return fetch(`/timelog/${id}`, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  }).then(response => {
+    return response.json();
+  });
+};
+
 export const updateShowNotes = (id, bool) => {
   return fetch(`/issue/${id}/showNotes`, {
     method: "PUT",

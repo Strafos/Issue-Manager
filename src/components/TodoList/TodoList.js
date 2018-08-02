@@ -7,7 +7,7 @@ import "react-datepicker/dist/react-datepicker.css";
 class TodoList extends Component {
   state = {
     todoList: [],
-    newTodo: ""
+    newTodo: "",
   };
 
   renderTodo = todo => {
@@ -34,20 +34,19 @@ class TodoList extends Component {
     if (newTodo) {
       todoList.push(newTodo);
       this.setState({
-        todoList
+        todoList,
       });
     }
   };
 
   handleInput = (event, data) => {
     this.setState({
-      newTodo: data.value
+      newTodo: data.value,
     });
   };
 
   render() {
     const { todoList } = this.state;
-    console.log(todoList);
 
     return (
       <div className="center">
@@ -63,7 +62,7 @@ class TodoList extends Component {
                   placeholder="Add todo..."
                   action={{
                     icon: "plus",
-                    onClick: this.handleSubmit
+                    onClick: this.handleSubmit,
                   }}
                   size="small"
                   onChange={this.handleInput}
