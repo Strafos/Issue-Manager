@@ -67,7 +67,6 @@ class IssueModal extends Component {
   };
 
   handleNotes = (event, { value }) => {
-    console.log(value);
     this.setState({
       notes: value,
     });

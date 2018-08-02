@@ -7,9 +7,9 @@ export const createSprint = async requestObj => {
     method: "POST",
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(requestObj)
+    body: JSON.stringify(requestObj),
   });
   const body = await response.json();
 
@@ -23,9 +23,9 @@ export const createIssue = async requestObj => {
     method: "POST",
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(requestObj)
+    body: JSON.stringify(requestObj),
   });
 
   return await response;
@@ -36,9 +36,9 @@ export const createTimeLog = async requestObj => {
     method: "POST",
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(requestObj)
+    body: JSON.stringify(requestObj),
   });
 
   return await response;
@@ -49,8 +49,8 @@ export const getTimeLogs = id => {
     method: "GET",
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json"
-    }
+      "Content-Type": "application/json",
+    },
   }).then(response => {
     return response.json();
   });
@@ -61,9 +61,9 @@ export const createProject = async requestObj => {
     method: "POST",
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(requestObj)
+    body: JSON.stringify(requestObj),
   });
 
   return await response;
@@ -74,8 +74,8 @@ export const getSprints = () => {
     method: "GET",
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json"
-    }
+      "Content-Type": "application/json",
+    },
   }).then(response => {
     return response.json();
   });
@@ -86,8 +86,8 @@ export const getProjects = () => {
     method: "GET",
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json"
-    }
+      "Content-Type": "application/json",
+    },
   }).then(response => {
     return response.json();
   });
@@ -98,8 +98,8 @@ export const getSprint = id => {
     method: "GET",
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json"
-    }
+      "Content-Type": "application/json",
+    },
   }).then(response => {
     return response.json();
   });
@@ -110,9 +110,9 @@ export const addRecentIssue = (id, name) => {
     method: "POST",
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ name })
+    body: JSON.stringify({ name }),
   }).then(response => {
     return response.json();
   });
@@ -123,8 +123,8 @@ export const getRecentIssues = () => {
     method: "GET",
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json"
-    }
+      "Content-Type": "application/json",
+    },
   }).then(response => {
     return response.json();
   });
@@ -135,8 +135,8 @@ export const getIssue = id => {
     method: "GET",
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json"
-    }
+      "Content-Type": "application/json",
+    },
   }).then(response => {
     return response.json();
   });
@@ -147,9 +147,9 @@ export const setStatus = (id, status) => {
     method: "PUT",
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ status })
+    body: JSON.stringify({ status }),
   }).then(response => {
     if (response.status === 500) {
       return { status: "Failed" };
@@ -163,9 +163,9 @@ export const setBlocked = (id, blocked) => {
     method: "PUT",
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ blocked })
+    body: JSON.stringify({ blocked }),
   }).then(response => {
     return response.json();
   });
@@ -176,9 +176,9 @@ export const setTime = (id, stat, time) => {
     method: "PUT",
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ stat, time })
+    body: JSON.stringify({ stat, time }),
   }).then(response => {
     return response.json();
   });
@@ -189,9 +189,22 @@ export const updateSprintNotes = (notes, id) => {
     method: "PUT",
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ notes })
+    body: JSON.stringify({ notes }),
+  }).then(response => {
+    return response.json();
+  });
+};
+
+export const updateSprintQuote = (quote, id) => {
+  return fetch(`/sprint/${id}/quote`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ quote }),
   }).then(response => {
     return response.json();
   });
@@ -202,9 +215,9 @@ export const updateIssueNotes = (id, notes) => {
     method: "PUT",
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ notes })
+    body: JSON.stringify({ notes }),
   }).then(response => {
     return response.json();
   });
@@ -215,9 +228,9 @@ export const updateIssue = (requestObj, id) => {
     method: "PUT",
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(requestObj)
+    body: JSON.stringify(requestObj),
   }).then(response => {
     return response.json();
   });
@@ -228,8 +241,8 @@ export const deleteIssue = id => {
     method: "DELETE",
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json"
-    }
+      "Content-Type": "application/json",
+    },
   }).then(response => {
     return response.json();
   });
@@ -240,9 +253,9 @@ export const updateShowNotes = (id, bool) => {
     method: "PUT",
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ bool })
+    body: JSON.stringify({ bool }),
   }).then(response => {
     return response.json();
   });
@@ -261,5 +274,6 @@ export default {
   updateSprintNotes,
   updateIssueNotes,
   updateIssue,
-  updateShowNotes
+  updateShowNotes,
+  updateSprintQuote,
 };

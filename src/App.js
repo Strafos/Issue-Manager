@@ -23,7 +23,7 @@ import {
   getSprints,
   getProjects,
   getTimeLogs,
-  getRecentIssues
+  getRecentIssues,
 } from "./utils/api/api";
 
 class App extends Component {
@@ -34,30 +34,30 @@ class App extends Component {
     defaultSprint: null,
     recentIssues: null,
     errorMessage: "",
-    showErrorMessage: false
+    showErrorMessage: false,
   };
 
   handleSprintIndex = index => {
     this.setState({
-      selectedSprint: this.state.sprints.find(sprint => sprint.id == index)
+      selectedSprint: this.state.sprints.find(sprint => sprint.id == index),
     });
   };
 
   handleSprintSelect = (event, { value }) => {
     this.setState({
-      selectedSprint: this.state.sprints.find(sprint => sprint.id === value)
+      selectedSprint: this.state.sprints.find(sprint => sprint.id === value),
     });
   };
 
   handleSprintMenuClick = (event, { index }) => {
     this.setState({
-      selectedSprint: this.state.sprints.find(sprint => sprint.id === index)
+      selectedSprint: this.state.sprints.find(sprint => sprint.id === index),
     });
   };
 
   handleIssueMenuClick = (event, { index }) => {
     this.setState({
-      selectedIssue: index
+      selectedIssue: index,
     });
   };
 
@@ -72,14 +72,14 @@ class App extends Component {
   setError = message => {
     this.setState({
       showErrorMessage: true,
-      errorMessage: message
+      errorMessage: message,
     });
   };
 
   componentDidMount() {
     getRecentIssues().then(issues => {
       this.setState({
-        recentIssues: issues
+        recentIssues: issues,
       });
     });
 
@@ -99,7 +99,7 @@ class App extends Component {
           {
             selectedSprint: match
               ? sprints.find(sprint => sprint.id == match[2])
-              : this.getDefaultSprint(sprints)
+              : this.getDefaultSprint(sprints),
           },
           () => {
             this.getLogs(this.state.selectedSprint.id);
@@ -109,13 +109,13 @@ class App extends Component {
       } else if (match && match[1] === "issue") {
         // If issue is in the URL, then set selectedIssue
         this.setState({
-          selectedIssue: match[2]
+          selectedIssue: match[2],
         });
       } else {
         // If neither, it's a graph page (?)
         this.setState(
           {
-            selectedSprint: this.getDefaultSprint(sprints)
+            selectedSprint: this.getDefaultSprint(sprints),
           },
           () => {
             this.getLogs(this.state.selectedSprint.id);
@@ -132,7 +132,7 @@ class App extends Component {
         timeSpentLogs: logs.filter(log => log.time_stat === "time_spent"),
         timeRemainingLogs: logs.filter(
           log => log.time_stat === "time_remaining"
-        )
+        ),
       });
     });
   };
@@ -152,7 +152,7 @@ class App extends Component {
             .reduce((a, b) => a + b),
         totalTimeRemaining:
           issues.length > 0 &&
-          issues.map(i => i.time_remaining).reduce((a, b) => a + b)
+          issues.map(i => i.time_remaining).reduce((a, b) => a + b),
       });
     });
   };
@@ -170,14 +170,6 @@ class App extends Component {
     return sprints.find(sprint => sprint.start_date === lastMonday);
   };
 
-  updateNotes = notes => {
-    const { selectedSprint } = this.state;
-    selectedSprint.notes = notes;
-    this.setState({
-      selectedSprint
-    });
-  };
-
   updateComponent = () => {
     this.forceUpdate();
   };
@@ -190,7 +182,6 @@ class App extends Component {
         projects={projects}
         selectedSprint={selectedSprint}
         sprintId={selectedSprint && selectedSprint.id}
-        update={this.updateNotes}
       />
     );
   };
@@ -202,7 +193,7 @@ class App extends Component {
       selectedSprint,
       recentIssues,
       selectedIssue,
-      timeSpentLogs
+      timeSpentLogs,
     } = this.state;
 
     return (
@@ -277,7 +268,6 @@ class App extends Component {
                     return (
                       <SprintDisplay
                         projects={projects}
-                        update={this.updateNotes}
                         sprints={sprints}
                         error={this.setError}
                         {...props}
@@ -293,7 +283,6 @@ class App extends Component {
                     return (
                       <SprintDisplay
                         projects={projects}
-                        update={this.updateNotes}
                         error={this.setError}
                         sprints={sprints}
                         {...props}

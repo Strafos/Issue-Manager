@@ -8,31 +8,31 @@ class TimeCounter extends Component {
   state = {
     time: 0,
     openModal: false,
-    tempTime: ""
+    tempTime: "",
   };
 
   componentDidMount() {
     const { time } = this.props;
     this.setState({
-      time
+      time,
     });
   }
 
   handleOpen = () => {
     this.setState({
-      openModal: true
+      openModal: true,
     });
   };
 
   handleClose = () => {
     this.setState({
-      openModal: false
+      openModal: false,
     });
   };
 
   handleTempTime = (event, { value }) => {
     this.setState({
-      tempTime: value
+      tempTime: value,
     });
   };
 
@@ -52,13 +52,15 @@ class TimeCounter extends Component {
     const delta = newTime - time;
 
     //Log time delta
-    const reqObj = {
-      issueId,
-      delta,
-      stat,
-      createdAt: new Date().toISOString()
-    };
-    createTimeLog(reqObj);
+    if (!this.props.bad) {
+      const reqObj = {
+        issueId,
+        delta,
+        stat,
+        createdAt: new Date().toISOString(),
+      };
+      createTimeLog(reqObj);
+    }
 
     // Update total time in sprint display
     this.props.timeTotals(stat, delta);
@@ -66,7 +68,7 @@ class TimeCounter extends Component {
     // Update time displayed in TimeCounter
     this.setState({
       time: newTime,
-      openModal: false
+      openModal: false,
     });
 
     //Update time in database
@@ -81,13 +83,15 @@ class TimeCounter extends Component {
     const delta = newTime - time;
 
     // Log time delta
-    const reqObj = {
-      issueId,
-      delta,
-      stat,
-      createdAt: new Date().toISOString()
-    };
-    createTimeLog(reqObj);
+    if (!this.props.bad) {
+      const reqObj = {
+        issueId,
+        delta,
+        stat,
+        createdAt: new Date().toISOString(),
+      };
+      createTimeLog(reqObj);
+    }
 
     // Update total time in sprint display
     this.props.timeTotals(stat, delta);
@@ -95,7 +99,7 @@ class TimeCounter extends Component {
     // Update time displayed in TimeCounter
     this.setState({
       time: newTime,
-      openModal: false
+      openModal: false,
     });
 
     //Update time in database

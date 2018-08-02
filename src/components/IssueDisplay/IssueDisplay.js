@@ -9,7 +9,7 @@ import {
   Form,
   TextArea,
   Message,
-  Header
+  Header,
 } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
@@ -22,7 +22,7 @@ import {
   addRecentIssue,
   updateIssue,
   deleteIssue,
-  createTimeLog
+  createTimeLog,
 } from "../../utils/api/api";
 
 class IssueDisplay extends Component {
@@ -43,7 +43,7 @@ class IssueDisplay extends Component {
     blocked: "false",
     modalOpen: false,
     showMessage: false,
-    message: ""
+    message: "",
   };
 
   componentDidMount() {
@@ -64,7 +64,7 @@ class IssueDisplay extends Component {
         timeRemaining: issue.time_remaining,
         notes: issue.notes,
         blocked: issue.blocked,
-        bad: issue.bad
+        bad: issue.bad,
       });
       issueId && this.addRecentIssue(issueId, issue.name);
     });
@@ -88,7 +88,7 @@ class IssueDisplay extends Component {
         timeRemaining: issue.time_remaining,
         notes: issue.notes,
         blocked: issue.blocked,
-        bad: issue.bad
+        bad: issue.bad,
       });
       issueId && this.addRecentIssue(issueId, issue.name);
     });
@@ -99,7 +99,7 @@ class IssueDisplay extends Component {
       return {
         text: sprint.name,
         key: sprint.id,
-        value: sprint.id
+        value: sprint.id,
       };
     });
 
@@ -117,7 +117,7 @@ class IssueDisplay extends Component {
       blocked,
       bad,
       timeSpentDelta,
-      timeRemainingDelta
+      timeRemainingDelta,
     } = this.state;
 
     const requestObj = {
@@ -130,7 +130,7 @@ class IssueDisplay extends Component {
       timeSpent,
       notes,
       blocked,
-      bad
+      bad,
     };
 
     // Save the updated issue in table
@@ -140,7 +140,7 @@ class IssueDisplay extends Component {
       } else {
         this.setState({
           showMessage: true,
-          message: "Issue updated successfully :P"
+          message: "Issue updated successfully :P",
         });
         this.timeout = setTimeout(() => {
           this.setState({ showMessage: false });
@@ -153,23 +153,23 @@ class IssueDisplay extends Component {
       issueId,
       delta: timeSpentDelta,
       stat: "time_spent",
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
-    timeSpentDelta > 0 && createTimeLog(timeSpentRequestObj);
+    timeSpentDelta > 0 && !bad && createTimeLog(timeSpentRequestObj);
 
     // Add a timelog if time changed
     const timeRemainingRequestObj = {
       issueId,
       delta: this.state.timeRemainingDelta,
       stat: "time_remaining",
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
     timeRemainingDelta !== 0 && createTimeLog(timeRemainingRequestObj);
 
     // Reset time change
     this.setState({
       timeSpentDelta: 0,
-      timeRemainingDelta: 0
+      timeRemainingDelta: 0,
     });
   };
 
@@ -184,43 +184,43 @@ class IssueDisplay extends Component {
 
   handleModalOpen = () => {
     this.setState({
-      modalOpen: true
+      modalOpen: true,
     });
   };
 
   handleModalClose = () => {
     this.setState({
-      modalOpen: false
+      modalOpen: false,
     });
   };
 
   handleSprintSelect = (event, { value }) => {
     this.setState({
-      sprintId: value
+      sprintId: value,
     });
   };
 
   handleProjectSelect = (event, { value }) => {
     this.setState({
-      projectId: value
+      projectId: value,
     });
   };
 
   handleName = (event, { value }) => {
     this.setState({
-      name: value
+      name: value,
     });
   };
 
   handleNotes = (event, { value }) => {
     this.setState({
-      notes: value
+      notes: value,
     });
   };
 
   handleEditName = () => {
     this.setState({
-      editName: true
+      editName: true,
     });
   };
 
@@ -229,7 +229,7 @@ class IssueDisplay extends Component {
     const time = parseInt(value, 10) || 0;
     this.setState({
       timeRemainingDelta: timeRemainingDelta + time - timeRemaining,
-      timeRemaining: time
+      timeRemaining: time,
     });
   };
 
@@ -238,31 +238,31 @@ class IssueDisplay extends Component {
     const time = parseInt(value, 10) || 0;
     this.setState({
       timeSpentDelta: timeSpentDelta + time - timeSpent,
-      timeSpent: time
+      timeSpent: time,
     });
   };
 
   handleTimeEstimate = (event, { value }) => {
     this.setState({
-      timeEstimate: value
+      timeEstimate: value,
     });
   };
 
   handleBlockedChange = () => {
     this.setState({
-      blocked: this.state.blocked === "true" ? "false" : "true"
+      blocked: this.state.blocked === "true" ? "false" : "true",
     });
   };
 
   handleStatusChange = (event, { name }) => {
     this.setState({
-      status: name
+      status: name,
     });
   };
 
   handleMessageClose = () => {
     this.setState({
-      showMessage: false
+      showMessage: false,
     });
     clearTimeout(this.timeout);
   };
@@ -299,7 +299,7 @@ class IssueDisplay extends Component {
       blocked,
       modalOpen,
       showMessage,
-      bad
+      bad,
     } = this.state;
     const { sprints, projects } = this.props;
 

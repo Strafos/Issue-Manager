@@ -224,6 +224,19 @@ app.put("/sprint/:id/notes", (req, res) => {
     });
 });
 
+// updateNotes
+app.put("/sprint/:id/quote", (req, res) => {
+  const { quote } = req.body;
+  const query = "UPDATE sprints SET quote=(?) where id=(?)";
+  db.insert(query, [quote, req.params.id])
+    .then(() => {
+      res.send({ status: "Success" });
+    })
+    .catch(err => {
+      res.send({ status: "Failure" });
+    });
+});
+
 // updateissuenotes
 app.put("/issue/:id/notes", (req, res) => {
   const { notes } = req.body;

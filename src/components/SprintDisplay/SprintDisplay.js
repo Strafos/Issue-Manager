@@ -5,7 +5,6 @@ import {
   Icon,
   Grid,
   Button,
-  Segment,
   Form,
   TextArea,
   Table,
@@ -24,6 +23,7 @@ import {
   updateIssueNotes,
   updateSprintNotes,
   updateShowNotes,
+  updateSprintQuote,
 } from "../../utils/api/api";
 
 class SprintDisplay extends Component {
@@ -40,6 +40,8 @@ class SprintDisplay extends Component {
     totalTimeEstimate: 0,
     sortByColumn: null,
     direction: null,
+    editQuote: false,
+    quote: "",
   };
 
   statusMap = {
@@ -103,6 +105,7 @@ class SprintDisplay extends Component {
       // SPRINT notes
       this.setState({
         notes: selectedSprint ? selectedSprint.notes : "",
+        quote: selectedSprint ? selectedSprint.quote : "",
       });
 
       // Want to sort by status by default
@@ -152,6 +155,7 @@ class SprintDisplay extends Component {
       // SPRINT notes
       this.setState({
         notes: selectedSprint ? selectedSprint.notes : "",
+        quote: selectedSprint ? selectedSprint.quote : "",
       });
 
       // Want to sort by status by default
@@ -279,10 +283,19 @@ class SprintDisplay extends Component {
 
   handleSaveSprintNotes = () => {
     const { notes, selectedSprint } = this.state;
-    this.props.update(notes);
     updateSprintNotes(notes, selectedSprint.id).then(res => {
       if (!res || res.status !== "Success") {
         this.props.error("Failed to save notes");
+      }
+    });
+  };
+
+  handleSaveSprintQuote = () => {
+    const { quote, selectedSprint } = this.state;
+    this.toggleEditSprintQuote();
+    updateSprintQuote(quote, selectedSprint.id).then(res => {
+      if (!res || res.status !== "Success") {
+        this.props.error("Failed to save quote");
       }
     });
   };
@@ -305,9 +318,14 @@ class SprintDisplay extends Component {
   };
 
   handleSaveIssueNotes = (id, notes) => {
-    // this.handleIssueNotes(id, notes);
     this.handleEditNotes(id);
     updateIssueNotes(id, notes);
+  };
+
+  handleSprintQuoteChange = (event, { value }) => {
+    this.setState({
+      quote: value,
+    });
   };
 
   projectedProgress = () => {
@@ -332,6 +350,12 @@ class SprintDisplay extends Component {
       0: 45,
     };
     return Math.round((dateMap[new Date().getDay()] / 45) * 100);
+  };
+
+  toggleEditSprintQuote = () => {
+    this.setState({
+      editQuote: !this.state.editQuote,
+    });
   };
 
   renderTextArea = () => {
@@ -364,6 +388,7 @@ class SprintDisplay extends Component {
       time_remaining,
       project_id,
       blocked,
+      bad,
     } = issue;
 
     return (
@@ -391,6 +416,7 @@ class SprintDisplay extends Component {
               inc={true}
               stat="time_spent"
               time={time_spent}
+              bad={bad}
             />
           </Table.Cell>
           <Table.Cell textAlign="center" collapsing>
@@ -400,6 +426,7 @@ class SprintDisplay extends Component {
               inc={false}
               stat="time_remaining"
               time={time_remaining}
+              bad={0}
             />
           </Table.Cell>
           <Table.Cell
@@ -458,6 +485,8 @@ class SprintDisplay extends Component {
       totalTimeSpent,
       totalTimeRemaining,
       totalTimeEstimate,
+      editQuote,
+      quote,
     } = this.state;
 
     if (!selectedSprint) {
@@ -472,7 +501,19 @@ class SprintDisplay extends Component {
               <Header floated="left" as="h1">
                 {selectedSprint && selectedSprint.name}
                 <Header.Subheader>
-                  {selectedSprint && selectedSprint.quote}
+                  {editQuote ? (
+                    <div>
+                      <TextArea
+                        onChange={this.handleSprintQuoteChange}
+                        defaultValue={quote}
+                      />
+                      <Button onClick={this.handleSaveSprintQuote}>Save</Button>
+                    </div>
+                  ) : (
+                    <Container onClick={this.toggleEditSprintQuote}>
+                      {quote || "you idiot"}
+                    </Container>
+                  )}
                 </Header.Subheader>
               </Header>
             </Grid.Row>
@@ -513,7 +554,7 @@ class SprintDisplay extends Component {
             </Container>
           </Grid.Column>
         </Grid>
-        <Table sortable celled size="large" compact>
+        <Table sortable fixed celled size="large" compact>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell onClick={this.handleSort("name")} width={4}>
@@ -530,14 +571,14 @@ class SprintDisplay extends Component {
               </Table.HeaderCell>
               <Table.HeaderCell
                 onClick={this.handleSort("time_spent")}
-                width={1}
+                width={2}
                 textAlign="center"
               >
                 Time Spent
               </Table.HeaderCell>
               <Table.HeaderCell
                 onClick={this.handleSort("time_remaining")}
-                width={1}
+                width={2}
               >
                 Time Remaining
               </Table.HeaderCell>
