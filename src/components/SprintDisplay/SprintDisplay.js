@@ -364,7 +364,12 @@ class SprintDisplay extends Component {
     return (
       <TextArea
         onChange={this.handleSprintNotes}
-        style={{ minHeight: 150 }}
+        style={{
+          minHeight: 150,
+          backgroundColor: "#282828",
+          color: "#BEBEBE",
+          fontSize: 17,
+        }}
         placeholder="Sprint notes..."
         value={this.state.notes}
       />
@@ -448,7 +453,11 @@ class SprintDisplay extends Component {
                     onChange={(event, { value }) =>
                       this.handleIssueNotes(id, value)
                     }
-                    style={{ minHeight: 150 }}
+                    style={{
+                      minHeight: 150,
+                      backgroundColor: "#282828",
+                      color: "#BEBEBE",
+                    }}
                     placeholder="Issue notes..."
                     value={this.state.issueNoteList[id]}
                   />
@@ -510,7 +519,13 @@ class SprintDisplay extends Component {
                         onChange={this.handleSprintQuoteChange}
                         defaultValue={quote}
                       />
-                      <Button onClick={this.handleSaveSprintQuote}>Save</Button>
+                      <Button
+                        color="black"
+                        floated="right"
+                        onClick={this.handleSaveSprintQuote}
+                      >
+                        Save
+                      </Button>
                     </div>
                   ) : (
                     <Container onClick={this.toggleEditSprintQuote}>
@@ -625,6 +640,13 @@ class SprintDisplay extends Component {
             </Table.Footer>
           </Table>
         )}
+        {/* <textarea
+          className="textArea"
+          onChange={this.handleSprintNotes}
+          // style={{ minHeight: 150, backgroundColor: "black" }}
+          placeholder="Sprint notes..."
+          value={this.state.notes}
+        /> */}
         <Form>
           <Form.Field control={this.renderTextArea} label="Sprint Notes" />
         </Form>

@@ -40,3 +40,10 @@
 .linebreak {
   white-space: pre-line;
 }
+
+.textArea {
+  width: 100%;
+  min-height: 150px;
+  background-color: #303030;
+  color: white;
+}
