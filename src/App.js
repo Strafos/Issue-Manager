@@ -10,6 +10,7 @@ import "./semantic/dist/semantic.min.css";
 import SprintModal from "./components/SprintModal/SprintModal";
 import SprintDropDown from "./components/SprintDropDown/SprintDropDown";
 import RecentMenu from "./components/RecentMenu/RecentMenu";
+import TodoList from "./components/TodoList/TodoList";
 import IssueModal from "./components/IssueModal/IssueModal";
 import SprintDisplay from "./components/SprintDisplay/SprintDisplay";
 import ProjectModal from "./components/ProjectModal/ProjectModal";
@@ -243,7 +244,9 @@ class App extends Component {
                       sprints={sprints}
                       recentIssues={recentIssues}
                     />
+                    <TodoList todoList={sprints} />
                   </div>
+
                   {selectedSprint && (
                     <div>
                       <br />

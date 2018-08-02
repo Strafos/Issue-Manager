@@ -1,6 +1,15 @@
 import React, { Component } from "react";
 import "./IssueModal.css";
-import { Container, Icon, Button, Modal, Input, Form } from "semantic-ui-react";
+import {
+  TextArea,
+  Container,
+  Icon,
+  Button,
+  Modal,
+  Input,
+  Form,
+  Divider,
+} from "semantic-ui-react";
 
 import { createIssue } from "../../utils/api/api";
 import ProjectDropDown from "../ProjectDropDown/ProjectDropDown";
@@ -12,47 +21,55 @@ class IssueModal extends Component {
     timeEstimate: 0,
     projectId: 0,
     sprintId: 0,
-    modalOpen: false
+    modalOpen: false,
+    notes: "",
   };
 
   componentWillReceiveProps(nextProps) {
     const { selectedSprint } = nextProps;
     this.setState({
-      sprintId: selectedSprint && selectedSprint.id
+      sprintId: selectedSprint && selectedSprint.id,
     });
   }
 
   handleOpen = () =>
     this.setState({
-      modalOpen: true
+      modalOpen: true,
     });
 
   handleClose = () =>
     this.setState({
-      modalOpen: false
+      modalOpen: false,
     });
 
   handleName = (event, { value }) => {
     this.setState({
-      name: value
+      name: value,
     });
   };
 
   handleTime = (event, { value }) => {
     this.setState({
-      timeEstimate: value
+      timeEstimate: value,
     });
   };
 
   handleSprintSelect = (event, { value }) => {
     this.setState({
-      sprintId: value
+      sprintId: value,
     });
   };
 
   handleProjectSelect = (event, { value }) => {
     this.setState({
-      projectId: value
+      projectId: value,
+    });
+  };
+
+  handleNotes = (event, { value }) => {
+    console.log(value);
+    this.setState({
+      notes: value,
     });
   };
 
@@ -62,7 +79,7 @@ class IssueModal extends Component {
   };
 
   handleSubmit = () => {
-    const { sprintId, name, timeEstimate, projectId } = this.state;
+    const { sprintId, name, timeEstimate, projectId, notes } = this.state;
     const requestObj = {
       sprintId,
       name,
@@ -72,7 +89,7 @@ class IssueModal extends Component {
       status: "In queue", //In queue
       blocked: 0, // not blocked
       projectId,
-      notes: ""
+      notes,
     };
     createIssue(requestObj);
     this.handleClose();
@@ -125,18 +142,22 @@ class IssueModal extends Component {
                 onChange={this.handleProjectSelect}
               />
             </Form.Field>
+            <Form.Field>
+              <label>Notes</label>
+              <TextArea onChange={this.handleNotes} />
+            </Form.Field>
           </Form>
-        </Container>
-        <Container textAlign="center">
+          <Divider />
           <Button
             onClick={this.handleSubmit}
             disabled={this.handleValidate()}
             style={this.padding}
             color="green"
           >
-            Create Sprint
+            Create Issue
           </Button>
         </Container>
+        <Container textAlign="center" />
       </Modal>
     );
   }

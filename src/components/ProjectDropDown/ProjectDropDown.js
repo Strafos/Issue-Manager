@@ -7,7 +7,7 @@ class ProjectDropDown extends Component {
       return {
         text: project.name,
         key: project.id,
-        value: project.id
+        value: project.id,
       };
     });
 
@@ -21,6 +21,7 @@ class ProjectDropDown extends Component {
         placeholder="Select Project"
         search
         selection
+        defaultValue={0}
         value={value}
         onChange={onChange}
         options={this.projectOptions(projects)}

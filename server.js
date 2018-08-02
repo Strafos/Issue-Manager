@@ -36,12 +36,14 @@ app.post("/issue", (req, res) => {
     projectId,
     notes,
   } = req.body;
+  // const query = `INSERT INTO sprints values(null, (?), (?), (?), '')`;
+  // db.insert(query, [name, startDate, endDate])
   const query =
     `INSERT INTO issues values(null, ` +
-    `${sprintId}, '${name}', '${status}', ` +
+    `${sprintId}, (?), '${status}', ` +
     `${timeEstimate}, ${timeRemaining}, ` +
-    `${projectId}, '${blocked}', ${timeSpent}, '${notes}', 0, 0)`;
-  db.insert(query);
+    `${projectId}, '${blocked}', ${timeSpent}, (?), 0, 0)`;
+  db.insert(query, [name, notes]);
   res.send({ dbconn: "Success" });
 });
 

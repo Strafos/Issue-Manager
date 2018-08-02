@@ -13,7 +13,7 @@ import {
   Progress,
   Container,
   Loader,
-  Divider
+  Divider,
 } from "semantic-ui-react";
 
 import Status from "../Status/Status";
@@ -23,7 +23,7 @@ import {
   getSprint,
   updateIssueNotes,
   updateSprintNotes,
-  updateShowNotes
+  updateShowNotes,
 } from "../../utils/api/api";
 
 class SprintDisplay extends Component {
@@ -39,14 +39,14 @@ class SprintDisplay extends Component {
     totalTimeRemaining: 0,
     totalTimeEstimate: 0,
     sortByColumn: null,
-    direction: null
+    direction: null,
   };
 
   statusMap = {
     "In queue": 1,
     "In progress": 0,
     Paused: 2,
-    Done: 3
+    Done: 3,
   };
 
   mapProjectId = id => {
@@ -97,12 +97,12 @@ class SprintDisplay extends Component {
             .reduce((a, b) => a + b),
         totalTimeRemaining:
           issues.length > 0 &&
-          issues.map(i => i.time_remaining).reduce((a, b) => a + b)
+          issues.map(i => i.time_remaining).reduce((a, b) => a + b),
       });
 
       // SPRINT notes
       this.setState({
-        notes: selectedSprint ? selectedSprint.notes : ""
+        notes: selectedSprint ? selectedSprint.notes : "",
       });
 
       // Want to sort by status by default
@@ -146,12 +146,12 @@ class SprintDisplay extends Component {
             .reduce((a, b) => a + b),
         totalTimeRemaining:
           issues.length > 0 &&
-          issues.map(i => i.time_remaining).reduce((a, b) => a + b)
+          issues.map(i => i.time_remaining).reduce((a, b) => a + b),
       });
 
       // SPRINT notes
       this.setState({
-        notes: selectedSprint ? selectedSprint.notes : ""
+        notes: selectedSprint ? selectedSprint.notes : "",
       });
 
       // Want to sort by status by default
@@ -174,15 +174,15 @@ class SprintDisplay extends Component {
   handleTimeTotals = (timeStat, delta) => {
     if (timeStat === "time_spent") {
       this.setState({
-        totalTimeSpent: this.state.totalTimeSpent + delta
+        totalTimeSpent: this.state.totalTimeSpent + delta,
       });
     } else if (timeStat === "time_remaining") {
       this.setState({
-        totalTimeRemaining: this.state.totalTimeRemaining + delta
+        totalTimeRemaining: this.state.totalTimeRemaining + delta,
       });
     } else if (timeStat === "time_estimate") {
       this.setState({
-        totalTimeEstimate: this.state.totalTimeEstimate + delta
+        totalTimeEstimate: this.state.totalTimeEstimate + delta,
       });
     }
   };
@@ -194,7 +194,7 @@ class SprintDisplay extends Component {
         (a, b) => this.statusMap[a.status] - this.statusMap[b.status]
       ),
       direction: "ascending",
-      sortByColumn: "status"
+      sortByColumn: "status",
     });
   };
 
@@ -203,7 +203,7 @@ class SprintDisplay extends Component {
     const idx = issueList.findIndex(issue => issue.id === id);
     issueList[idx].status = status;
     this.setState({
-      issueList
+      issueList,
     });
     this.handleStatusSort();
   };
@@ -220,14 +220,14 @@ class SprintDisplay extends Component {
         this.setState({
           sortByColumn: clickedColumn,
           issueList: _.sortBy(issueList, [clickedColumn]).reverse(),
-          direction: "ascending"
+          direction: "ascending",
         });
       }
 
       this.setState({
         sortByColumn: clickedColumn,
         issueList: _.sortBy(issueList, [clickedColumn]),
-        direction: "descending"
+        direction: "descending",
       });
 
       return;
@@ -235,7 +235,7 @@ class SprintDisplay extends Component {
 
     this.setState({
       issueList: issueList.reverse(),
-      direction: direction === "ascending" ? "descending" : "ascending"
+      direction: direction === "ascending" ? "descending" : "ascending",
     });
   };
 
@@ -252,20 +252,20 @@ class SprintDisplay extends Component {
       this.setState({
         sortByColumn: sortByColumn,
         issueList: _.sortBy(issueList, [sortByColumn]).reverse(),
-        direction: "ascending"
+        direction: "ascending",
       });
     }
 
     this.setState({
       sortByColumn: sortByColumn,
       issueList: _.sortBy(issueList, [sortByColumn]),
-      direction: "descending"
+      direction: "descending",
     });
   };
 
   handleSprintNotes = (event, { value }) => {
     this.setState({
-      notes: value
+      notes: value,
     });
   };
 
@@ -273,7 +273,7 @@ class SprintDisplay extends Component {
     const { issueNoteList } = this.state;
     issueNoteList[id] = value;
     this.setState({
-      issueNoteList
+      issueNoteList,
     });
   };
 
@@ -291,7 +291,7 @@ class SprintDisplay extends Component {
     const { showNoteList } = this.state;
     showNoteList[id] = !showNoteList[id];
     this.setState({
-      showNoteList
+      showNoteList,
     });
     updateShowNotes(id, showNoteList[id] ? 1 : 0);
   };
@@ -300,7 +300,7 @@ class SprintDisplay extends Component {
     const { editNoteList } = this.state;
     editNoteList[id] = !editNoteList[id];
     this.setState({
-      editNoteList
+      editNoteList,
     });
   };
 
@@ -329,7 +329,7 @@ class SprintDisplay extends Component {
       4: 20,
       5: 25,
       6: 35,
-      0: 45
+      0: 45,
     };
     return Math.round((dateMap[new Date().getDay()] / 45) * 100);
   };
@@ -363,7 +363,7 @@ class SprintDisplay extends Component {
       time_estimate,
       time_remaining,
       project_id,
-      blocked
+      blocked,
     } = issue;
 
     return (
@@ -457,7 +457,7 @@ class SprintDisplay extends Component {
       selectedSprint,
       totalTimeSpent,
       totalTimeRemaining,
-      totalTimeEstimate
+      totalTimeEstimate,
     } = this.state;
 
     if (!selectedSprint) {
@@ -466,30 +466,23 @@ class SprintDisplay extends Component {
 
     return (
       <div>
-        {/* <Button color="black" floated="right">
-          <a href={`/sprint/graph/${selectedSprint.id}`}>{"Go to graph"}</a>
-        </Button>
-        <br />
-        <br />
-        <Divider />
-        <br /> */}
         <Grid verticalAlign="top" columns={2} stretched>
           <Grid.Column textAlign="left" width={4}>
             <Grid.Row>
               <Header floated="left" as="h1">
                 {selectedSprint && selectedSprint.name}
                 <Header.Subheader>
-                  {"A silly goose jumped over the moon and fled earth"}
+                  {selectedSprint && selectedSprint.quote}
                 </Header.Subheader>
               </Header>
             </Grid.Row>
             <Divider />
             <Grid.Row>
-              <Button color="black" floated="left">
-                <a href={`/sprint/graph/${selectedSprint.id}`}>
+              <a href={`/sprint/graph/${selectedSprint.id}`}>
+                <Button color="black" floated="left">
                   {"Go to graph"}
-                </a>
-              </Button>
+                </Button>
+              </a>
             </Grid.Row>
           </Grid.Column>
           <Grid.Column width={12}>
