@@ -4,7 +4,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 
 const db = require("./database");
-
 const app = express();
 app.use(bodyParser.json());
 const port = process.env.PORT || 5000;
@@ -35,14 +34,13 @@ app.post("/issue", (req, res) => {
     status,
     blocked,
     projectId,
-    notes
+    notes,
   } = req.body;
   const query =
     `INSERT INTO issues values(null, ` +
     `${sprintId}, '${name}', '${status}', ` +
     `${timeEstimate}, ${timeRemaining}, ` +
     `${projectId}, '${blocked}', ${timeSpent}, '${notes}', 0, 0)`;
-  console.log(query);
   db.insert(query);
   res.send({ dbconn: "Success" });
 });
@@ -136,11 +134,13 @@ app.put("/issue/:id/showNotes", (req, res) => {
 
 // Update issueTime
 // search: updateIssueTime
+// search: setTime
 app.put("/issue/:id/time", (req, res) => {
   const { stat, time } = req.body;
   const query = `UPDATE issues SET ${stat}=(?) where id=(?)`;
   db.insert(query, [time, req.params.id])
     .then(() => {
+      console.log("issue success");
       res.send({ status: "Success" });
     })
     .catch(err => {
@@ -173,6 +173,7 @@ app.post("/log", (req, res) => {
     `WHERE i.id=${issueId}`;
   db.insert(query)
     .then(() => {
+      console.log("log success");
       res.send({ status: "Success" });
     })
     .catch(err => {
@@ -246,7 +247,7 @@ app.put("/issue/:id", (req, res) => {
     timeSpent,
     blocked,
     notes,
-    bad
+    bad,
   } = req.body;
   // const query =
   //   `UPDATE issues SET name='${name}', sprint_id=${sprintId}, project_id=${projectId}, ` +
@@ -270,7 +271,7 @@ app.put("/issue/:id", (req, res) => {
     blocked,
     notes,
     bad,
-    req.params.id
+    req.params.id,
   ])
     .then(() => {
       res.send({ status: "Success" });

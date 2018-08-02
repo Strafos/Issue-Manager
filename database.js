@@ -3,6 +3,12 @@ const sqlite3 = require("sqlite3").verbose();
 
 const dbFile = path.normalize(path.join(__dirname, "/db/", "zim.db"));
 
+let db = new sqlite3.Database(dbFile, sqlite3.OPEN_READWRITE, err => {
+  if (err) {
+    return console.log(err.message);
+  }
+});
+
 /**
  * insert() handles all the non-select database queries
  * returns Promise with the query
@@ -10,11 +16,11 @@ const dbFile = path.normalize(path.join(__dirname, "/db/", "zim.db"));
  * but some check that the API was successful
  */
 const insert = (query, params) => {
-  let db = new sqlite3.Database(dbFile, sqlite3.OPEN_READWRITE, err => {
-    if (err) {
-      return console.log(err.message);
-    }
-  });
+  // let db = new sqlite3.Database(dbFile, sqlite3.OPEN_READWRITE, err => {
+  //   if (err) {
+  //     return console.log(err.message);
+  //   }
+  // });
 
   const prom = new Promise((resolve, reject) => {
     db.all(query, params, (err, res) => {
@@ -26,11 +32,11 @@ const insert = (query, params) => {
     });
   });
 
-  db.close(err => {
-    if (err) {
-      console.error(err.message);
-    }
-  });
+  // db.close(err => {
+  //   if (err) {
+  //     console.error(err.message);
+  //   }
+  // });
 
   return prom;
 };
@@ -40,11 +46,11 @@ const insert = (query, params) => {
  * returns a Promise obj with data
  */
 const read = async query => {
-  let db = new sqlite3.Database(dbFile, sqlite3.OPEN_READONLY, err => {
-    if (err) {
-      return console.log(err.message);
-    }
-  });
+  // let db = new sqlite3.Database(dbFile, sqlite3.OPEN_READONLY, err => {
+  //   if (err) {
+  //     return console.log(err.message);
+  //   }
+  // });
 
   const prom = new Promise((resolve, reject) => {
     db.all(query, (err, res) => {
@@ -56,16 +62,16 @@ const read = async query => {
     });
   });
 
-  db.close(err => {
-    if (err) {
-      console.error(err.message);
-    }
-  });
+  // db.close(err => {
+  //   if (err) {
+  //     console.error(err.message);
+  //   }
+  // });
 
   return prom;
 };
 
 module.exports = {
   insert: insert,
-  read: read
+  read: read,
 };
