@@ -368,7 +368,7 @@ class SprintDisplay extends Component {
       <TextArea
         onChange={this.handleSprintNotes}
         style={{
-          minHeight: 150,
+          minHeight: 350,
           backgroundColor: "#282828",
           color: "#BEBEBE",
           fontSize: 17,
@@ -502,10 +502,76 @@ class SprintDisplay extends Component {
       editQuote,
       quote,
       displayTimelogs,
+      displayGraphs,
     } = this.state;
 
     if (!selectedSprint) {
       return <Loader active inline />;
+    }
+
+    let display;
+    if (displayTimelogs) {
+      display = <TimelogTable sprintId={selectedSprint && selectedSprint.id} />;
+    } else if (displayGraphs) {
+      display = <SprintGraphDisplay selectedSprint={selectedSprint} />;
+    } else {
+      display = (
+        <Table sortable fixed celled size="large" compact>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell onClick={this.handleSort("name")} width={4}>
+                Name
+              </Table.HeaderCell>
+              <Table.HeaderCell
+                onClick={this.handleSort("project_id")}
+                width={3}
+              >
+                Project
+              </Table.HeaderCell>
+              <Table.HeaderCell onClick={this.handleSort("status")} width={6}>
+                Status
+              </Table.HeaderCell>
+              <Table.HeaderCell
+                onClick={this.handleSort("time_spent")}
+                width={2}
+                textAlign="center"
+              >
+                Time Spent
+              </Table.HeaderCell>
+              <Table.HeaderCell
+                onClick={this.handleSort("time_remaining")}
+                width={2}
+              >
+                Time Remaining
+              </Table.HeaderCell>
+              <Table.HeaderCell
+                onClick={this.handleSort("time_estimate")}
+                width={2}
+              >
+                Time Estimate
+              </Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          {issueList.map(this.renderIssue)}
+          <Table.Footer fullWidth>
+            <Table.Row>
+              <Table.HeaderCell colSpan="3" />
+              <Table.HeaderCell textAlign="center" colSpan="1">
+                {totalTimeSpent}
+                {" hours"}
+              </Table.HeaderCell>
+              <Table.HeaderCell textAlign="center" colSpan="1">
+                {totalTimeRemaining}
+                {" hours"}
+              </Table.HeaderCell>
+              <Table.HeaderCell textAlign="center" colSpan="1">
+                {totalTimeEstimate}
+                {" hours"}
+              </Table.HeaderCell>
+            </Table.Row>
+          </Table.Footer>
+        </Table>
+      );
     }
 
     return (
@@ -541,8 +607,21 @@ class SprintDisplay extends Component {
             <Divider />
             <Grid.Row>
               <Button
-                as={Link}
-                to={`/sprint/graph/${selectedSprint.id}`}
+                onClick={() =>
+                  this.setState({
+                    displayGraphs: false,
+                    displayTimelogs: false,
+                  })
+                }
+                color="black"
+                floated="left"
+              >
+                {"Issues"}
+              </Button>
+              <Button
+                onClick={() =>
+                  this.setState({ displayGraphs: true, displayTimelogs: false })
+                }
                 color="black"
                 floated="left"
               >
@@ -550,12 +629,12 @@ class SprintDisplay extends Component {
               </Button>
               <Button
                 onClick={() =>
-                  this.setState({ displayTimelogs: !displayTimelogs })
+                  this.setState({ displayGraphs: false, displayTimelogs: true })
                 }
                 color="black"
                 floated="left"
               >
-                {displayTimelogs ? "Issues" : "TimeLogs"}
+                {"Timelogs"}
               </Button>
             </Grid.Row>
           </Grid.Column>
@@ -587,69 +666,8 @@ class SprintDisplay extends Component {
             </Container>
           </Grid.Column>
         </Grid>
-        {displayTimelogs ? (
-          // <TimelogTable sprintId={selectedSprint && selectedSprint.id} />
-          <SprintGraphDisplay
-            // error={this.setError}
-            selectedSprint={selectedSprint}
-          />
-        ) : (
-          <Table sortable fixed celled size="large" compact>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell onClick={this.handleSort("name")} width={4}>
-                  Name
-                </Table.HeaderCell>
-                <Table.HeaderCell
-                  onClick={this.handleSort("project_id")}
-                  width={3}
-                >
-                  Project
-                </Table.HeaderCell>
-                <Table.HeaderCell onClick={this.handleSort("status")} width={6}>
-                  Status
-                </Table.HeaderCell>
-                <Table.HeaderCell
-                  onClick={this.handleSort("time_spent")}
-                  width={2}
-                  textAlign="center"
-                >
-                  Time Spent
-                </Table.HeaderCell>
-                <Table.HeaderCell
-                  onClick={this.handleSort("time_remaining")}
-                  width={2}
-                >
-                  Time Remaining
-                </Table.HeaderCell>
-                <Table.HeaderCell
-                  onClick={this.handleSort("time_estimate")}
-                  width={2}
-                >
-                  Time Estimate
-                </Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            {issueList.map(this.renderIssue)}
-            <Table.Footer fullWidth>
-              <Table.Row>
-                <Table.HeaderCell colSpan="3" />
-                <Table.HeaderCell textAlign="center" colSpan="1">
-                  {totalTimeSpent}
-                  {" hours"}
-                </Table.HeaderCell>
-                <Table.HeaderCell textAlign="center" colSpan="1">
-                  {totalTimeRemaining}
-                  {" hours"}
-                </Table.HeaderCell>
-                <Table.HeaderCell textAlign="center" colSpan="1">
-                  {totalTimeEstimate}
-                  {" hours"}
-                </Table.HeaderCell>
-              </Table.Row>
-            </Table.Footer>
-          </Table>
-        )}
+        {/*where all the shit was*/}
+        {display}
 
         <Form>
           <Form.Field control={this.renderTextArea} label="Sprint Notes" />

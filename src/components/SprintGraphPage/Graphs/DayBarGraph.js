@@ -7,7 +7,7 @@ class DayBarGraph extends Component {
   state = {
     timeSpentData: null,
     timeSpentProjection: null,
-    hoveredNode: null
+    hoveredNode: null,
   };
 
   componentDidMount() {
@@ -53,7 +53,7 @@ class DayBarGraph extends Component {
     });
 
     this.setState({
-      timeSpentData
+      timeSpentData,
     });
   };
 

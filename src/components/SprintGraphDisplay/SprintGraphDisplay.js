@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { Header, Grid, Divider, Loader } from "semantic-ui-react";
 
 import { getSprint, getTimeLogs } from "../../utils/api/api";
@@ -9,7 +9,7 @@ import DayBarGraph from "./Graphs/DayBarGraph";
 // Shows the progress of the sprint through two main graphs
 // TimeRemaining and Time Spent
 // Also has a small bar graph for time spent on issue per day
-class SprintGraphDisplay extends Component {
+class SprintGraphDisplay extends PureComponent {
   state = {
     selectedSprint: null,
     sprints: null,
@@ -46,8 +46,47 @@ class SprintGraphDisplay extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { selectedSprint } = nextProps;
+    console.log(selectedSprint);
 
     const sprintId = selectedSprint.id;
+
+    // Use the id from URL to get all timelogs
+    getTimeLogs(sprintId).then(logs => {
+      this.setState({
+        timeSpentLogs: logs.filter(log => log.time_stat === "time_spent"),
+        timeRemainingLogs: logs.filter(
+          log => log.time_stat === "time_remaining"
+        ),
+      });
+    });
+
+    this.setState({
+      selectedSprint,
+    });
+
+    getSprint(sprintId).then(issues => {
+      console.log(issues);
+      this.setState({
+        totalTimeEstimate:
+          issues.length > 0 &&
+          issues.map(i => i.time_estimate).reduce((a, b) => a + b),
+        issues,
+      });
+    });
+  }
+
+  updateSprint = selectedSprint => {
+    const sprintId = selectedSprint.id;
+
+    // Use the id from URL to get all timelogs
+    getTimeLogs(sprintId).then(logs => {
+      this.setState({
+        timeSpentLogs: logs.filter(log => log.time_stat === "time_spent"),
+        timeRemainingLogs: logs.filter(
+          log => log.time_stat === "time_remaining"
+        ),
+      });
+    });
 
     this.setState({
       selectedSprint,
@@ -60,16 +99,16 @@ class SprintGraphDisplay extends Component {
           issues.map(i => i.time_estimate).reduce((a, b) => a + b),
       });
     });
-  }
+  };
 
   render() {
     const {
       timeRemainingLogs,
-      selectedSprint,
       totalTimeEstimate,
       timeSpentLogs,
       issues,
     } = this.state;
+    const { selectedSprint } = this.props;
 
     if (
       !timeRemainingLogs ||

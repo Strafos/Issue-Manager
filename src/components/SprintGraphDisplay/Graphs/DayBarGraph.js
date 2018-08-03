@@ -1,13 +1,13 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { Segment, Loader, Dimmer } from "semantic-ui-react";
 
 import { XAxis, YAxis, XYPlot, HorizontalBarSeries } from "react-vis";
 
-class DayBarGraph extends Component {
+class DayBarGraph extends PureComponent {
   state = {
     timeSpentData: null,
     timeSpentProjection: null,
-    hoveredNode: null
+    hoveredNode: null,
   };
 
   componentDidMount() {
@@ -19,7 +19,9 @@ class DayBarGraph extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { issues, logs, day } = nextProps;
-    this.constructTimeSpent(logs, issues, day);
+    if (issues && logs) {
+      this.constructTimeSpent(logs, issues, day);
+    }
   }
 
   // Thought 1 am is technically the next day, we want to bucket with the previous day
@@ -47,13 +49,13 @@ class DayBarGraph extends Component {
 
     const timeSpentData = [];
     Object.keys(timeSpentMap).forEach(key => {
-      const issueName = issues.find(issue => issue.id === parseInt(key, 10))
-        .name;
-      timeSpentData.push({ y: issueName, x: timeSpentMap[key] });
+      const mappedIssue = issues.find(issue => issue.id === parseInt(key, 10));
+      mappedIssue &&
+        timeSpentData.push({ y: mappedIssue.name, x: timeSpentMap[key] });
     });
 
     this.setState({
-      timeSpentData
+      timeSpentData,
     });
   };
 
