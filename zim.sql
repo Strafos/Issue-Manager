@@ -2,8 +2,11 @@ CREATE TABLE sprints (
  id integer PRIMARY KEY AUTOINCREMENT,
  name text NOT NULL,
  start_date text NOT NULL,
- end_date text NOT NULL
+ end_date text NOT NULL, 
+ notes text default '', 
+ quote text default ''
 );
+
 
 CREATE TABLE status (
  id integer PRIMARY KEY AUTOINCREMENT,
@@ -28,16 +31,17 @@ CREATE TABLE issues (
  status text NOT NULL,
  time_estimate integer NOT NULL,
  time_remaining integer NOT NULL,
- time_spent integer NOT NULL DEFAULT 0,
  project_id integer,
- blocked integer DEFAULT 0,
- notes TEXT default "",
- bad integer NOT NULL DEFAULT 0,
+ blocked integer DEFAULT 0, 
+ time_spent integer NOT NULL DEFAULT 0, 
+ notes TEXT default "", 
+ bad integer NOT NULL DEFAULT 0, 
  show_notes integer NOT NULL DEFAULT 0,
  FOREIGN KEY (sprint_id) REFERENCES sprints(id)
  FOREIGN KEY (project_id) REFERENCES projects(id)
  FOREIGN KEY (status) REFERENCES status(id)
 );
+
 
 CREATE TABLE timelog (
  id integer PRIMARY KEY AUTOINCREMENT,
