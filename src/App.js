@@ -199,13 +199,6 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
-          {/* <Header size="huge" as="h1">
-            <a href={"/"}>
-              <Icon color="red" name="paper plane" />
-            </a>
-            Zaibo's Issue Manager
-          </Header>
-          <Divider /> */}
           <Grid columns={2} divided>
             <Grid.Row />
             <Grid.Row>
@@ -241,10 +234,7 @@ class App extends Component {
                   {selectedSprint && (
                     <div>
                       <br />
-                      <TimeSpentMiniGraph
-                        logs={timeSpentLogs}
-                        sprint={selectedSprint}
-                      />
+                      <TimeSpentMiniGraph sprint={selectedSprint} />
                     </div>
                   )}
                 </Grid.Row>
@@ -304,22 +294,6 @@ class App extends Component {
                     );
                   }}
                 />
-
-                {/* <Route
-                  path="/sprint/graph/:id?"
-                  render={props => {
-                    return (
-                      sprints.length > 0 && (
-                        <SprintGraphPage
-                          projects={projects}
-                          error={this.setError}
-                          sprints={sprints}
-                          {...props}
-                        />
-                      )
-                    );
-                  }}
-                /> */}
               </Grid.Column>
             </Grid.Row>
           </Grid>

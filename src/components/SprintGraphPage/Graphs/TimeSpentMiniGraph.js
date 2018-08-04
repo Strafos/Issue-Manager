@@ -3,6 +3,8 @@ import { Segment, Loader, Dimmer } from "semantic-ui-react";
 
 import { XYPlot, Hint, LineMarkSeries } from "react-vis";
 
+import { getTimeLogs } from "../../../utils/api/api";
+
 class TimeSpentMiniGraph extends Component {
   state = {
     timeSpentData: null,
@@ -11,22 +13,45 @@ class TimeSpentMiniGraph extends Component {
   };
 
   componentDidMount() {
-    const { sprint, logs } = this.props;
-    if (sprint && logs) {
-      this.constructTimeSpent(sprint, logs);
-      this.constructProjectedTimeSpent(sprint);
-    }
+    const { sprint } = this.props;
+    // if (sprint) {
+    //   this.constructTimeSpent(sprint);
+    //   this.constructProjectedTimeSpent(sprint);
+    // }
+    sprint &&
+      getTimeLogs(sprint.id).then(logs => {
+        this.setState(
+          {
+            sprint,
+            logs: logs.filter(log => log.time_stat === "time_spent"),
+          },
+          () => {
+            this.constructTimeSpent();
+            this.constructProjectedTimeSpent(sprint);
+          }
+        );
+      });
   }
 
   componentWillReceiveProps(nextProps) {
-    const { sprint, logs } = nextProps;
-    if (sprint && logs) {
-      this.constructTimeSpent(sprint, logs);
-      this.constructProjectedTimeSpent(sprint);
-    }
+    const { sprint } = nextProps;
+    sprint &&
+      getTimeLogs(sprint.id).then(logs => {
+        this.setState(
+          {
+            sprint,
+            logs: logs.filter(log => log.time_stat === "time_spent"),
+          },
+          () => {
+            this.constructTimeSpent();
+            this.constructProjectedTimeSpent(sprint);
+          }
+        );
+      });
   }
 
-  constructTimeSpent = (sprint, logs) => {
+  constructTimeSpent = () => {
+    const { sprint, logs } = this.state;
     const startDate = new Date(sprint.start_date);
 
     const timeSpentData = [{ x: startDate, y: 0 }];
@@ -46,7 +71,9 @@ class TimeSpentMiniGraph extends Component {
     });
   };
 
-  constructProjectedTimeSpent = sprint => {
+  constructProjectedTimeSpent = () => {
+    const { sprint } = this.state;
+
     const startDate = new Date(sprint.start_date);
     const dateMap = {
       0: 35,
