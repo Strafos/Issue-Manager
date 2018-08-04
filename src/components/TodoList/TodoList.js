@@ -41,7 +41,6 @@ class TodoList extends Component {
   }
 
   handleFinishTodo = id => {
-    console.log(id);
     finishTodo(id).then(() => {
       getTodos().then(todoList => {
         this.setState({
@@ -83,17 +82,18 @@ class TodoList extends Component {
           <Menu.Menu>
             {todoList && todoList.map(todo => this.renderTodo(todo))}
           </Menu.Menu>
-          <Input
-            placeholder="Add todo..."
-            action={{
-              icon: "plus",
-              onClick: this.handleSubmit,
-            }}
-            value={this.state.newTodo}
-            size="small"
-            onChange={this.handleInput}
-          />
         </Menu>
+        <Input
+          placeholder="Add todo..."
+          action={{
+            icon: "plus",
+            onClick: this.handleSubmit,
+          }}
+          value={this.state.newTodo}
+          size="small"
+          onChange={this.handleInput}
+          inverted
+        />
       </div>
     );
   }
