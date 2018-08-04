@@ -1,8 +1,18 @@
 import React, { Component } from "react";
 import "./TodoList.css";
-import { Menu, Container, Icon, Input, Checkbox } from "semantic-ui-react";
+import {
+  Menu,
+  Container,
+  Icon,
+  Input,
+  Checkbox,
+  Divider,
+  Segment,
+} from "semantic-ui-react";
 
 import "react-datepicker/dist/react-datepicker.css";
+
+import { getTodos, addTodo, finishTodo } from "../../utils/api/api";
 
 class TodoList extends Component {
   state = {
@@ -13,30 +23,46 @@ class TodoList extends Component {
   renderTodo = todo => {
     return (
       <Menu.Item position="left">
-        <Checkbox label={todo} />
-        {/* content={issue.name}
-        index={issue.issue_id}
-        active={selectedIssue && selectedIssue == issue.issue_id}
-        onClick={this.props.handleIssueMenuClick}
-        href={`/issue/${issue.issue_id}`} */}
+        <Checkbox
+          onClick={() => this.handleFinishTodo(todo.id)}
+          checked={false}
+          label={todo.name}
+        />
       </Menu.Item>
     );
   };
 
   componentDidMount() {
-    const { todoList } = this.props;
-    this.setState({ todoList });
-  }
-
-  handleSubmit = () => {
-    const { todoList, newTodo } = this.state;
-    console.log(newTodo);
-    if (newTodo) {
-      todoList.push(newTodo);
+    getTodos().then(todoList => {
       this.setState({
         todoList,
       });
-    }
+    });
+  }
+
+  handleFinishTodo = id => {
+    console.log(id);
+    finishTodo(id).then(() => {
+      getTodos().then(todoList => {
+        this.setState({
+          todoList,
+        });
+      });
+    });
+  };
+
+  handleSubmit = () => {
+    const { newTodo } = this.state;
+    addTodo(newTodo).then(() => {
+      getTodos().then(todoList => {
+        this.setState({
+          todoList,
+        });
+      });
+    });
+    this.setState({
+      newTodo: "",
+    });
   };
 
   handleInput = (event, data) => {
@@ -51,24 +77,22 @@ class TodoList extends Component {
     return (
       <div className="center">
         <Menu vertical>
-          <Menu.Item>
-            <Menu.Header>TODOs</Menu.Header>
-            <Menu.Menu>
-              {todoList && todoList.map(todo => this.renderTodo(todo))}
-              <Menu.Item>
-                <Input
-                  style={{ backgroundColor: "black" }}
-                  placeholder="Add todo..."
-                  action={{
-                    icon: "plus",
-                    onClick: this.handleSubmit,
-                  }}
-                  size="small"
-                  onChange={this.handleInput}
-                />
-              </Menu.Item>
-            </Menu.Menu>
-          </Menu.Item>
+          <Segment size="mini">
+            <Menu.Header verticalAlign="middle">TODOs</Menu.Header>
+          </Segment>
+          <Menu.Menu>
+            {todoList && todoList.map(todo => this.renderTodo(todo))}
+          </Menu.Menu>
+          <Input
+            placeholder="Add todo..."
+            action={{
+              icon: "plus",
+              onClick: this.handleSubmit,
+            }}
+            value={this.state.newTodo}
+            size="small"
+            onChange={this.handleInput}
+          />
         </Menu>
       </div>
     );

@@ -22,7 +22,6 @@ import {
   getSprint,
   getSprints,
   getProjects,
-  getTimeLogs,
   getRecentIssues,
 } from "./utils/api/api";
 
@@ -102,7 +101,6 @@ class App extends Component {
               : this.getDefaultSprint(sprints),
           },
           () => {
-            this.getLogs(this.state.selectedSprint.id);
             this.sumTimes(this.state.selectedSprint.id);
           }
         );
@@ -111,31 +109,9 @@ class App extends Component {
         this.setState({
           selectedIssue: match[2],
         });
-      } else {
-        // If neither, it's a graph page (?)
-        this.setState(
-          {
-            selectedSprint: this.getDefaultSprint(sprints),
-          },
-          () => {
-            this.getLogs(this.state.selectedSprint.id);
-            this.sumTimes(this.state.selectedSprint.id);
-          }
-        );
       }
     });
   }
-
-  getLogs = sprintId => {
-    getTimeLogs(sprintId).then(logs => {
-      this.setState({
-        timeSpentLogs: logs.filter(log => log.time_stat === "time_spent"),
-        timeRemainingLogs: logs.filter(
-          log => log.time_stat === "time_remaining"
-        ),
-      });
-    });
-  };
 
   // Calculate totals for times
   sumTimes = sprintId => {
@@ -193,7 +169,6 @@ class App extends Component {
       selectedSprint,
       recentIssues,
       selectedIssue,
-      timeSpentLogs,
     } = this.state;
 
     return (
@@ -220,15 +195,15 @@ class App extends Component {
 
                 <Grid.Row>
                   <div className="center">
-                    <RecentMenu
+                    {/* <RecentMenu
                       selectedSprint={selectedSprint}
                       selectedIssue={selectedIssue}
                       handleSprintMenuClick={this.handleSprintMenuClick}
                       handleIssueMenuClick={this.handleIssueMenuClick}
                       sprints={sprints}
                       recentIssues={recentIssues}
-                    />
-                    <TodoList todoList={sprints} />
+                    /> */}
+                    <TodoList />
                   </div>
 
                   {selectedSprint && (

@@ -52,3 +52,9 @@ CREATE TABLE projects (
  id integer PRIMARY KEY AUTOINCREMENT,
  name text NOT NULL
 );
+
+CREATE TABLE todos (
+ id integer PRIMARY KEY AUTOINCREMENT,
+ name text NOT NULL,
+ done integer DEFAULT 0
+);

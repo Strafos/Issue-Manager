@@ -11,6 +11,7 @@ class SprintDropDown extends Component {
         text={sprint.name}
         key={sprint.id}
         value={sprint.id}
+        onClick={this.props.onChange}
       />
     );
   };
@@ -22,9 +23,9 @@ class SprintDropDown extends Component {
         placeholder="Select Sprint"
         selection
         value={value}
-        // item
+        item
         simple={simple}
-        onChange={onChange}
+        // onChange={onChange}
       >
         <Dropdown.Menu>
           {sprints.map(sprint => this.renderItem(sprint))}

@@ -349,4 +349,43 @@ app.post("/recentIssue/:id", (req, res) => {
     });
 });
 
+// Get all todos that aren't done
+// search: getTodos
+app.get("/todos", (req, res) => {
+  const query = `SELECT * FROM todos where done = 0`;
+  db.read(query)
+    .then(response => {
+      res.send(response);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
+// Get all todos that aren't done
+// search: addTodo
+app.put("/todos", (req, res) => {
+  const query = `INSERT INTO todos values(null, '${req.body.todoName}', 0)`;
+  db.read(query)
+    .then(response => {
+      res.send(response);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
+// Set todo done to true (1)
+// search: finishTodo
+app.post("/todos/:id", (req, res) => {
+  const query = `UPDATE todos SET done=1 where id=${req.params.id}`;
+  db.read(query)
+    .then(response => {
+      res.send(response);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
 app.listen(port, () => console.log(`Listening on port ${port}`));
