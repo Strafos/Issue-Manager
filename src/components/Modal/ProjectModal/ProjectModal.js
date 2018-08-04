@@ -2,35 +2,35 @@ import React, { Component } from "react";
 import "./ProjectModal.css";
 import { Icon, Segment, Button, Modal, Input } from "semantic-ui-react";
 
-import { createProject } from "../../utils/api/api";
+import { createProject } from "../../../utils/api/api";
 
 import "react-datepicker/dist/react-datepicker.css";
 
 class ProjectModal extends Component {
   state = {
-    name: ""
+    name: "",
   };
 
   handleOpen = () =>
     this.setState({
-      modalOpen: true
+      modalOpen: true,
     });
 
   handleClose = () =>
     this.setState({
-      modalOpen: false
+      modalOpen: false,
     });
 
   handleName = (event, { value }) => {
     this.setState({
-      name: value
+      name: value,
     });
   };
 
   handleSubmit = () => {
     const { name } = this.state;
     const requestObj = {
-      name
+      name,
     };
     createProject(requestObj);
     this.handleClose();
@@ -38,7 +38,7 @@ class ProjectModal extends Component {
 
   handleName = (event, { value }) => {
     this.setState({
-      name: value
+      name: value,
     });
   };
 

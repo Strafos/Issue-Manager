@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React, { Component } from "react";
 
-import "./SprintDisplay.css";
+import "./SprintPage.css";
 import {
   Icon,
   Grid,
@@ -18,8 +18,8 @@ import {
 
 import Status from "../Status/Status";
 import TimeCounter from "../TimeCounter/TimeCounter";
-import SprintGraphDisplay from "../SprintGraphDisplay/SprintGraphDisplay";
-import TimelogTable from "../TimelogTable/TimelogTable";
+import GraphDisplay from "./GraphDisplay/GraphDisplay";
+import TimelogDisplay from "./TimelogDisplay/TimelogDisplay";
 
 import {
   getSprint,
@@ -468,9 +468,11 @@ class SprintDisplay extends Component {
 
     let display;
     if (displayTimelogs) {
-      display = <TimelogTable sprintId={selectedSprint && selectedSprint.id} />;
+      display = (
+        <TimelogDisplay sprintId={selectedSprint && selectedSprint.id} />
+      );
     } else if (displayGraphs) {
-      display = <SprintGraphDisplay selectedSprint={selectedSprint} />;
+      display = <GraphDisplay selectedSprint={selectedSprint} />;
     } else {
       display = (
         <Table sortable fixed celled size="large" compact>

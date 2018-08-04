@@ -11,9 +11,9 @@ import {
   Divider,
 } from "semantic-ui-react";
 
-import { createIssue } from "../../utils/api/api";
-import ProjectDropDown from "../ProjectDropDown/ProjectDropDown";
-import SprintDropDown from "../SprintDropDown/SprintDropDown";
+import { createIssue } from "../../../utils/api/api";
+import ProjectDropDown from "../../ProjectDropDown/ProjectDropDown";
+import SprintDropDown from "../../SprintDropDown/SprintDropDown";
 
 class IssueModal extends Component {
   state = {

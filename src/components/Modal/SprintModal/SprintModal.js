@@ -3,7 +3,7 @@ import "./SprintModal.css";
 import { Icon, Grid, Button, Modal, Input, Form } from "semantic-ui-react";
 import ReactDatePicker from "react-datepicker";
 
-import { createSprint } from "../../utils/api/api";
+import { createSprint } from "../../../utils/api/api";
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -12,26 +12,26 @@ class SprintModal extends Component {
     name: "",
     startDate: null,
     endDate: null,
-    modalOpen: false
+    modalOpen: false,
   };
 
   padding = {
     padding: "5px",
-    textAlign: "center"
+    textAlign: "center",
   };
 
   center = {
-    "text-align": "center"
+    "text-align": "center",
   };
 
   handleOpen = () =>
     this.setState({
-      modalOpen: true
+      modalOpen: true,
     });
 
   handleClose = event => {
     this.setState({
-      modalOpen: event instanceof MouseEvent ? true : false
+      modalOpen: event instanceof MouseEvent ? true : false,
     });
   };
 
@@ -42,19 +42,19 @@ class SprintModal extends Component {
 
   handleChangeStartDate = (date, foo) => {
     this.setState({
-      startDate: date
+      startDate: date,
     });
   };
 
   handleChangeEndDate = date => {
     this.setState({
-      endDate: date
+      endDate: date,
     });
   };
 
   handleName = (event, { value }) => {
     this.setState({
-      name: value
+      name: value,
     });
   };
 
@@ -63,7 +63,7 @@ class SprintModal extends Component {
     const requestObj = {
       name,
       startDate: startDate.format("MM/DD/YY"),
-      endDate: endDate.format("MM/DD/YY")
+      endDate: endDate.format("MM/DD/YY"),
     };
     createSprint(requestObj);
     this.handleClose();
@@ -75,7 +75,7 @@ class SprintModal extends Component {
     const requestObj = {
       name,
       startDate,
-      endDate: this.futureMonday(weeksAdv + 1)
+      endDate: this.futureMonday(weeksAdv + 1),
     };
     createSprint(requestObj);
     this.handleClose();

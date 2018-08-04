@@ -7,15 +7,16 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import "./semantic/dist/semantic.min.css";
 
-import SprintModal from "./components/SprintModal/SprintModal";
+import IssueModal from "./components/Modal/IssueModal/IssueModal";
+import ProjectModal from "./components/Modal/ProjectModal/ProjectModal";
+import SprintModal from "./components/Modal/SprintModal/SprintModal";
+
 import SprintDropDown from "./components/SprintDropDown/SprintDropDown";
 import RecentMenu from "./components/RecentMenu/RecentMenu";
 import TodoList from "./components/TodoList/TodoList";
-import IssueModal from "./components/IssueModal/IssueModal";
-import SprintDisplay from "./components/SprintDisplay/SprintDisplay";
-import ProjectModal from "./components/ProjectModal/ProjectModal";
-import IssueDisplay from "./components/IssueDisplay/IssueDisplay";
-import SprintGraphPage from "./components/SprintGraphPage/SprintGraphPage";
+import SprintPage from "./components/SprintPage/SprintPage";
+import IssuePage from "./components/IssuePage/IssuePage";
+// import SprintGraphPage from "./components/SprintGraphPage/SprintGraphPage";
 import TimeSpentMiniGraph from "./components/SprintGraphPage/Graphs/TimeSpentMiniGraph";
 
 import {
@@ -92,7 +93,13 @@ class App extends Component {
       const pathRe = /\/(.*)\/(.*)/g;
       const match = pathRe.exec(path);
 
-      if (match && match[1] === "sprint") {
+      if (match && match[1] === "issue") {
+        // If issue is in the URL, then set selectedIssue
+        this.setState({
+          selectedIssue: match[2],
+        });
+      } else {
+        // } else (match && match[1] === "sprint") {
         // If sprint is in the URL, then set selectedSprint
         this.setState(
           {
@@ -104,11 +111,6 @@ class App extends Component {
             this.sumTimes(this.state.selectedSprint.id);
           }
         );
-      } else if (match && match[1] === "issue") {
-        // If issue is in the URL, then set selectedIssue
-        this.setState({
-          selectedIssue: match[2],
-        });
       }
     });
   }
@@ -150,11 +152,11 @@ class App extends Component {
     this.forceUpdate();
   };
 
-  renderSprintDisplay = () => {
+  renderSprintPage = () => {
     const { projects, selectedSprint } = this.state;
 
     return (
-      <SprintDisplay
+      <SprintPage
         projects={projects}
         selectedSprint={selectedSprint}
         sprintId={selectedSprint && selectedSprint.id}
@@ -231,7 +233,7 @@ class App extends Component {
                   path="/"
                   render={props => {
                     return (
-                      <SprintDisplay
+                      <SprintPage
                         projects={projects}
                         sprints={sprints}
                         error={this.setError}
@@ -246,7 +248,7 @@ class App extends Component {
                   path="/sprint/:id?"
                   render={props => {
                     return (
-                      <SprintDisplay
+                      <SprintPage
                         projects={projects}
                         error={this.setError}
                         sprints={sprints}
@@ -260,7 +262,7 @@ class App extends Component {
                   path="/issue/:id?"
                   render={props => {
                     return (
-                      <IssueDisplay
+                      <IssuePage
                         projects={projects}
                         error={this.setError}
                         sprints={sprints}

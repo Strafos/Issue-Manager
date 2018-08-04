@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./IssueDisplay.css";
+import "./IssuePage.css";
 import {
   Modal,
   Grid,
@@ -13,7 +13,7 @@ import {
 } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
-import StatusDisplay from "../StatusDisplay/StatusDisplay";
+import StatusDisplay from "../Status/StatusDisplay";
 import SprintDropDown from "../SprintDropDown/SprintDropDown";
 import ProjectDropDown from "../ProjectDropDown/ProjectDropDown";
 
