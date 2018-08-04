@@ -58,6 +58,7 @@ class TimeCounter extends Component {
         delta,
         stat,
         createdAt: new Date().toISOString(),
+        total: newTime,
       };
       createTimeLog(reqObj);
     }
@@ -89,6 +90,7 @@ class TimeCounter extends Component {
         delta,
         stat,
         createdAt: new Date().toISOString(),
+        total: newTime,
       };
       createTimeLog(reqObj);
     }

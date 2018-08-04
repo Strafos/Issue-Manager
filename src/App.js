@@ -17,7 +17,7 @@ import TodoList from "./components/TodoList/TodoList";
 import SprintPage from "./components/SprintPage/SprintPage";
 import IssuePage from "./components/IssuePage/IssuePage";
 // import SprintGraphPage from "./components/SprintGraphPage/SprintGraphPage";
-import TimeSpentMiniGraph from "./components/SprintGraphPage/Graphs/TimeSpentMiniGraph";
+import TimeSpentMiniGraph from "./components/SprintPage/GraphDisplay/Graphs/TimeSpentMiniGraph";
 
 import {
   getSprint,

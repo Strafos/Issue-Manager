@@ -1,32 +1,45 @@
 import React, { Component } from "react";
-import { Segment, Loader, Dimmer } from "semantic-ui-react";
+import { Loader } from "semantic-ui-react";
 
 import { XYPlot, Hint, LineMarkSeries } from "react-vis";
+
+import { getTimeLogs } from "../../../../utils/api/api";
 
 class TimeSpentMiniGraph extends Component {
   state = {
     timeSpentData: null,
     timeSpentProjection: null,
-    hoveredNode: null
+    hoveredNode: null,
   };
 
   componentDidMount() {
-    const { sprint, logs } = this.props;
-    if (sprint && logs) {
-      this.constructTimeSpent(sprint, logs);
-      this.constructProjectedTimeSpent(sprint);
-    }
+    const { sprint } = this.props;
+    this.onMount(sprint);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { sprint, logs } = nextProps;
-    if (sprint && logs) {
-      this.constructTimeSpent(sprint, logs);
-      this.constructProjectedTimeSpent(sprint);
-    }
+    const { sprint } = nextProps;
+    this.onMount(sprint);
   }
 
-  constructTimeSpent = (sprint, logs) => {
+  onMount = sprint => {
+    sprint &&
+      getTimeLogs(sprint.id).then(logs => {
+        this.setState(
+          {
+            sprint,
+            logs: logs.filter(log => log.time_stat === "time_spent"),
+          },
+          () => {
+            this.constructTimeSpent();
+            this.constructProjectedTimeSpent(sprint);
+          }
+        );
+      });
+  };
+
+  constructTimeSpent = () => {
+    const { sprint, logs } = this.state;
     const startDate = new Date(sprint.start_date);
 
     const timeSpentData = [{ x: startDate, y: 0 }];
@@ -37,16 +50,18 @@ class TimeSpentMiniGraph extends Component {
       const timestamp = new Date(log.created_at);
       timeSpentData.push({
         x: timestamp,
-        y: total
+        y: total,
       });
     });
 
     this.setState({
-      timeSpentData
+      timeSpentData,
     });
   };
 
-  constructProjectedTimeSpent = sprint => {
+  constructProjectedTimeSpent = () => {
+    const { sprint } = this.state;
+
     const startDate = new Date(sprint.start_date);
     const dateMap = {
       0: 35,
@@ -55,7 +70,7 @@ class TimeSpentMiniGraph extends Component {
       3: 10,
       4: 15,
       5: 20,
-      6: 25
+      6: 25,
     };
 
     const projection = [];
@@ -64,18 +79,18 @@ class TimeSpentMiniGraph extends Component {
       day.setDate(startDate.getDate() + i);
       projection.push({
         x: day,
-        y: dateMap[day.getDay()]
+        y: dateMap[day.getDay()],
       });
     }
     const nextMonday = new Date(startDate.getTime());
     nextMonday.setDate(startDate.getDate() + 7);
     projection.push({
       x: nextMonday,
-      y: 45
+      y: 45,
     });
 
     this.setState({
-      timeSpentProjection: projection
+      timeSpentProjection: projection,
     });
   };
 
@@ -120,7 +135,7 @@ class TimeSpentMiniGraph extends Component {
                   background: "black",
                   textAlign: "left",
                   padding: "5px",
-                  borderRadius: "5px"
+                  borderRadius: "5px",
                 }}
               >
                 <p>{"Hours Spent: " + Math.round(lastPoint.y)}</p>
@@ -139,7 +154,7 @@ class TimeSpentMiniGraph extends Component {
                   background: "black",
                   textAlign: "left",
                   padding: "5px",
-                  borderRadius: "5px"
+                  borderRadius: "5px",
                 }}
               >
                 <p>{"Hours: " + hoveredNode.y}</p>

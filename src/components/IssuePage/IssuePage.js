@@ -154,6 +154,7 @@ class IssueDisplay extends Component {
       delta: timeSpentDelta,
       stat: "time_spent",
       createdAt: new Date().toISOString(),
+      total: timeSpent,
     };
     timeSpentDelta > 0 && !bad && createTimeLog(timeSpentRequestObj);
 
@@ -163,6 +164,7 @@ class IssueDisplay extends Component {
       delta: this.state.timeRemainingDelta,
       stat: "time_remaining",
       createdAt: new Date().toISOString(),
+      total: timeRemaining,
     };
     timeRemainingDelta !== 0 && createTimeLog(timeRemainingRequestObj);
 

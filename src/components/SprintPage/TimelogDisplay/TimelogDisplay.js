@@ -38,13 +38,15 @@ class SprintTable extends Component {
   };
 
   renderLog = log => {
-    const { id, time_delta, name, created_at } = log;
+    const { id, time_delta, name, created_at, total } = log;
+    console.log(log);
     return (
       <Table.Row key={id}>
         <Table.Cell>{name}</Table.Cell>
         <Table.Cell textAlign="center">
           <TimeAgo date={created_at} />
         </Table.Cell>
+        <Table.Cell textAlign="center">{total}</Table.Cell>
         <Table.Cell textAlign="center">{time_delta}</Table.Cell>
         <Table.Cell textAlign="center">
           {new Date(created_at).toLocaleString()}
@@ -63,10 +65,13 @@ class SprintTable extends Component {
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell width={3}>Issue</Table.HeaderCell>
-          <Table.HeaderCell textAlign="center" width={3}>
+          <Table.HeaderCell textAlign="center" width={4}>
             Created
           </Table.HeaderCell>
-          <Table.HeaderCell textAlign="center" width={3}>
+          <Table.HeaderCell textAlign="center" width={2}>
+            Total
+          </Table.HeaderCell>
+          <Table.HeaderCell textAlign="center" width={2}>
             Delta
           </Table.HeaderCell>
           <Table.HeaderCell textAlign="center" width={5}>

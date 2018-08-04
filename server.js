@@ -167,10 +167,10 @@ app.post("/project", (req, res) => {
 // Create timelog
 // search: createTimelog
 app.post("/log", (req, res) => {
-  const { issueId, delta, stat, createdAt } = req.body;
+  const { issueId, delta, stat, createdAt, total } = req.body;
   const query =
-    `INSERT INTO timelog (issue_id, sprint_id, time_delta, time_stat, created_at) ` +
-    `SELECT ${issueId}, i.sprint_id, ${delta}, '${stat}', '${createdAt}' ` +
+    `INSERT INTO timelog (issue_id, sprint_id, time_delta, time_stat, created_at, total) ` +
+    `SELECT ${issueId}, i.sprint_id, ${delta}, '${stat}', '${createdAt}', ${total} ` +
     `FROM issues i ` +
     `WHERE i.id=${issueId}`;
   db.insert(query)
@@ -183,13 +183,13 @@ app.post("/log", (req, res) => {
     });
 });
 
-// Create timelog
-// search: createTimelog
+// Get all timelogs for a sprint
+// search: getTimelogs
 app.get("/log/:id", (req, res) => {
   // const query = `SELECT * FROM timelog where sprint_id=${req.params.id}`;
   const query =
     `SELECT timelog.id, timelog.issue_id, timelog.sprint_id, ` +
-    `timelog.time_delta, timelog.time_stat, timelog.created_at, issues.name ` +
+    `timelog.time_delta, timelog.time_stat, timelog.created_at, issues.name, timelog.total ` +
     `FROM timelog INNER JOIN issues ON timelog.issue_id = issues.id ` +
     `WHERE timelog.sprint_id=${req.params.id};`;
   db.read(query)
