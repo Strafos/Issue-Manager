@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Segment, Loader, Dimmer } from "semantic-ui-react";
+import { Loader } from "semantic-ui-react";
 
 import { XYPlot, Hint, LineMarkSeries } from "react-vis";
 
@@ -14,27 +14,15 @@ class TimeSpentMiniGraph extends Component {
 
   componentDidMount() {
     const { sprint } = this.props;
-    // if (sprint) {
-    //   this.constructTimeSpent(sprint);
-    //   this.constructProjectedTimeSpent(sprint);
-    // }
-    sprint &&
-      getTimeLogs(sprint.id).then(logs => {
-        this.setState(
-          {
-            sprint,
-            logs: logs.filter(log => log.time_stat === "time_spent"),
-          },
-          () => {
-            this.constructTimeSpent();
-            this.constructProjectedTimeSpent(sprint);
-          }
-        );
-      });
+    this.onMount(sprint);
   }
 
   componentWillReceiveProps(nextProps) {
     const { sprint } = nextProps;
+    this.onMount(sprint);
+  }
+
+  onMount = sprint => {
     sprint &&
       getTimeLogs(sprint.id).then(logs => {
         this.setState(
@@ -48,7 +36,7 @@ class TimeSpentMiniGraph extends Component {
           }
         );
       });
-  }
+  };
 
   constructTimeSpent = () => {
     const { sprint, logs } = this.state;

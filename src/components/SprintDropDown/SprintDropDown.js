@@ -3,15 +3,6 @@ import { Dropdown } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
 class SprintDropDown extends Component {
-  sprintOptions = sprints =>
-    sprints.map(sprint => {
-      return {
-        text: sprint.name,
-        key: sprint.id,
-        value: sprint.id,
-      };
-    });
-
   renderItem = sprint => {
     return (
       <Dropdown.Item
@@ -31,7 +22,7 @@ class SprintDropDown extends Component {
         placeholder="Select Sprint"
         selection
         value={value}
-        item
+        // item
         simple={simple}
         onChange={onChange}
       >

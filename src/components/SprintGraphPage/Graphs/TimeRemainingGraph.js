@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Segment, Loader } from "semantic-ui-react";
+import { Loader } from "semantic-ui-react";
 
 import { XYPlot, XAxis, YAxis, Hint, LineMarkSeries } from "react-vis";
 
@@ -7,7 +7,7 @@ class TimeRemainingGraph extends Component {
   state = {
     timeRemainingProjection: null, // Projection is expected benchmarks
     timeRemainingData: null, // Data comes from parsed timelogs
-    hoveredNode: null // Hint appears when node is hovered over
+    hoveredNode: null, // Hint appears when node is hovered over
   };
 
   componentDidMount() {
@@ -35,7 +35,7 @@ class TimeRemainingGraph extends Component {
     day.setDate(startDate.getDate());
     timeRemainingData.push({
       x: day,
-      y: totalTimeEstimate
+      y: totalTimeEstimate,
     });
 
     let total = totalTimeEstimate;
@@ -46,7 +46,7 @@ class TimeRemainingGraph extends Component {
     });
 
     this.setState({
-      timeRemainingData
+      timeRemainingData,
     });
   };
 
@@ -62,7 +62,7 @@ class TimeRemainingGraph extends Component {
       4: 6 / 9,
       5: 5 / 9,
       6: 4 / 9,
-      0: 2 / 9
+      0: 2 / 9,
     };
 
     const projection = [];
@@ -71,18 +71,18 @@ class TimeRemainingGraph extends Component {
       day.setDate(startDate.getDate() + i);
       projection.push({
         x: day,
-        y: totalTimeEstimate * dateMap[day.getDay()]
+        y: totalTimeEstimate * dateMap[day.getDay()],
       });
     }
     const nextMonday = new Date(startDate.getTime());
     nextMonday.setDate(startDate.getDate() + 7);
     projection.push({
       x: nextMonday,
-      y: 0
+      y: 0,
     });
 
     this.setState({
-      timeRemainingProjection: projection
+      timeRemainingProjection: projection,
     });
   };
 
@@ -90,7 +90,7 @@ class TimeRemainingGraph extends Component {
     const {
       hoveredNode,
       timeRemainingProjection,
-      timeRemainingData
+      timeRemainingData,
     } = this.state;
 
     if (!timeRemainingData || !timeRemainingProjection) {
@@ -126,7 +126,7 @@ class TimeRemainingGraph extends Component {
                 background: "black",
                 textAlign: "left",
                 padding: "5px",
-                borderRadius: "5px"
+                borderRadius: "5px",
               }}
             >
               <p>{"Hours: " + Math.round(hoveredNode.y)}</p>

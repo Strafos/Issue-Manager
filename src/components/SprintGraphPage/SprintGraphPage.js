@@ -29,7 +29,9 @@ class SprintGraphPage extends Component {
       });
     });
 
-    const selectedSprint = sprints.find(sprint => sprint.id == sprintId);
+    const selectedSprint = sprints.find(
+      sprint => sprint.id === parseInt(sprintId, 10)
+    );
 
     this.setState({
       selectedSprint,
@@ -50,7 +52,10 @@ class SprintGraphPage extends Component {
     const { match, sprints } = nextProps;
 
     const sprintId = match.params.id;
-    const selectedSprint = sprints.find(sprint => sprint.id == sprintId);
+    const selectedSprint = sprints.find(
+      sprint => sprint.id === parseInt(sprintId, 10)
+    );
+    // const selectedSprint = sprints.find(sprint => sprint.id == sprintId);
 
     this.setState({
       selectedSprint,

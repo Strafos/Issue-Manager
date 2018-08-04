@@ -1,6 +1,5 @@
 import _ from "lodash";
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 
 import "./SprintDisplay.css";
 import {
@@ -70,57 +69,15 @@ class SprintDisplay extends Component {
 
   componentDidMount() {
     const { match, sprints } = this.props;
-
-    const defaultSprint = this.getDefaultSprint(sprints);
-    const defaultSprintId = defaultSprint ? defaultSprint.id : null;
-
-    // If the id is part of the url params, use that, otherwise, display default sprint
-    const id = match.params.id ? match.params.id : defaultSprintId;
-
-    getSprint(id).then(issues => {
-      const selectedSprint = sprints.find(spr => spr.id == id);
-      const showNoteList = {};
-      const editNoteList = {};
-      const issueNoteList = {};
-      issues.map(issue => (showNoteList[issue.id] = !!issue.show_notes));
-      issues.map(issue => (editNoteList[issue.id] = false));
-      issues.map(issue => (issueNoteList[issue.id] = issue.notes));
-
-      // Issues, note toggle array, summing times for footer
-      this.setState({
-        selectedSprint,
-        issueList: issues,
-        showNoteList,
-        editNoteList,
-        issueNoteList,
-        totalTimeEstimate:
-          issues.length > 0 &&
-          issues.map(i => i.time_estimate).reduce((a, b) => a + b),
-        totalTimeSpent:
-          issues.length > 0 &&
-          issues
-            .filter(i => !i.bad)
-            .map(i => i.time_spent)
-            .reduce((a, b) => a + b),
-        totalTimeRemaining:
-          issues.length > 0 &&
-          issues.map(i => i.time_remaining).reduce((a, b) => a + b),
-      });
-
-      // SPRINT notes
-      this.setState({
-        notes: selectedSprint ? selectedSprint.notes : "",
-        quote: selectedSprint ? selectedSprint.quote : "",
-      });
-
-      // Want to sort by status by default
-      this.handleStatusSort();
-    });
+    this.onMount(match, sprints);
   }
 
   componentWillReceiveProps(nextProps) {
     const { match, sprints } = nextProps;
+    this.onMount(match, sprints);
+  }
 
+  onMount = (match, sprints) => {
     const defaultSprint = this.getDefaultSprint(sprints);
     const defaultSprintId = defaultSprint ? defaultSprint.id : null;
 
@@ -128,7 +85,7 @@ class SprintDisplay extends Component {
     const id = match.params.id ? match.params.id : defaultSprintId;
 
     getSprint(id).then(issues => {
-      const selectedSprint = sprints.find(spr => spr.id == id);
+      const selectedSprint = sprints.find(spr => spr.id === parseInt(id, 10));
       const showNoteList = {};
       const editNoteList = {};
       const issueNoteList = {};
@@ -166,7 +123,7 @@ class SprintDisplay extends Component {
       // Want to sort by status by default
       this.handleStatusSort();
     });
-  }
+  };
 
   getDefaultSprint = sprints => {
     const d = new Date();
@@ -251,7 +208,7 @@ class SprintDisplay extends Component {
   // Resort after status is clicked. Not implementable currently because
   // the state management is handled by the Status component
   handleResort = () => {
-    const { sortByColumn, issueList, direction } = this.state;
+    const { sortByColumn, issueList } = this.state;
     if (sortByColumn === "status") {
       this.handleStatusSort();
       return;
@@ -402,8 +359,8 @@ class SprintDisplay extends Component {
     } = issue;
 
     return (
-      <Table.Body>
-        <Table.Row key={id}>
+      <Table.Body key={id}>
+        <Table.Row>
           <Table.Cell onClick={() => this.handleShowNotes(id)} collapsing>
             {this.renderName(name, id)}
           </Table.Cell>

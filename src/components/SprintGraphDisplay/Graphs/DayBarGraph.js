@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { Segment, Loader, Dimmer } from "semantic-ui-react";
+import { Loader } from "semantic-ui-react";
 
 import { XAxis, YAxis, XYPlot, HorizontalBarSeries } from "react-vis";
 
