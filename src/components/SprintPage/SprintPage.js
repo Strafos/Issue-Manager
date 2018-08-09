@@ -7,7 +7,6 @@ import {
   Button,
   Form,
   TextArea,
-  Table,
   Header,
   Progress,
   Container,
@@ -15,8 +14,6 @@ import {
   Divider,
 } from "semantic-ui-react";
 
-import Status from "../Status/Status";
-import TimeCounter from "../TimeCounter/TimeCounter";
 import GraphDisplay from "./GraphDisplay/GraphDisplay";
 import TimelogDisplay from "./TimelogDisplay/TimelogDisplay";
 import IssueDisplay from "./IssueDisplay/IssueDisplay";
@@ -32,37 +29,12 @@ class SprintDisplay extends Component {
     selectedSprint: null,
     issueList: [],
     notes: "",
-    showNoteList: {},
-    editNoteList: {},
-    issueNoteList: {},
-    issueStatusList: {},
-    totalTimeSpent: 0,
-    totalTimeRemaining: 0,
-    totalTimeEstimate: 0,
-    sortByColumn: null,
-    direction: null,
     editQuote: false,
     quote: "",
     displayTimelogs: false,
-  };
-
-  statusMap = {
-    "In queue": 1,
-    "In progress": 0,
-    Paused: 2,
-    Done: 3,
-  };
-
-  mapProjectId = id => {
-    const { projects } = this.props;
-    const project = projects.find(proj => proj.id === id);
-    return project ? project.name : "";
-  };
-
-  mapSprintId = id => {
-    const { sprints } = this.props;
-    const sprint = sprints.find(spr => spr.id === id);
-    return sprint;
+    displayGraphs: false,
+    displayIssues: true,
+    isSprintNoteSaving: false,
   };
 
   componentDidMount() {
@@ -119,9 +91,12 @@ class SprintDisplay extends Component {
 
   handleSaveSprintNotes = () => {
     const { notes, selectedSprint } = this.state;
+    this.setState({ isSprintNoteSaving: true });
     updateSprintNotes(notes, selectedSprint.id).then(res => {
       if (!res || res.status !== "Success") {
         this.props.error("Failed to save notes");
+      } else {
+        this.setState({ isSprintNoteSaving: false });
       }
     });
   };
@@ -201,13 +176,11 @@ class SprintDisplay extends Component {
     const {
       issueList,
       selectedSprint,
-      totalTimeSpent,
-      totalTimeRemaining,
-      totalTimeEstimate,
       editQuote,
       quote,
       displayTimelogs,
       displayGraphs,
+      isSprintNoteSaving,
     } = this.state;
 
     if (!selectedSprint) {
@@ -226,9 +199,6 @@ class SprintDisplay extends Component {
         <IssueDisplay
           issueList={issueList}
           selectedSprint={selectedSprint}
-          totalTimeEstimate={totalTimeEstimate}
-          totalTimeRemaining={totalTimeRemaining}
-          totalTimeSpent={totalTimeSpent}
           projects={this.props.projects}
           sprints={this.props.sprints}
           issues={issueList}
@@ -302,7 +272,7 @@ class SprintDisplay extends Component {
           </Grid.Column>
           <Grid.Column width={12}>
             <Container>
-              <Progress
+              {/* <Progress
                 percent={Math.round((totalTimeSpent / 45) * 100)}
                 progress
                 color="black"
@@ -324,11 +294,11 @@ class SprintDisplay extends Component {
                 color="black"
                 size="small"
                 label="Projected"
-              />
+              /> */}
             </Container>
           </Grid.Column>
         </Grid>
-        {/*where all the shit was*/}
+
         {display}
 
         <Form>
@@ -343,6 +313,11 @@ class SprintDisplay extends Component {
           >
             Save notes
           </Button>
+          <Icon
+            style={{ paddingTop: "10px", paddingLeft: "10px", float: "left" }}
+            loading={isSprintNoteSaving}
+            name={isSprintNoteSaving ? "redo" : "check"}
+          />
         </div>
       </div>
     );

@@ -141,7 +141,11 @@ class IssueDisplay extends Component {
 
       this.setState({
         sortByColumn: clickedColumn,
-        issueList: _.sortBy(issueList, [clickedColumn]),
+        issueList: _.orderBy(
+          issueList,
+          [user => user.name.toLowerCase()],
+          ["asc"]
+        ),
         direction: "descending",
       });
 

@@ -64,7 +64,7 @@ class SprintTable extends Component {
     <Table celled compact fixed size="large">
       <Table.Header>
         <Table.Row>
-          <Table.HeaderCell width={3}>Issue</Table.HeaderCell>
+          <Table.HeaderCell width={4}>Issue</Table.HeaderCell>
           <Table.HeaderCell textAlign="center" width={4}>
             Created
           </Table.HeaderCell>
@@ -74,7 +74,7 @@ class SprintTable extends Component {
           <Table.HeaderCell textAlign="center" width={2}>
             Delta
           </Table.HeaderCell>
-          <Table.HeaderCell textAlign="center" width={5}>
+          <Table.HeaderCell textAlign="center" width={6}>
             Date
           </Table.HeaderCell>
           <Table.HeaderCell textAlign="center" width={2}>
