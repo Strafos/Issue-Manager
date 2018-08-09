@@ -1,19 +1,7 @@
 import _ from "lodash";
 import React, { Component } from "react";
 
-import {
-  Icon,
-  Grid,
-  Button,
-  Form,
-  TextArea,
-  Table,
-  Header,
-  Progress,
-  Container,
-  Loader,
-  Divider,
-} from "semantic-ui-react";
+import { Icon, Button, Form, TextArea, Table, Loader } from "semantic-ui-react";
 
 import Status from "../../Status/Status";
 import TimeCounter from "../../TimeCounter/TimeCounter";
@@ -148,6 +136,7 @@ class IssueDisplay extends Component {
           issueList: _.sortBy(issueList, [clickedColumn]).reverse(),
           direction: "ascending",
         });
+        return;
       }
 
       this.setState({

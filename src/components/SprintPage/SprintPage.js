@@ -1,4 +1,3 @@
-import _ from "lodash";
 import React, { Component } from "react";
 
 import "./SprintPage.css";
@@ -24,9 +23,7 @@ import IssueDisplay from "./IssueDisplay/IssueDisplay";
 
 import {
   getSprint,
-  updateIssueNotes,
   updateSprintNotes,
-  updateShowNotes,
   updateSprintQuote,
 } from "../../utils/api/api";
 
@@ -199,110 +196,6 @@ class SprintDisplay extends Component {
       </a>
     </div>
   );
-
-  renderIssue = issue => {
-    const {
-      name,
-      id,
-      status,
-      time_spent,
-      time_estimate,
-      time_remaining,
-      project_id,
-      blocked,
-      bad,
-    } = issue;
-
-    return (
-      <Table.Body key={id}>
-        <Table.Row>
-          <Table.Cell onClick={() => this.handleShowNotes(id)} collapsing>
-            {this.renderName(name, id)}
-          </Table.Cell>
-          <Table.Cell onClick={() => this.handleShowNotes(id)} collapsing>
-            {this.mapProjectId(project_id)}
-          </Table.Cell>
-          <Table.Cell collapsing>
-            <Status
-              update={this.updateStatus}
-              error={this.props.error}
-              issueId={id}
-              blocked={blocked === "true"}
-              status={status}
-            />
-          </Table.Cell>
-          <Table.Cell textAlign="center" collapsing>
-            <TimeCounter
-              timeTotals={this.handleTimeTotals}
-              issueId={id}
-              inc={true}
-              stat="time_spent"
-              time={time_spent}
-              bad={bad}
-            />
-          </Table.Cell>
-          <Table.Cell textAlign="center" collapsing>
-            <TimeCounter
-              timeTotals={this.handleTimeTotals}
-              issueId={id}
-              inc={false}
-              stat="time_remaining"
-              time={time_remaining}
-              bad={0}
-            />
-          </Table.Cell>
-          <Table.Cell
-            onClick={() => this.handleShowNotes(id)}
-            textAlign="center"
-            collapsing
-          >
-            {time_estimate}
-          </Table.Cell>
-        </Table.Row>
-        {this.state.showNoteList[id] && (
-          <Table.Row>
-            <Table.Cell colSpan="6">
-              {this.state.editNoteList[id] ? (
-                <Form>
-                  <TextArea
-                    onChange={(event, { value }) =>
-                      this.handleIssueNotes(id, value)
-                    }
-                    style={{
-                      minHeight: 350,
-                      backgroundColor: "#282828",
-                      color: "#BEBEBE",
-                    }}
-                    placeholder="Issue notes..."
-                    value={this.state.issueNoteList[id]}
-                  />
-                  <Button
-                    floated="left"
-                    color="red"
-                    onClick={() =>
-                      this.handleSaveIssueNotes(
-                        id,
-                        this.state.issueNoteList[id]
-                      )
-                    }
-                  >
-                    Save
-                  </Button>
-                </Form>
-              ) : (
-                <div
-                  onClick={() => this.handleEditNotes(id)}
-                  className="linebreak"
-                >
-                  {this.state.issueNoteList[id] || "Notes: "}
-                </div>
-              )}
-            </Table.Cell>
-          </Table.Row>
-        )}
-      </Table.Body>
-    );
-  };
 
   render() {
     const {
