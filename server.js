@@ -12,7 +12,7 @@ const port = process.env.PORT || 5000;
 // search: createsprint
 app.post("/sprint", (req, res) => {
   const { name, startDate, endDate } = req.body;
-  const query = `INSERT INTO sprints values(null, (?), (?), (?), '')`;
+  const query = `INSERT INTO sprints values(null, (?), (?), (?), '', '')`;
   db.insert(query, [name, startDate, endDate])
     .then(() => {
       res.send({ status: "Success" });

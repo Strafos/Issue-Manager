@@ -1,6 +1,8 @@
 import React, { PureComponent } from "react";
 import { Loader } from "semantic-ui-react";
 
+import "./DayBarGraph.css";
+
 import { XAxis, YAxis, XYPlot, HorizontalBarSeries } from "react-vis";
 
 class DayBarGraph extends PureComponent {

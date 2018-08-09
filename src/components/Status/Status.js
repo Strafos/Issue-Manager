@@ -6,14 +6,14 @@ import { setStatus, setBlocked } from "../../utils/api/api";
 class Status extends Component {
   state = {
     status: null,
-    blocked: false
+    blocked: false,
   };
 
   componentWillReceiveProps(nextProps) {
     const { status, blocked } = nextProps;
     this.setState({
       status: status,
-      blocked: blocked
+      blocked: blocked,
     });
   }
 
@@ -21,7 +21,7 @@ class Status extends Component {
     const { status, blocked } = this.props;
     this.setState({
       status: status,
-      blocked: blocked
+      blocked: blocked,
     });
   }
 
@@ -76,17 +76,6 @@ class Status extends Component {
               name="play"
             />
           </Menu.Item>
-          <Menu.Item
-            name="Paused"
-            active={status === "Paused"}
-            onClick={this.handleItemClick}
-          >
-            <Icon
-              inverted
-              color={status === "Paused" ? "red" : "grey"}
-              name="pause"
-            />
-          </Menu.Item>
 
           <Menu.Item
             name="Done"
@@ -97,6 +86,17 @@ class Status extends Component {
               color={status === "Done" ? "red" : "grey"}
               inverted
               name="check"
+            />
+          </Menu.Item>
+          <Menu.Item
+            name="Paused"
+            active={status === "Paused"}
+            onClick={this.handleItemClick}
+          >
+            <Icon
+              inverted
+              color={status === "Paused" ? "red" : "grey"}
+              name="sync"
             />
           </Menu.Item>
         </Menu>

@@ -13,7 +13,7 @@ import {
 
 import { createIssue } from "../../../utils/api/api";
 import ProjectDropDown from "../../ProjectDropDown/ProjectDropDown";
-import SprintDropDown from "../../SprintDropDown/SprintDropDown";
+import SprintDropDown from "./SprintDropDown";
 
 class IssueModal extends Component {
   state = {
@@ -55,6 +55,7 @@ class IssueModal extends Component {
   };
 
   handleSprintSelect = (event, { value }) => {
+    console.log(value);
     this.setState({
       sprintId: value,
     });
@@ -96,7 +97,7 @@ class IssueModal extends Component {
   };
 
   render() {
-    const { modalOpen } = this.state;
+    const { modalOpen, sprintId } = this.state;
 
     const { sprints, projects, selectedSprint } = this.props;
 
@@ -125,7 +126,7 @@ class IssueModal extends Component {
             <Form.Field>
               <label>Sprint</label>
               <SprintDropDown
-                value={selectedSprint && selectedSprint.id}
+                value={sprintId}
                 sprints={sprints}
                 onChange={this.handleSprintSelect}
               />

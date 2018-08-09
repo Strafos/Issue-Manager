@@ -1,7 +1,6 @@
 import _ from "lodash";
 import React, { Component } from "react";
 
-import "./SprintPage.css";
 import {
   Icon,
   Grid,
@@ -16,21 +15,17 @@ import {
   Divider,
 } from "semantic-ui-react";
 
-import Status from "../Status/Status";
-import TimeCounter from "../TimeCounter/TimeCounter";
-import GraphDisplay from "./GraphDisplay/GraphDisplay";
-import TimelogDisplay from "./TimelogDisplay/TimelogDisplay";
-import IssueDisplay from "./IssueDisplay/IssueDisplay";
+import Status from "../../Status/Status";
+import TimeCounter from "../../TimeCounter/TimeCounter";
 
 import {
-  getSprint,
   updateIssueNotes,
   updateSprintNotes,
   updateShowNotes,
   updateSprintQuote,
-} from "../../utils/api/api";
+} from "../../../utils/api/api";
 
-class SprintDisplay extends Component {
+class IssueDisplay extends Component {
   state = {
     selectedSprint: null,
     issueList: [],
@@ -56,6 +51,56 @@ class SprintDisplay extends Component {
     Done: 3,
   };
 
+  componentDidMount() {
+    const { selectedSprint, issues } = this.props;
+    const showNoteList = {};
+    const editNoteList = {};
+    const issueNoteList = {};
+    issues.map(issue => (showNoteList[issue.id] = !!issue.show_notes));
+    issues.map(issue => (editNoteList[issue.id] = false));
+    issues.map(issue => (issueNoteList[issue.id] = issue.notes));
+
+    // Issues, note toggle array, summing times for footer
+    this.setState(
+      {
+        selectedSprint,
+        issueList: issues,
+        showNoteList,
+        editNoteList,
+        issueNoteList,
+        totalTimeEstimate:
+          issues.length > 0 &&
+          issues.map(i => i.time_estimate).reduce((a, b) => a + b),
+        totalTimeSpent:
+          issues.length > 0 &&
+          issues
+            .filter(i => !i.bad)
+            .map(i => i.time_spent)
+            .reduce((a, b) => a + b),
+        totalTimeRemaining:
+          issues.length > 0 &&
+          issues.map(i => i.time_remaining).reduce((a, b) => a + b),
+      },
+      this.handleStatusSort
+    );
+  }
+
+  handleTimeTotals = (timeStat, delta) => {
+    if (timeStat === "time_spent") {
+      this.setState({
+        totalTimeSpent: this.state.totalTimeSpent + delta,
+      });
+    } else if (timeStat === "time_remaining") {
+      this.setState({
+        totalTimeRemaining: this.state.totalTimeRemaining + delta,
+      });
+    } else if (timeStat === "time_estimate") {
+      this.setState({
+        totalTimeEstimate: this.state.totalTimeEstimate + delta,
+      });
+    }
+  };
+
   mapProjectId = id => {
     const { projects } = this.props;
     const project = projects.find(proj => proj.id === id);
@@ -68,55 +113,93 @@ class SprintDisplay extends Component {
     return sprint;
   };
 
-  componentDidMount() {
-    const { match, sprints } = this.props;
-    this.onMount(match, sprints);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { match, sprints } = nextProps;
-    this.onMount(match, sprints);
-  }
-
-  onMount = (match, sprints) => {
-    const defaultSprint = this.getDefaultSprint(sprints);
-    const defaultSprintId = defaultSprint ? defaultSprint.id : null;
-
-    // If the id is part of the url params, use that, otherwise, display default sprint
-    const id = match.params.id ? match.params.id : defaultSprintId;
-
-    getSprint(id).then(issues => {
-      const selectedSprint = sprints.find(spr => spr.id === parseInt(id, 10));
-
-      // Issues, note toggle array, summing times for footer
-      this.setState({
-        selectedSprint,
-        issueList: issues,
-      });
-
-      // SPRINT notes
-      this.setState({
-        notes: selectedSprint ? selectedSprint.notes : "",
-        quote: selectedSprint ? selectedSprint.quote : "",
-      });
+  handleStatusSort = () => {
+    const { issueList } = this.state;
+    this.setState({
+      issueList: issueList.sort(
+        (a, b) => this.statusMap[a.status] - this.statusMap[b.status]
+      ),
+      direction: "ascending",
+      sortByColumn: "status",
     });
   };
 
-  getDefaultSprint = sprints => {
-    const d = new Date();
-    if (d.getDay() !== 1) {
-      // Get last monday unless today is Monday
-      d.setDate(d.getDate() + ((1 + 7 - d.getDay()) % 7) - 7);
+  updateStatus = (id, status) => {
+    const { issueList } = this.state;
+    const idx = issueList.findIndex(issue => issue.id === id);
+    issueList[idx].status = status;
+    this.setState({
+      issueList,
+    });
+    this.handleStatusSort();
+  };
+
+  handleSort = clickedColumn => () => {
+    const { sortByColumn, issueList, direction } = this.state;
+    if (sortByColumn !== clickedColumn) {
+      if (clickedColumn === "status") {
+        this.handleStatusSort();
+        return;
+      }
+
+      if (clickedColumn.includes("time")) {
+        this.setState({
+          sortByColumn: clickedColumn,
+          issueList: _.sortBy(issueList, [clickedColumn]).reverse(),
+          direction: "ascending",
+        });
+      }
+
+      this.setState({
+        sortByColumn: clickedColumn,
+        issueList: _.sortBy(issueList, [clickedColumn]),
+        direction: "descending",
+      });
+
+      return;
     }
 
-    const options = { month: "2-digit", day: "2-digit", year: "2-digit" };
-    const lastMonday = d.toLocaleDateString("en-US", options);
-    return sprints.find(sprint => sprint.start_date === lastMonday);
+    this.setState({
+      issueList: issueList.reverse(),
+      direction: direction === "ascending" ? "descending" : "ascending",
+    });
+  };
+
+  // Resort after status is clicked. Not implementable currently because
+  // the state management is handled by the Status component
+  handleResort = () => {
+    const { sortByColumn, issueList } = this.state;
+    if (sortByColumn === "status") {
+      this.handleStatusSort();
+      return;
+    }
+
+    if (sortByColumn.includes("time")) {
+      this.setState({
+        sortByColumn: sortByColumn,
+        issueList: _.sortBy(issueList, [sortByColumn]).reverse(),
+        direction: "ascending",
+      });
+    }
+
+    this.setState({
+      sortByColumn: sortByColumn,
+      issueList: _.sortBy(issueList, [sortByColumn]),
+      direction: "descending",
+    });
   };
 
   handleSprintNotes = (event, { value }) => {
     this.setState({
       notes: value,
+    });
+  };
+
+  handleIssueNotes = (id, value) => {
+    const { issueNoteList } = this.state;
+    issueNoteList[id] = value;
+    this.setState({
+      issueNoteList,
     });
   };
 
@@ -137,6 +220,28 @@ class SprintDisplay extends Component {
         this.props.error("Failed to save quote");
       }
     });
+  };
+
+  handleShowNotes = id => {
+    const { showNoteList } = this.state;
+    showNoteList[id] = !showNoteList[id];
+    this.setState({
+      showNoteList,
+    });
+    updateShowNotes(id, showNoteList[id] ? 1 : 0);
+  };
+
+  handleEditNotes = id => {
+    const { editNoteList } = this.state;
+    editNoteList[id] = !editNoteList[id];
+    this.setState({
+      editNoteList,
+    });
+  };
+
+  handleSaveIssueNotes = (id, notes) => {
+    this.handleEditNotes(id);
+    updateIssueNotes(id, notes);
   };
 
   handleSprintQuoteChange = (event, { value }) => {
@@ -305,155 +410,73 @@ class SprintDisplay extends Component {
   };
 
   render() {
+    const { selectedSprint } = this.props;
     const {
       issueList,
-      selectedSprint,
       totalTimeSpent,
       totalTimeRemaining,
       totalTimeEstimate,
-      editQuote,
-      quote,
-      displayTimelogs,
-      displayGraphs,
     } = this.state;
 
     if (!selectedSprint) {
       return <Loader active inline />;
     }
 
-    let display;
-    if (displayTimelogs) {
-      display = (
-        <TimelogDisplay sprintId={selectedSprint && selectedSprint.id} />
-      );
-    } else if (displayGraphs) {
-      display = <GraphDisplay selectedSprint={selectedSprint} />;
-    } else {
-      display = (
-        <IssueDisplay
-          issueList={issueList}
-          selectedSprint={selectedSprint}
-          totalTimeEstimate={totalTimeEstimate}
-          totalTimeRemaining={totalTimeRemaining}
-          totalTimeSpent={totalTimeSpent}
-          projects={this.props.projects}
-          sprints={this.props.sprints}
-          issues={issueList}
-        />
-      );
-    }
-
     return (
-      <div>
-        <Grid verticalAlign="top" columns={2} stretched>
-          <Grid.Column textAlign="left" width={4}>
-            <Grid.Row>
-              <Header floated="left" as="h1">
-                {selectedSprint && selectedSprint.name}
-                <Header.Subheader>
-                  {editQuote ? (
-                    <div>
-                      <TextArea
-                        onChange={this.handleSprintQuoteChange}
-                        defaultValue={quote}
-                      />
-                      <Button
-                        color="black"
-                        floated="right"
-                        onClick={this.handleSaveSprintQuote}
-                      >
-                        Save
-                      </Button>
-                    </div>
-                  ) : (
-                    <Container onClick={this.toggleEditSprintQuote}>
-                      {quote || "you idiot"}
-                    </Container>
-                  )}
-                </Header.Subheader>
-              </Header>
-            </Grid.Row>
-            <Divider />
-            <Grid.Row>
-              <Button
-                onClick={() =>
-                  this.setState({
-                    displayGraphs: false,
-                    displayTimelogs: false,
-                  })
-                }
-                color="black"
-                floated="left"
-              >
-                {"Issues"}
-              </Button>
-              <Button
-                onClick={() =>
-                  this.setState({ displayGraphs: true, displayTimelogs: false })
-                }
-                color="black"
-                floated="left"
-              >
-                {"Graphs"}
-              </Button>
-              <Button
-                onClick={() =>
-                  this.setState({ displayGraphs: false, displayTimelogs: true })
-                }
-                color="black"
-                floated="left"
-              >
-                {"Timelogs"}
-              </Button>
-            </Grid.Row>
-          </Grid.Column>
-          <Grid.Column width={12}>
-            <Container>
-              <Progress
-                percent={Math.round((totalTimeSpent / 45) * 100)}
-                progress
-                color="black"
-                size="small"
-                label="Time Spent"
-              />
-              <Progress
-                percent={Math.round(
-                  (1 - totalTimeRemaining / totalTimeEstimate) * 100
-                )}
-                progress
-                color="black"
-                label="Task Progress"
-                size="small"
-              />
-              <Progress
-                percent={this.projectedProgress()}
-                progress
-                color="black"
-                size="small"
-                label="Projected"
-              />
-            </Container>
-          </Grid.Column>
-        </Grid>
-        {/*where all the shit was*/}
-        {display}
-
-        <Form>
-          <Form.Field control={this.renderTextArea} label="Sprint Notes" />
-        </Form>
-        <br />
-        <div>
-          <Button
-            floated="left"
-            color="red"
-            onClick={this.handleSaveSprintNotes}
-          >
-            Save notes
-          </Button>
-        </div>
-      </div>
+      <Table sortable fixed celled size="large" compact>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell onClick={this.handleSort("name")} width={4}>
+              Name
+            </Table.HeaderCell>
+            <Table.HeaderCell onClick={this.handleSort("project_id")} width={3}>
+              Project
+            </Table.HeaderCell>
+            <Table.HeaderCell onClick={this.handleSort("status")} width={6}>
+              Status
+            </Table.HeaderCell>
+            <Table.HeaderCell
+              onClick={this.handleSort("time_spent")}
+              width={2}
+              textAlign="center"
+            >
+              Time Spent
+            </Table.HeaderCell>
+            <Table.HeaderCell
+              onClick={this.handleSort("time_remaining")}
+              width={2}
+            >
+              Time Remaining
+            </Table.HeaderCell>
+            <Table.HeaderCell
+              onClick={this.handleSort("time_estimate")}
+              width={2}
+            >
+              Time Estimate
+            </Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        {issueList.map(this.renderIssue)}
+        <Table.Footer fullWidth>
+          <Table.Row>
+            <Table.HeaderCell colSpan="3" />
+            <Table.HeaderCell textAlign="center" colSpan="1">
+              {totalTimeSpent}
+              {" hours"}
+            </Table.HeaderCell>
+            <Table.HeaderCell textAlign="center" colSpan="1">
+              {totalTimeRemaining}
+              {" hours"}
+            </Table.HeaderCell>
+            <Table.HeaderCell textAlign="center" colSpan="1">
+              {totalTimeEstimate}
+              {" hours"}
+            </Table.HeaderCell>
+          </Table.Row>
+        </Table.Footer>
+      </Table>
     );
   }
 }
 
-export default SprintDisplay;
+export default IssueDisplay;

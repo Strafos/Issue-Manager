@@ -25,7 +25,7 @@ class SprintDropDown extends Component {
         value={value}
         item
         simple={simple}
-        // onChange={onChange}
+        onChange={onChange}
       >
         <Dropdown.Menu>
           {sprints.map(sprint => this.renderItem(sprint))}
