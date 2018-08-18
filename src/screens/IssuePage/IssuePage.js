@@ -13,9 +13,9 @@ import {
 } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
-import StatusDisplay from "../Status/StatusDisplay";
-import SprintDropDown from "../SprintDropDown/SprintDropDown";
-import ProjectDropDown from "../ProjectDropDown/ProjectDropDown";
+import StatusDisplay from "../../components/Status/StatusDisplay";
+import SprintDropDown from "../../components/SprintDropDown/SprintDropDown";
+import ProjectDropDown from "../../components/ProjectDropDown/ProjectDropDown";
 
 import {
   getIssue,

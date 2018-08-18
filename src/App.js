@@ -12,12 +12,11 @@ import ProjectModal from "./components/Modal/ProjectModal/ProjectModal";
 import SprintModal from "./components/Modal/SprintModal/SprintModal";
 
 import SprintDropDown from "./components/SprintDropDown/SprintDropDown";
-import RecentMenu from "./components/RecentMenu/RecentMenu";
 import TodoList from "./components/TodoList/TodoList";
-import SprintPage from "./components/SprintPage/SprintPage";
-import IssuePage from "./components/IssuePage/IssuePage";
+import SprintPage from "./screens/SprintPage/SprintPage";
+import IssuePage from "./screens/IssuePage/IssuePage";
 // import SprintGraphPage from "./components/SprintGraphPage/SprintGraphPage";
-import TimeSpentMiniGraph from "./components/SprintPage/GraphDisplay/Graphs/TimeSpentMiniGraph";
+import TimeSpentMiniGraph from "./screens/SprintPage/GraphDisplay/Graphs/TimeSpentMiniGraph";
 
 import {
   getSprint,

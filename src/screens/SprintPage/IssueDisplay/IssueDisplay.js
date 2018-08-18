@@ -3,8 +3,8 @@ import React, { Component } from "react";
 
 import { Icon, Button, Form, TextArea, Table, Loader } from "semantic-ui-react";
 
-import Status from "../../Status/Status";
-import TimeCounter from "../../TimeCounter/TimeCounter";
+import Status from "../../../components/Status/Status";
+import TimeCounter from "../../../components/TimeCounter/TimeCounter";
 
 import {
   updateIssueNotes,

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 
 import "./SprintPage.css";
 import {
@@ -17,6 +18,8 @@ import {
 import GraphDisplay from "./GraphDisplay/GraphDisplay";
 import TimelogDisplay from "./TimelogDisplay/TimelogDisplay";
 import IssueDisplay from "./IssueDisplay/IssueDisplay";
+
+import * as CommonActions from "../../commonActions";
 
 import {
   getSprint,
@@ -40,6 +43,7 @@ class SprintDisplay extends Component {
 
   componentDidMount() {
     const { match, sprints } = this.props;
+    this.props.getSprints();
     this.onMount(match, sprints);
   }
 
@@ -351,4 +355,15 @@ class SprintDisplay extends Component {
   }
 }
 
-export default SprintDisplay;
+const mapStateToProps = state => ({
+  sprintList: state.commonData.sprintList.data,
+});
+
+const mapDispatchToProps = {
+  getSprints: CommonActions.getAllSprints,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SprintDisplay);
