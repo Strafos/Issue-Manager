@@ -227,7 +227,7 @@ class App extends Component {
 
               <Grid.Column width={13}>
                 {this.state.showErrorMessage && this.handleErrorMessage()}
-                <Route
+                {/* <Route
                   exact
                   path="/"
                   render={props => {
@@ -240,7 +240,7 @@ class App extends Component {
                       />
                     );
                   }}
-                />
+                /> */}
 
                 <Route
                   exact

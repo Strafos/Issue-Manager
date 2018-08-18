@@ -44,6 +44,7 @@ class SprintDisplay extends Component {
   componentDidMount() {
     const { match, sprints } = this.props;
     this.props.getSprints();
+    this.props.getSprintIssues(match.params.id);
     this.onMount(match, sprints);
   }
 
@@ -53,11 +54,8 @@ class SprintDisplay extends Component {
   }
 
   onMount = (match, sprints) => {
-    const defaultSprint = this.getDefaultSprint(sprints);
-    const defaultSprintId = defaultSprint ? defaultSprint.id : null;
-
     // If the id is part of the url params, use that, otherwise, display default sprint
-    const id = match.params.id ? match.params.id : defaultSprintId;
+    const id = match.params.id;
 
     getSprint(id).then(issues => {
       const selectedSprint = sprints.find(spr => spr.id === parseInt(id, 10));
@@ -357,10 +355,12 @@ class SprintDisplay extends Component {
 
 const mapStateToProps = state => ({
   sprintList: state.commonData.sprintList.data,
+  sspr: state.commonData.sprintIssues.data,
 });
 
 const mapDispatchToProps = {
   getSprints: CommonActions.getAllSprints,
+  getSprintIssues: CommonActions.getSprintIssues,
 };
 
 export default connect(

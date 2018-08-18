@@ -13,3 +13,13 @@ export const getAllSprints = () =>
     },
     API.getSprints
   )();
+
+export const getSprintIssues = sprintId =>
+  asyncActionCreator(
+    {
+      pending: ActionTypes.FETCH_SPRINT_ISSUES_REQUEST,
+      complete: ActionTypes.FETCH_SPRINT_ISSUES_SUCCESS,
+      error: ActionTypes.FETCH_SPRINT_ISSUES_FAILURE,
+    },
+    API.getSprint
+  )(sprintId);

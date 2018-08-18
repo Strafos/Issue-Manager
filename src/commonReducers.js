@@ -9,6 +9,12 @@ const asyncSprintReducer = asyncStateReducer({
   [ActionTypes.FETCH_SPRINTS_SUCCESS]: "complete",
 });
 
+const asyncSprintIssuesReducer = asyncStateReducer({
+  [ActionTypes.FETCH_SPRINT_ISSUES_REQUEST]: "pending",
+  [ActionTypes.FETCH_SPRINT_ISSUES_FAILURE]: "error",
+  [ActionTypes.FETCH_SPRINT_ISSUES_SUCCESS]: "complete",
+});
+
 const sprintListReducer = (state, action) => {
   switch (action.type) {
     default:
@@ -16,4 +22,7 @@ const sprintListReducer = (state, action) => {
   }
 };
 
-export default combineReducers({ sprintList: sprintListReducer });
+export default combineReducers({
+  sprintList: sprintListReducer,
+  sprintIssues: asyncSprintIssuesReducer,
+});
