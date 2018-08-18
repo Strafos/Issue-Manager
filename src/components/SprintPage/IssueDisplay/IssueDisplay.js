@@ -13,6 +13,13 @@ import {
   updateSprintQuote,
 } from "../../../utils/api/api";
 
+const statusMap = {
+  "In queue": 1,
+  "In progress": 0,
+  Paused: 2,
+  Done: 3,
+};
+
 class IssueDisplay extends Component {
   state = {
     selectedSprint: null,
@@ -30,13 +37,6 @@ class IssueDisplay extends Component {
     editQuote: false,
     quote: "",
     displayTimelogs: false,
-  };
-
-  statusMap = {
-    "In queue": 1,
-    "In progress": 0,
-    Paused: 2,
-    Done: 3,
   };
 
   componentDidMount() {
@@ -105,7 +105,7 @@ class IssueDisplay extends Component {
     const { issueList } = this.state;
     this.setState({
       issueList: issueList.sort(
-        (a, b) => this.statusMap[a.status] - this.statusMap[b.status]
+        (a, b) => statusMap[a.status] - statusMap[b.status]
       ),
       direction: "ascending",
       sortByColumn: "status",
@@ -198,19 +198,12 @@ class IssueDisplay extends Component {
 
   handleSaveSprintNotes = () => {
     const { notes, selectedSprint } = this.state;
+    this.props.saving(true);
     updateSprintNotes(notes, selectedSprint.id).then(res => {
       if (!res || res.status !== "Success") {
         this.props.error("Failed to save notes");
-      }
-    });
-  };
-
-  handleSaveSprintQuote = () => {
-    const { quote, selectedSprint } = this.state;
-    this.toggleEditSprintQuote();
-    updateSprintQuote(quote, selectedSprint.id).then(res => {
-      if (!res || res.status !== "Success") {
-        this.props.error("Failed to save quote");
+      } else {
+        this.props.saving(false);
       }
     });
   };
@@ -234,37 +227,20 @@ class IssueDisplay extends Component {
 
   handleSaveIssueNotes = (id, notes) => {
     this.handleEditNotes(id);
-    updateIssueNotes(id, notes);
+    this.props.saving(true);
+    updateIssueNotes(id, notes).then(res => {
+      if (!res || res.status !== "Success") {
+        this.props.error("Failed to save issue notes");
+      } else {
+        this.props.saving(false);
+      }
+    });
   };
 
   handleSprintQuoteChange = (event, { value }) => {
     this.setState({
       quote: value,
     });
-  };
-
-  projectedProgress = () => {
-    const { selectedSprint } = this.state;
-    const now = new Date();
-    const sprintEnd = new Date(selectedSprint && selectedSprint.end_date);
-    const delta = sprintEnd - now;
-
-    // Sprint has past, so set projected to 100%
-    if (delta / 1000 / 3600 / 24 < 0) {
-      return 100;
-    }
-
-    // 5hrs per weekday, 10 hours per weekend
-    const dateMap = {
-      1: 5,
-      2: 10,
-      3: 15,
-      4: 20,
-      5: 25,
-      6: 35,
-      0: 45,
-    };
-    return Math.round((dateMap[new Date().getDay()] / 45) * 100);
   };
 
   toggleEditSprintQuote = () => {

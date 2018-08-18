@@ -242,7 +242,7 @@ app.put("/sprint/:id/quote", (req, res) => {
     });
 });
 
-// updateissuenotes
+// updateIssueNotes
 app.put("/issue/:id/notes", (req, res) => {
   const { notes } = req.body;
   const query = "UPDATE issues SET notes=(?) where id=(?)";
@@ -255,7 +255,7 @@ app.put("/issue/:id/notes", (req, res) => {
     });
 });
 
-// updateissue
+// updateIssue
 app.put("/issue/:id", (req, res) => {
   const {
     name,

@@ -28,13 +28,14 @@ class SprintDisplay extends Component {
   state = {
     selectedSprint: null,
     issueList: [],
-    notes: "",
-    editQuote: false,
-    quote: "",
     displayTimelogs: false,
     displayGraphs: false,
     displayIssues: true,
+    notes: "",
+    quote: "",
+    editQuote: false,
     isSprintNoteSaving: false,
+    isSaving: false,
   };
 
   componentDidMount() {
@@ -104,10 +105,19 @@ class SprintDisplay extends Component {
   handleSaveSprintQuote = () => {
     const { quote, selectedSprint } = this.state;
     this.toggleEditSprintQuote();
+    this.setSaving(true);
     updateSprintQuote(quote, selectedSprint.id).then(res => {
       if (!res || res.status !== "Success") {
         this.props.error("Failed to save quote");
+      } else {
+        this.setSaving(false);
       }
+    });
+  };
+
+  setSaving = saveState => {
+    this.setState({
+      isSaving: saveState,
     });
   };
 
@@ -181,7 +191,9 @@ class SprintDisplay extends Component {
       displayTimelogs,
       displayGraphs,
       isSprintNoteSaving,
+      isSaving,
     } = this.state;
+    const { projects, sprints } = this.props;
 
     if (!selectedSprint) {
       return <Loader active inline />;
@@ -199,9 +211,10 @@ class SprintDisplay extends Component {
         <IssueDisplay
           issueList={issueList}
           selectedSprint={selectedSprint}
-          projects={this.props.projects}
-          sprints={this.props.sprints}
+          projects={projects}
+          sprints={sprints}
           issues={issueList}
+          saving={this.setSaving}
         />
       );
     }
@@ -214,6 +227,15 @@ class SprintDisplay extends Component {
               <Header floated="left" as="h1">
                 {selectedSprint && selectedSprint.name}
                 <Header.Subheader>
+                  <Icon
+                    style={{
+                      position: "relative",
+                      left: "280px",
+                      top: "20px",
+                    }}
+                    loading={isSaving}
+                    name={isSaving ? "redo" : "check"}
+                  />
                   {editQuote ? (
                     <div>
                       <TextArea
@@ -314,7 +336,12 @@ class SprintDisplay extends Component {
             Save notes
           </Button>
           <Icon
-            style={{ paddingTop: "10px", paddingLeft: "10px", float: "left" }}
+            style={{
+              position: "relative",
+              left: "10px",
+              top: "8px",
+              float: "left",
+            }}
             loading={isSprintNoteSaving}
             name={isSprintNoteSaving ? "redo" : "check"}
           />

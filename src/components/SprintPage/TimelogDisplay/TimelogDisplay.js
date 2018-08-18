@@ -39,7 +39,6 @@ class SprintTable extends Component {
 
   renderLog = log => {
     const { id, time_delta, name, created_at, total } = log;
-    console.log(log);
     return (
       <Table.Row key={id}>
         <Table.Cell>{name}</Table.Cell>
