@@ -3,4 +3,3 @@ export * from "./projects";
 export * from "./sprints";
 export * from "./timelogs";
 export * from "./todos";
-export * from "./projects";

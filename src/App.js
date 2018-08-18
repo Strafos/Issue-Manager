@@ -24,7 +24,7 @@ import {
   getSprints,
   getProjects,
   getRecentIssues,
-} from "./utils/api/api";
+} from "./utils/api";
 
 class App extends Component {
   state = {

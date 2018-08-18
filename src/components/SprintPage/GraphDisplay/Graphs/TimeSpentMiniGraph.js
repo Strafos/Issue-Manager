@@ -3,7 +3,7 @@ import { Loader } from "semantic-ui-react";
 
 import { XYPlot, Hint, LineMarkSeries } from "react-vis";
 
-import { getTimeLogs } from "../../../../utils/api/api";
+import { getTimeLogs } from "../../../../utils/api";
 
 class TimeSpentMiniGraph extends Component {
   state = {

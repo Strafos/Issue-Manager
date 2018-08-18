@@ -9,15 +9,15 @@ import {
   Header,
   Progress,
   Segment,
-  Loader
+  Loader,
 } from "semantic-ui-react";
 
-import { getSprint, getTimeLogs } from "../../utils/api/api";
+import { getSprint, getTimeLogs } from "../../utils/api";
 
 class SprintGraphPage extends Component {
   state = {
     selectedSprint: null,
-    sprints: null
+    sprints: null,
   };
 
   mapProjectId = id => {
@@ -40,7 +40,7 @@ class SprintGraphPage extends Component {
           timeSpentLogs: logs.filter(log => log.time_stat === "time_spent"),
           timeRemainingLogs: logs.filter(
             log => log.time_stat === "time_remaining"
-          )
+          ),
         },
         this.constructTimeSpent
       );
@@ -55,7 +55,7 @@ class SprintGraphPage extends Component {
 
     this.setState(
       {
-        selectedSprint
+        selectedSprint,
       },
       this.constructProjectedTimeSpent
     );
@@ -74,7 +74,7 @@ class SprintGraphPage extends Component {
               .reduce((a, b) => a + b),
           totalTimeRemaining:
             issues.length > 0 &&
-            issues.map(i => i.time_remaining).reduce((a, b) => a + b)
+            issues.map(i => i.time_remaining).reduce((a, b) => a + b),
         },
         () => {
           this.constructProjectedTimeRemaining();
@@ -109,12 +109,12 @@ class SprintGraphPage extends Component {
       timeSpentData.push({
         date: timestamp,
         hours: total,
-        name: "actual"
+        name: "actual",
       });
     });
 
     this.setState({
-      timeSpentData
+      timeSpentData,
     });
   };
 
@@ -128,7 +128,7 @@ class SprintGraphPage extends Component {
       3: 15,
       4: 20,
       5: 25,
-      6: 35
+      6: 35,
     };
 
     const projection = [];
@@ -139,7 +139,7 @@ class SprintGraphPage extends Component {
       projection.push({
         date: day,
         hours: dateMap[day.getDay()],
-        name: "projection"
+        name: "projection",
       });
     }
     const nextMonday = new Date(startDate.getTime());
@@ -148,11 +148,11 @@ class SprintGraphPage extends Component {
     projection.push({
       date: nextMonday,
       hours: 45,
-      name: "projection"
+      name: "projection",
     });
 
     this.setState({
-      timeSpentProjection: projection
+      timeSpentProjection: projection,
     });
   };
 
@@ -166,7 +166,7 @@ class SprintGraphPage extends Component {
     day.setHours(startDate.getHours() - 4);
     timeRemainingData.push({
       date: day,
-      hours: totalTimeEstimate
+      hours: totalTimeEstimate,
     });
 
     let total = totalTimeEstimate;
@@ -178,7 +178,7 @@ class SprintGraphPage extends Component {
     });
 
     this.setState({
-      timeRemainingData
+      timeRemainingData,
     });
   };
 
@@ -192,7 +192,7 @@ class SprintGraphPage extends Component {
       3: 6 / 9,
       4: 5 / 9,
       5: 4 / 9,
-      6: 2 / 9
+      6: 2 / 9,
     };
 
     const projection = [];
@@ -203,7 +203,7 @@ class SprintGraphPage extends Component {
       projection.push({
         date: day,
         hours: totalTimeEstimate * dateMap[day.getDay()],
-        name: "projection"
+        name: "projection",
       });
     }
     const nextMonday = new Date(startDate.getTime());
@@ -212,11 +212,11 @@ class SprintGraphPage extends Component {
     projection.push({
       date: nextMonday,
       hours: 0,
-      name: "projection"
+      name: "projection",
     });
 
     this.setState({
-      timeRemainingProjection: projection
+      timeRemainingProjection: projection,
     });
   };
 
@@ -225,7 +225,7 @@ class SprintGraphPage extends Component {
       timeSpentProjection,
       timeSpentData,
       timeRemainingProjection,
-      timeRemainingData
+      timeRemainingData,
     } = this.state;
 
     if (!timeSpentProjection || !timeRemainingData) {
@@ -243,7 +243,7 @@ class SprintGraphPage extends Component {
       plotBackgroundFill: "hsl(0, 0%, 20%)",
       guideStroke: "hsl(0, 0%, 30%)",
       guideZeroStroke: "hsl(0, 0%, 55%)",
-      plotFill: "white"
+      plotFill: "white",
     };
 
     const timeSpent = [timeSpentProjection, timeSpentData];

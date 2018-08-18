@@ -23,7 +23,7 @@ import {
   updateIssue,
   deleteIssue,
   createTimeLog,
-} from "../../utils/api/api";
+} from "../../utils/api";
 
 class IssueDisplay extends Component {
   state = {

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./TimeCounter.css";
 import { Button, Modal, Form, Input, Label, Icon } from "semantic-ui-react";
 
-import { setTime, createTimeLog } from "../../utils/api/api";
+import { setTime, createTimeLog } from "../../utils/api";
 
 class TimeCounter extends Component {
   state = {

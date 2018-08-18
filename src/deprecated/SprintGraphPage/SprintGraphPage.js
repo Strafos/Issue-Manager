@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Header, Grid, Divider, Loader } from "semantic-ui-react";
 
-import { getSprint, getTimeLogs } from "../../utils/api/api";
+import { getSprint, getTimeLogs } from "../../utils/api";
 import TimeRemainingGraph from "./Graphs/TimeRemainingGraph";
 import TimeSpentGraph from "./Graphs/TimeSpentGraph";
 import DayBarGraph from "./Graphs/DayBarGraph";

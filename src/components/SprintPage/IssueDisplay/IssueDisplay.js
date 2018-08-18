@@ -11,7 +11,7 @@ import {
   updateSprintNotes,
   updateShowNotes,
   updateSprintQuote,
-} from "../../../utils/api/api";
+} from "../../../utils/api";
 
 const statusMap = {
   "In queue": 1,

@@ -22,7 +22,7 @@ import {
   getSprint,
   updateSprintNotes,
   updateSprintQuote,
-} from "../../utils/api/api";
+} from "../../utils/api";
 
 class SprintDisplay extends Component {
   state = {

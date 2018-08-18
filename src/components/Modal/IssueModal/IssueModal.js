@@ -11,7 +11,7 @@ import {
   Divider,
 } from "semantic-ui-react";
 
-import { createIssue } from "../../../utils/api/api";
+import { createIssue } from "../../../utils/api";
 import ProjectDropDown from "../../ProjectDropDown/ProjectDropDown";
 import SprintDropDown from "./SprintDropDown";
 

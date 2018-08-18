@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Button, Table, Header, Icon, Grid } from "semantic-ui-react";
 import TimeAgo from "react-timeago";
 
-import { getTimeLogs, deleteLog } from "../../../utils/api/api";
+import { getTimeLogs, deleteLog } from "../../../utils/api";
 
 class SprintTable extends Component {
   state = {
