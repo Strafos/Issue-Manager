@@ -6,12 +6,7 @@ import { Icon, Button, Form, TextArea, Table, Loader } from "semantic-ui-react";
 import Status from "../../../components/Status/Status";
 import TimeCounter from "../../../components/TimeCounter/TimeCounter";
 
-import {
-  updateIssueNotes,
-  updateSprintNotes,
-  updateShowNotes,
-  updateSprintQuote,
-} from "../../../utils/api";
+import { updateIssueNotes, updateShowNotes } from "../../../utils/api";
 
 const statusMap = {
   "In queue": 1,
@@ -24,7 +19,6 @@ class IssueDisplay extends Component {
   state = {
     selectedSprint: null,
     issueList: [],
-    notes: "",
     showNoteList: {},
     editNoteList: {},
     issueNoteList: {},
@@ -41,6 +35,17 @@ class IssueDisplay extends Component {
 
   componentDidMount() {
     const { selectedSprint, issues } = this.props;
+    this._loadData(selectedSprint, issues);
+  }
+
+  componentDidUpdate(prevProps) {
+    const { selectedSprint, issues } = this.props;
+    if (selectedSprint.id !== prevProps.selectedSprint.id) {
+      this._loadData(selectedSprint, issues);
+    }
+  }
+
+  _loadData = (selectedSprint, issues) => {
     const showNoteList = {};
     const editNoteList = {};
     const issueNoteList = {};
@@ -71,7 +76,7 @@ class IssueDisplay extends Component {
       },
       this.handleStatusSort
     );
-  }
+  };
 
   handleTimeTotals = (timeStat, delta) => {
     if (timeStat === "time_spent") {
@@ -182,29 +187,11 @@ class IssueDisplay extends Component {
     });
   };
 
-  handleSprintNotes = (event, { value }) => {
-    this.setState({
-      notes: value,
-    });
-  };
-
   handleIssueNotes = (id, value) => {
     const { issueNoteList } = this.state;
     issueNoteList[id] = value;
     this.setState({
       issueNoteList,
-    });
-  };
-
-  handleSaveSprintNotes = () => {
-    const { notes, selectedSprint } = this.state;
-    this.props.saving(true);
-    updateSprintNotes(notes, selectedSprint.id).then(res => {
-      if (!res || res.status !== "Success") {
-        this.props.error("Failed to save notes");
-      } else {
-        this.props.saving(false);
-      }
     });
   };
 
@@ -235,34 +222,6 @@ class IssueDisplay extends Component {
         this.props.saving(false);
       }
     });
-  };
-
-  handleSprintQuoteChange = (event, { value }) => {
-    this.setState({
-      quote: value,
-    });
-  };
-
-  toggleEditSprintQuote = () => {
-    this.setState({
-      editQuote: !this.state.editQuote,
-    });
-  };
-
-  renderTextArea = () => {
-    return (
-      <TextArea
-        onChange={this.handleSprintNotes}
-        style={{
-          minHeight: 350,
-          backgroundColor: "#282828",
-          color: "#BEBEBE",
-          fontSize: 17,
-        }}
-        placeholder="Sprint notes..."
-        value={this.state.notes}
-      />
-    );
   };
 
   renderName = (name, id) => (

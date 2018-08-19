@@ -49,6 +49,17 @@ class SprintDisplay extends Component {
     // this.onMount(match, sprints);
   }
 
+  componentDidUpdate(prevProps) {
+    const { match } = this.props;
+    if (prevProps.match.params.id !== match.params.id) {
+      console.log("updated");
+      console.log(match.params.id);
+      this.props.getSprints();
+      this.props.getSprintIssues(match.params.id);
+      this.props.getSprint(match.params.id);
+    }
+  }
+
   // componentWillReceiveProps(nextProps) {
   //   const { match, sprints } = nextProps;
   // this.props.getSprints();
@@ -199,6 +210,8 @@ class SprintDisplay extends Component {
       isSaving,
     } = this.state;
     const { projects, sprints, issueList, selectedSprint } = this.props;
+
+    console.log(issueList);
 
     if (!selectedSprint) {
       return <Loader active inline />;
