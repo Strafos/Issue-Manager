@@ -1,8 +1,14 @@
 const path = require("path");
 const sqlite3 = require("sqlite3").verbose();
 
-// const dbFile = path.normalize(path.join(__dirname, "/db/", "zim.db"));
-const dbFile = path.normalize(path.join(__dirname, "/db/", "dev.db"));
+const build = "dev";
+
+let dbFile;
+if (build === "dev") {
+  dbFile = path.normalize(path.join(__dirname, "/db/", "dev.db"));
+} else if (build === "prod") {
+  dbFile = path.normalize(path.join(__dirname, "/db/", "zim.db"));
+}
 
 let db = new sqlite3.Database(dbFile, sqlite3.OPEN_READWRITE, err => {
   if (err) {

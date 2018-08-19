@@ -197,14 +197,14 @@ class App extends Component {
 
                 <Grid.Row>
                   <div className="center">
-                    {/* <RecentMenu
+                    <RecentMenu
                       selectedSprint={selectedSprint}
                       selectedIssue={selectedIssue}
                       handleSprintMenuClick={this.handleSprintMenuClick}
                       handleIssueMenuClick={this.handleIssueMenuClick}
                       sprints={sprints}
                       recentIssues={recentIssues}
-                    /> */}
+                    />
                     <TodoList />
                   </div>
 
