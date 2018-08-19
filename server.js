@@ -61,12 +61,25 @@ app.get("/sprints", (req, res) => {
 });
 
 // Get issues of particular sprint
-// search: getsprint
-app.get("/Sprint/:id", (req, res) => {
+// search: getSprintIssues
+app.get("/sprint/:id/issues", (req, res) => {
   const query = `SELECT * FROM issues where sprint_id=${req.params.id}`;
   db.read(query)
     .then(response => {
       res.send(response);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
+// Get single sprint by ID
+// search: getSprint
+app.get("/sprint/:id", (req, res) => {
+  const query = `SELECT * FROM sprints where id=${req.params.id}`;
+  db.read(query)
+    .then(response => {
+      res.send(response[0]);
     })
     .catch(err => {
       console.log(err);

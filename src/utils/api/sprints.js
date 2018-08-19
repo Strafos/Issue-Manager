@@ -26,8 +26,20 @@ export const getSprints = () => {
   });
 };
 
+export const getSprintIssues = id => {
+  return fetch(`/sprint/${id}/issues`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  }).then(response => {
+    return response.json();
+  });
+};
+
 export const getSprint = id => {
-  return fetch(`/Sprint/${id}`, {
+  return fetch(`/sprint/${id}`, {
     method: "GET",
     headers: {
       Accept: "application/json",

@@ -21,5 +21,15 @@ export const getSprintIssues = sprintId =>
       complete: ActionTypes.FETCH_SPRINT_ISSUES_SUCCESS,
       error: ActionTypes.FETCH_SPRINT_ISSUES_FAILURE,
     },
+    API.getSprintIssues
+  )(sprintId);
+
+export const getSprint = sprintId =>
+  asyncActionCreator(
+    {
+      pending: ActionTypes.FETCH_SPRINT_REQUEST,
+      complete: ActionTypes.FETCH_SPRINT_SUCCESS,
+      error: ActionTypes.FETCH_SPRINT_FAILURE,
+    },
     API.getSprint
   )(sprintId);

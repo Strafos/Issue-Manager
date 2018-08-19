@@ -45,13 +45,17 @@ class SprintDisplay extends Component {
     const { match, sprints } = this.props;
     this.props.getSprints();
     this.props.getSprintIssues(match.params.id);
-    this.onMount(match, sprints);
+    this.props.getSprint(match.params.id);
+    // this.onMount(match, sprints);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { match, sprints } = nextProps;
-    this.onMount(match, sprints);
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   const { match, sprints } = nextProps;
+  // this.props.getSprints();
+  // this.props.getSprintIssues(match.params.id);
+  // this.props.getSprint(match.params.id);
+  //   this.onMount(match, sprints);
+  // }
 
   onMount = (match, sprints) => {
     // If the id is part of the url params, use that, otherwise, display default sprint
@@ -105,7 +109,8 @@ class SprintDisplay extends Component {
   };
 
   handleSaveSprintQuote = () => {
-    const { quote, selectedSprint } = this.state;
+    const { selectedSprint } = this.props;
+    const { quote } = this.state;
     this.toggleEditSprintQuote();
     this.setSaving(true);
     updateSprintQuote(quote, selectedSprint.id).then(res => {
@@ -186,8 +191,6 @@ class SprintDisplay extends Component {
 
   render() {
     const {
-      issueList,
-      selectedSprint,
       editQuote,
       quote,
       displayTimelogs,
@@ -195,7 +198,7 @@ class SprintDisplay extends Component {
       isSprintNoteSaving,
       isSaving,
     } = this.state;
-    const { projects, sprints } = this.props;
+    const { projects, sprints, issueList, selectedSprint } = this.props;
 
     if (!selectedSprint) {
       return <Loader active inline />;
@@ -229,7 +232,7 @@ class SprintDisplay extends Component {
               <Header floated="left" as="h1">
                 {selectedSprint && selectedSprint.name}
                 <Header.Subheader>
-                  <Icon
+                  {/* <Icon
                     style={{
                       position: "relative",
                       left: "280px",
@@ -237,12 +240,12 @@ class SprintDisplay extends Component {
                     }}
                     loading={isSaving}
                     name={isSaving ? "redo" : "check"}
-                  />
+                  /> */}
                   {editQuote ? (
                     <div>
                       <TextArea
                         onChange={this.handleSprintQuoteChange}
-                        defaultValue={quote}
+                        defaultValue={quote || selectedSprint.quote}
                       />
                       <Button
                         color="black"
@@ -254,7 +257,7 @@ class SprintDisplay extends Component {
                     </div>
                   ) : (
                     <Container onClick={this.toggleEditSprintQuote}>
-                      {quote || "you idiot"}
+                      {quote || selectedSprint.quote || "you idiot"}
                     </Container>
                   )}
                 </Header.Subheader>
@@ -355,12 +358,14 @@ class SprintDisplay extends Component {
 
 const mapStateToProps = state => ({
   sprintList: state.commonData.sprintList.data,
-  sspr: state.commonData.sprintIssues.data,
+  issueList: state.commonData.sprintIssues.data,
+  selectedSprint: state.commonData.sprint.data && state.commonData.sprint.data,
 });
 
 const mapDispatchToProps = {
   getSprints: CommonActions.getAllSprints,
   getSprintIssues: CommonActions.getSprintIssues,
+  getSprint: CommonActions.getSprint,
 };
 
 export default connect(
