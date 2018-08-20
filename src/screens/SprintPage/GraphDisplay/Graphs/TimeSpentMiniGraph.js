@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Loader } from "semantic-ui-react";
+import TimeAgo from "react-timeago";
 
 import { XYPlot, Hint, LineMarkSeries } from "react-vis";
 
@@ -17,9 +18,11 @@ class TimeSpentMiniGraph extends Component {
     this.onMount(sprint);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { sprint } = nextProps;
-    this.onMount(sprint);
+  componentDidUpdate(prevProps) {
+    const { sprint } = this.props;
+    if (sprint != prevProps.sprint) {
+      this.onMount(sprint);
+    }
   }
 
   onMount = sprint => {
@@ -27,7 +30,6 @@ class TimeSpentMiniGraph extends Component {
       getTimeLogs(sprint.id).then(logs => {
         this.setState(
           {
-            sprint,
             logs: logs.filter(log => log.time_stat === "time_spent"),
           },
           () => {
@@ -39,7 +41,8 @@ class TimeSpentMiniGraph extends Component {
   };
 
   constructTimeSpent = () => {
-    const { sprint, logs } = this.state;
+    const { sprint } = this.props;
+    const { logs } = this.state;
     const startDate = new Date(sprint.start_date);
 
     const timeSpentData = [{ x: startDate, y: 0 }];
@@ -54,13 +57,24 @@ class TimeSpentMiniGraph extends Component {
       });
     });
 
+    // Add a projection point for total time spent at the moment
+    // Only if current sprint is going on
+    const now = new Date();
+    const end = new Date(sprint.end_date);
+    if (end > now) {
+      timeSpentData.push({
+        x: new Date(),
+        y: total,
+      });
+    }
+
     this.setState({
       timeSpentData,
     });
   };
 
   constructProjectedTimeSpent = () => {
-    const { sprint } = this.state;
+    const { sprint } = this.props;
 
     const startDate = new Date(sprint.start_date);
     const dateMap = {
@@ -95,7 +109,10 @@ class TimeSpentMiniGraph extends Component {
   };
 
   render() {
+    const { sprint } = this.props;
     const { timeSpentProjection, timeSpentData, hoveredNode } = this.state;
+
+    const currWeek = new Date(sprint.end_date) > new Date();
 
     if (!timeSpentProjection || !timeSpentData) {
       return (
@@ -105,7 +122,7 @@ class TimeSpentMiniGraph extends Component {
       );
     }
 
-    const lastPoint = timeSpentData[timeSpentData.length - 1];
+    const lastPoint = timeSpentData[timeSpentData.length - 2];
 
     return (
       <div>
@@ -139,15 +156,17 @@ class TimeSpentMiniGraph extends Component {
                 }}
               >
                 <p>{"Hours Spent: " + Math.round(lastPoint.y)}</p>
-                {"Time: " +
+                {currWeek ? (
+                  <TimeAgo date={lastPoint.x} />
+                ) : (
+                  "Time: " +
                   lastPoint.x.toLocaleTimeString() +
                   " on " +
-                  lastPoint.x.toDateString()}
+                  lastPoint.x.toDateString()
+                )}
               </div>
             </Hint>
-          ) : null}
-
-          {hoveredNode ? (
+          ) : (
             <Hint value={hoveredNode}>
               <div
                 style={{
@@ -157,14 +176,15 @@ class TimeSpentMiniGraph extends Component {
                   borderRadius: "5px",
                 }}
               >
-                <p>{"Hours: " + hoveredNode.y}</p>
+                <p>{hoveredNode.y + " hours spent"}</p>
                 {"Time: " +
                   hoveredNode.x.toLocaleTimeString() +
                   " on " +
                   hoveredNode.x.toDateString()}
+                {/* <TimeAgo date={hoveredNode.x} /> */}
               </div>
             </Hint>
-          ) : null}
+          )}
         </XYPlot>
       </div>
     );
