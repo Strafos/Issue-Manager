@@ -95,8 +95,6 @@ class TimeRemainingGraph extends Component {
       timeRemainingProjection,
       timeRemainingData,
     } = this.state;
-    console.log(timeRemainingData);
-    console.log(timeRemainingProjection);
 
     if (!timeRemainingData || !timeRemainingProjection) {
       return (

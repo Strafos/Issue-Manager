@@ -7,7 +7,7 @@ class TimeSpentGraph extends Component {
   state = {
     timeSpentData: null,
     timeSpentProjection: null,
-    hoveredNode: null
+    hoveredNode: null,
   };
 
   componentDidMount() {
@@ -27,7 +27,8 @@ class TimeSpentGraph extends Component {
   constructTimeSpent = (sprint, logs) => {
     const startDate = new Date(sprint.start_date);
 
-    const timeSpentData = [{ x: startDate, y: 0 }];
+    const timeSpentData = [];
+    logs.length > 0 && timeSpentData.push({ x: startDate, y: 0 });
 
     let total = 0;
     logs.forEach(log => {
@@ -35,12 +36,12 @@ class TimeSpentGraph extends Component {
       const timestamp = new Date(log.created_at);
       timeSpentData.push({
         x: timestamp,
-        y: total
+        y: total,
       });
     });
 
     this.setState({
-      timeSpentData
+      timeSpentData,
     });
   };
 
@@ -53,7 +54,7 @@ class TimeSpentGraph extends Component {
       3: 10,
       4: 15,
       5: 20,
-      6: 25
+      6: 25,
     };
 
     const projection = [];
@@ -62,18 +63,18 @@ class TimeSpentGraph extends Component {
       day.setDate(startDate.getDate() + i);
       projection.push({
         x: day,
-        y: dateMap[day.getDay()]
+        y: dateMap[day.getDay()],
       });
     }
     const nextMonday = new Date(startDate.getTime());
     nextMonday.setDate(startDate.getDate() + 7);
     projection.push({
       x: nextMonday,
-      y: 45
+      y: 45,
     });
 
     this.setState({
-      timeSpentProjection: projection
+      timeSpentProjection: projection,
     });
   };
 
@@ -113,7 +114,7 @@ class TimeSpentGraph extends Component {
                   background: "black",
                   textAlign: "left",
                   padding: "5px",
-                  borderRadius: "5px"
+                  borderRadius: "5px",
                 }}
               >
                 <p>{"Hours: " + hoveredNode.y}</p>
