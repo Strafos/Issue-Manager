@@ -61,12 +61,7 @@ class SprintGraphDisplay extends PureComponent {
     } = this.state;
     const { selectedSprint } = this.props;
 
-    if (
-      !timeRemainingLogs ||
-      !timeSpentLogs ||
-      !totalTimeEstimate ||
-      !selectedSprint
-    ) {
+    if (!timeRemainingLogs || !timeSpentLogs || !selectedSprint) {
       return (
         <Loader active inline>
           Loading

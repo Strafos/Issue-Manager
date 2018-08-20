@@ -1,19 +1,19 @@
 import React, { Component } from "react";
-import { Segment, Loader } from "semantic-ui-react";
+import { Loader } from "semantic-ui-react";
 
 import { XYPlot, XAxis, YAxis, Hint, LineMarkSeries } from "react-vis";
 
 class TimeRemainingGraph extends Component {
   state = {
-    timeRemainingProjection: null, // Projection is expected benchmarks
-    timeRemainingData: null, // Data comes from parsed timelogs
-    hoveredNode: null // Hint appears when node is hovered over
+    timeRemainingProjection: [], // Projection is expected benchmarks
+    timeRemainingData: [], // Data comes from parsed timelogs
+    hoveredNode: null, // Hint appears when node is hovered over
   };
 
   componentDidMount() {
     const { logs, sprint, totalTimeEstimate } = this.props;
-    if ((logs, sprint, totalTimeEstimate)) {
-      this.constructTimeRemaining(logs, sprint, totalTimeEstimate);
+    if (logs && sprint) {
+      this.constructTimeRemainingData(logs, sprint, totalTimeEstimate);
       this.constructProjectedTimeRemaining(sprint, totalTimeEstimate);
     }
   }
@@ -22,21 +22,22 @@ class TimeRemainingGraph extends Component {
   // using this method is hacky b/c it's deprecated, but at least it works
   componentWillReceiveProps(nextProps) {
     const { logs, sprint, totalTimeEstimate } = nextProps;
-    this.constructTimeRemaining(logs, sprint, totalTimeEstimate);
+    this.constructTimeRemainingData(logs, sprint, totalTimeEstimate);
     this.constructProjectedTimeRemaining(sprint, totalTimeEstimate);
   }
 
   // Iterate through time logs to create datapoints for time remaining
-  constructTimeRemaining = (logs, sprint, totalTimeEstimate) => {
+  constructTimeRemainingData = (logs, sprint, totalTimeEstimate) => {
     const timeRemainingData = [];
 
     const startDate = new Date(sprint.start_date);
     const day = new Date(startDate.getTime());
     day.setDate(startDate.getDate());
-    timeRemainingData.push({
-      x: day,
-      y: totalTimeEstimate
-    });
+    totalTimeEstimate &&
+      timeRemainingData.push({
+        x: day,
+        y: totalTimeEstimate,
+      });
 
     let total = totalTimeEstimate;
     logs.forEach(log => {
@@ -46,7 +47,7 @@ class TimeRemainingGraph extends Component {
     });
 
     this.setState({
-      timeRemainingData
+      timeRemainingData,
     });
   };
 
@@ -54,6 +55,8 @@ class TimeRemainingGraph extends Component {
   // On week days, reduce time remaining by 1/9
   // On weekends, reduce time remaining by 2/9
   constructProjectedTimeRemaining = (sprint, totalTimeEstimate) => {
+    const estimate = totalTimeEstimate === 0 ? 40 : totalTimeEstimate;
+
     const startDate = new Date(sprint.start_date);
     const dateMap = {
       1: 1,
@@ -62,7 +65,7 @@ class TimeRemainingGraph extends Component {
       4: 6 / 9,
       5: 5 / 9,
       6: 4 / 9,
-      0: 2 / 9
+      0: 2 / 9,
     };
 
     const projection = [];
@@ -71,18 +74,18 @@ class TimeRemainingGraph extends Component {
       day.setDate(startDate.getDate() + i);
       projection.push({
         x: day,
-        y: totalTimeEstimate * dateMap[day.getDay()]
+        y: estimate * dateMap[day.getDay()],
       });
     }
     const nextMonday = new Date(startDate.getTime());
     nextMonday.setDate(startDate.getDate() + 7);
     projection.push({
       x: nextMonday,
-      y: 0
+      y: 0,
     });
 
     this.setState({
-      timeRemainingProjection: projection
+      timeRemainingProjection: projection,
     });
   };
 
@@ -90,8 +93,10 @@ class TimeRemainingGraph extends Component {
     const {
       hoveredNode,
       timeRemainingProjection,
-      timeRemainingData
+      timeRemainingData,
     } = this.state;
+    console.log(timeRemainingData);
+    console.log(timeRemainingProjection);
 
     if (!timeRemainingData || !timeRemainingProjection) {
       return (
@@ -126,7 +131,7 @@ class TimeRemainingGraph extends Component {
                 background: "black",
                 textAlign: "left",
                 padding: "5px",
-                borderRadius: "5px"
+                borderRadius: "5px",
               }}
             >
               <p>{"Hours: " + Math.round(hoveredNode.y)}</p>
