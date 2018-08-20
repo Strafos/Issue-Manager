@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
 import "./RecentMenu.css";
 import { Menu, Container, Button } from "semantic-ui-react";
@@ -22,23 +23,9 @@ class RecentMenu extends Component {
     );
   };
 
-  renderIssue = issue => {
-    const { selectedIssue } = this.props;
-    return (
-      <Menu.Item
-        key={issue.issue_id}
-        content={issue.name}
-        index={issue.issue_id}
-        active={selectedIssue && selectedIssue == issue.issue_id}
-        onClick={this.props.handleIssueMenuClick}
-        as={Link}
-        to={`/sprint/${issue.issue_id}`}
-      />
-    );
-  };
-
   render() {
-    const { sprints, recentIssues } = this.props;
+    const { sprints } = this.props;
+    console.log(this.props.ssprint);
 
     sprints.sort((a, b) => {
       return new Date(a.start_date) - new Date(b.start_date);
@@ -54,26 +41,23 @@ class RecentMenu extends Component {
 
             <Menu.Menu>
               {sprints
-                .slice(len - 3, len)
+                .slice(len - 4, len)
                 .map(sprint => this.renderSprints(sprint))}
             </Menu.Menu>
           </Menu.Item>
         </Menu>
-
-        {/*For now, take out recent issues*/}
-        {/* <Menu vertical>
-          <Menu.Item>
-            <Menu.Header>Recent Issues</Menu.Header>
-
-            <Menu.Menu>
-              {recentIssues &&
-                recentIssues.map(issue => this.renderIssue(issue))}
-            </Menu.Menu>
-          </Menu.Item>
-        </Menu> */}
       </div>
     );
   }
 }
 
-export default RecentMenu;
+const mapStateToProps = state => ({
+  selectedSprint: state.commonData.sprint.data && state.commonData.sprint.data,
+});
+
+const mapDispatchToProps = {};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(RecentMenu);
