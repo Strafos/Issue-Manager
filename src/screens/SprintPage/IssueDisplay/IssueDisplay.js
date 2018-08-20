@@ -397,7 +397,6 @@ class IssueDisplay extends Component {
             </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
-        {/* {issues.map(this.renderIssue)} */}
         {issueList.map(this.renderIssue)}
         <Table.Footer fullWidth>
           <Table.Row>

@@ -32,16 +32,8 @@ const sprintListReducer = (state, action) => {
 const issueListReducer = (state, action) => {
   switch (action.type) {
     case TimeCounterActions.UPDATE_TIME_SUCCESS:
-      let changedSprint = state.data.find(
-        issue => issue.id === action.responseJson.id
-      );
-      changedSprint = { ...changedSprint, ...action.responseJson };
       return {
         ...state,
-        // data: [
-        //   ...state.data.filter(issue => issue.id !== action.responseJson.id),
-        //   changedSprint,
-        // ],
         data: state.data.map(
           issue =>
             issue.id === action.responseJson.id ? action.responseJson : issue

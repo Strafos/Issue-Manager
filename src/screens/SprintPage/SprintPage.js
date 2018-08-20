@@ -21,11 +21,7 @@ import IssueDisplay from "./IssueDisplay/IssueDisplay";
 
 import * as CommonActions from "../../commonActions";
 
-import {
-  getSprint,
-  updateSprintNotes,
-  updateSprintQuote,
-} from "../../utils/api";
+import { updateSprintNotes, updateSprintQuote } from "../../utils/api";
 
 class SprintDisplay extends Component {
   state = {
@@ -42,7 +38,7 @@ class SprintDisplay extends Component {
   };
 
   componentDidMount() {
-    const { match, sprints } = this.props;
+    const { match } = this.props;
     this.props.getSprints();
     this.props.getSprintIssues(match.params.id);
     this.props.getSprint(match.params.id);
