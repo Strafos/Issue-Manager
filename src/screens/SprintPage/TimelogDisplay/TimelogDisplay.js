@@ -12,7 +12,17 @@ class SprintTable extends Component {
 
   componentDidMount() {
     const { sprintId } = this.props;
-    console.log(sprintId);
+    this._loadData(sprintId);
+  }
+
+  componentDidUpdate(prevProps) {
+    const { sprintId } = this.props;
+    if (sprintId !== prevProps.sprintId) {
+      this._loadData(sprintId);
+    }
+  }
+
+  _loadData = sprintId => {
     getTimeLogs(sprintId).then(logs => {
       const spentLogs = logs
         .filter(log => log.time_stat === "time_spent")
@@ -26,7 +36,7 @@ class SprintTable extends Component {
         remainLogs,
       });
     });
-  }
+  };
 
   handleDeleteLog = id => {
     const { spentLogs, remainLogs } = this.state;
