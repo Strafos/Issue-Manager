@@ -46,48 +46,16 @@ class SprintDisplay extends Component {
     this.props.getSprints();
     this.props.getSprintIssues(match.params.id);
     this.props.getSprint(match.params.id);
-    // this.onMount(match, sprints);
   }
 
   componentDidUpdate(prevProps) {
     const { match } = this.props;
     if (prevProps.match.params.id !== match.params.id) {
-      console.log("updated");
-      console.log(match.params.id);
       this.props.getSprints();
       this.props.getSprintIssues(match.params.id);
       this.props.getSprint(match.params.id);
     }
   }
-
-  // componentWillReceiveProps(nextProps) {
-  //   const { match, sprints } = nextProps;
-  // this.props.getSprints();
-  // this.props.getSprintIssues(match.params.id);
-  // this.props.getSprint(match.params.id);
-  //   this.onMount(match, sprints);
-  // }
-
-  onMount = (match, sprints) => {
-    // If the id is part of the url params, use that, otherwise, display default sprint
-    const id = match.params.id;
-
-    getSprint(id).then(issues => {
-      const selectedSprint = sprints.find(spr => spr.id === parseInt(id, 10));
-
-      // Issues, note toggle array, summing times for footer
-      this.setState({
-        selectedSprint,
-        issueList: issues,
-      });
-
-      // SPRINT notes
-      this.setState({
-        notes: selectedSprint ? selectedSprint.notes : "",
-        quote: selectedSprint ? selectedSprint.quote : "",
-      });
-    });
-  };
 
   getDefaultSprint = sprints => {
     const d = new Date();
@@ -108,15 +76,19 @@ class SprintDisplay extends Component {
   };
 
   handleSaveSprintNotes = () => {
-    const { notes, selectedSprint } = this.state;
+    const { selectedSprint } = this.props;
+    const { notes } = this.state;
+
     this.setState({ isSprintNoteSaving: true });
-    updateSprintNotes(notes, selectedSprint.id).then(res => {
-      if (!res || res.status !== "Success") {
-        this.props.error("Failed to save notes");
-      } else {
-        this.setState({ isSprintNoteSaving: false });
+    updateSprintNotes(notes || selectedSprint.notes, selectedSprint.id).then(
+      res => {
+        if (!res || res.status !== "Success") {
+          this.props.error("Failed to save notes");
+        } else {
+          this.setState({ isSprintNoteSaving: false });
+        }
       }
-    });
+    );
   };
 
   handleSaveSprintQuote = () => {
@@ -124,13 +96,15 @@ class SprintDisplay extends Component {
     const { quote } = this.state;
     this.toggleEditSprintQuote();
     this.setSaving(true);
-    updateSprintQuote(quote, selectedSprint.id).then(res => {
-      if (!res || res.status !== "Success") {
-        this.props.error("Failed to save quote");
-      } else {
-        this.setSaving(false);
+    updateSprintQuote(quote || selectedSprint.quote, selectedSprint.id).then(
+      res => {
+        if (!res || res.status !== "Success") {
+          this.props.error("Failed to save quote");
+        } else {
+          this.setSaving(false);
+        }
       }
-    });
+    );
   };
 
   setSaving = saveState => {
@@ -176,6 +150,7 @@ class SprintDisplay extends Component {
   };
 
   renderTextArea = () => {
+    const { selectedSprint } = this.props;
     return (
       <TextArea
         onChange={this.handleSprintNotes}
@@ -186,7 +161,7 @@ class SprintDisplay extends Component {
           fontSize: 17,
         }}
         placeholder="Sprint notes..."
-        value={this.state.notes}
+        value={this.state.notes || selectedSprint.notes}
       />
     );
   };
@@ -211,8 +186,6 @@ class SprintDisplay extends Component {
     } = this.state;
     const { projects, sprints, issueList, selectedSprint } = this.props;
 
-    console.log(issueList);
-
     if (!selectedSprint) {
       return <Loader active inline />;
     }
@@ -223,7 +196,9 @@ class SprintDisplay extends Component {
         <TimelogDisplay sprintId={selectedSprint && selectedSprint.id} />
       );
     } else if (displayGraphs) {
-      display = <GraphDisplay selectedSprint={selectedSprint} />;
+      display = (
+        <GraphDisplay selectedSprint={selectedSprint} issueList={issueList} />
+      );
     } else {
       display = (
         <IssueDisplay

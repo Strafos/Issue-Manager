@@ -49,9 +49,10 @@ class IssueDisplay extends Component {
     const showNoteList = {};
     const editNoteList = {};
     const issueNoteList = {};
-    issues.map(issue => (showNoteList[issue.id] = !!issue.show_notes));
-    issues.map(issue => (editNoteList[issue.id] = false));
-    issues.map(issue => (issueNoteList[issue.id] = issue.notes));
+    issues &&
+      issues.map(issue => (showNoteList[issue.id] = !!issue.show_notes));
+    issues && issues.map(issue => (editNoteList[issue.id] = false));
+    issues && issues.map(issue => (issueNoteList[issue.id] = issue.notes));
 
     // Issues, note toggle array, summing times for footer
     this.setState(
@@ -62,15 +63,18 @@ class IssueDisplay extends Component {
         editNoteList,
         issueNoteList,
         totalTimeEstimate:
+          issues &&
           issues.length > 0 &&
           issues.map(i => i.time_estimate).reduce((a, b) => a + b),
         totalTimeSpent:
+          issues &&
           issues.length > 0 &&
           issues
             .filter(i => !i.bad)
             .map(i => i.time_spent)
             .reduce((a, b) => a + b),
         totalTimeRemaining:
+          issues &&
           issues.length > 0 &&
           issues.map(i => i.time_remaining).reduce((a, b) => a + b),
       },
@@ -346,7 +350,7 @@ class IssueDisplay extends Component {
       totalTimeEstimate,
     } = this.state;
 
-    if (!selectedSprint) {
+    if (!selectedSprint || !issueList) {
       return <Loader active inline />;
     }
 

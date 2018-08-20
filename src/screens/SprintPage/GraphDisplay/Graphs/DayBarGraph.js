@@ -19,13 +19,6 @@ class DayBarGraph extends PureComponent {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { issues, logs, day } = nextProps;
-    if (issues && logs) {
-      this.constructTimeSpent(logs, issues, day);
-    }
-  }
-
   // Thought 1 am is technically the next day, we want to bucket with the previous day
   // By offsetting 3 hours, up until 3am counts to previous day
   getDayWithOffset = created_at => {

@@ -12,6 +12,7 @@ import ProjectModal from "./components/Modal/ProjectModal/ProjectModal";
 import SprintModal from "./components/Modal/SprintModal/SprintModal";
 
 import SprintDropDown from "./components/SprintDropDown/SprintDropDown";
+import RecentMenu from "./components/RecentMenu/RecentMenu";
 import TodoList from "./components/TodoList/TodoList";
 import SprintPage from "./screens/SprintPage/SprintPage";
 import IssuePage from "./screens/IssuePage/IssuePage";
@@ -196,14 +197,14 @@ class App extends Component {
 
                 <Grid.Row>
                   <div className="center">
-                    {/* <RecentMenu
+                    <RecentMenu
                       selectedSprint={selectedSprint}
                       selectedIssue={selectedIssue}
                       handleSprintMenuClick={this.handleSprintMenuClick}
                       handleIssueMenuClick={this.handleIssueMenuClick}
                       sprints={sprints}
                       recentIssues={recentIssues}
-                    /> */}
+                    />
                     <TodoList />
                   </div>
 
