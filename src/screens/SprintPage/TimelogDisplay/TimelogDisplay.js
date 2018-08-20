@@ -1,40 +1,39 @@
 import React, { Component } from "react";
 import { Button, Table, Header, Icon, Grid } from "semantic-ui-react";
 import TimeAgo from "react-timeago";
+import { connect } from "react-redux";
 
-import { getTimeLogs, deleteLog } from "../../../utils/api";
+import { deleteLog } from "../../../utils/api";
+import * as Actions from "../sprintPageActions";
 
-class SprintTable extends Component {
+class TimelogDisplay extends Component {
   state = {
     spentLogs: [],
     remainLogs: [],
   };
 
   componentDidMount() {
-    const { sprintId } = this.props;
-    this._loadData(sprintId);
+    this._parseLogs();
   }
 
   componentDidUpdate(prevProps) {
     const { sprintId } = this.props;
     if (sprintId !== prevProps.sprintId) {
-      this._loadData(sprintId);
+      this._parseLogs();
     }
   }
 
-  _loadData = sprintId => {
-    getTimeLogs(sprintId).then(logs => {
-      const spentLogs = logs
-        .filter(log => log.time_stat === "time_spent")
-        .reverse();
-      const remainLogs = logs
-        .filter(log => log.time_stat === "time_remaining")
-        .reverse();
-      this.setState({
-        logs,
-        spentLogs,
-        remainLogs,
-      });
+  _parseLogs = () => {
+    const { timelogs } = this.props;
+    const spentLogs = timelogs
+      .filter(log => log.time_stat === "time_spent")
+      .reverse();
+    const remainLogs = timelogs
+      .filter(log => log.time_stat === "time_remaining")
+      .reverse();
+    this.setState({
+      spentLogs,
+      remainLogs,
     });
   };
 
@@ -97,6 +96,7 @@ class SprintTable extends Component {
 
   render() {
     const { spentLogs, remainLogs } = this.state;
+
     return (
       <Grid divided columns={2}>
         <Grid.Column>
@@ -112,4 +112,13 @@ class SprintTable extends Component {
   }
 }
 
-export default SprintTable;
+const mapStateToProps = state => ({
+  timelogs: state.sprintPage.timelogList.data,
+});
+
+const mapDispatchToProps = {};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TimelogDisplay);

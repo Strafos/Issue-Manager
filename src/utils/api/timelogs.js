@@ -23,6 +23,18 @@ export const getTimeLogs = sprintId => {
   });
 };
 
+export const getSpentTimeLogs = sprintId => {
+  return fetch(`/log/${sprintId}?type=time_spent`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  }).then(response => {
+    return response.json();
+  });
+};
+
 export const deleteLog = id => {
   return fetch(`/timelog/${id}`, {
     method: "DELETE",

@@ -20,6 +20,7 @@ import TimelogDisplay from "./TimelogDisplay/TimelogDisplay";
 import IssueDisplay from "./IssueDisplay/IssueDisplay";
 
 import * as CommonActions from "../../commonActions";
+import * as Actions from "./sprintPageActions";
 
 import { updateSprintNotes, updateSprintQuote } from "../../utils/api";
 
@@ -41,6 +42,7 @@ class SprintDisplay extends Component {
     const { match } = this.props;
     this.props.getSprintIssues(match.params.id);
     this.props.getSprint(match.params.id);
+    this.props.getTimeLogs(match.params.id);
   }
 
   componentDidUpdate(prevProps) {
@@ -48,6 +50,7 @@ class SprintDisplay extends Component {
     if (prevProps.match.params.id !== match.params.id) {
       this.props.getSprintIssues(match.params.id);
       this.props.getSprint(match.params.id);
+      this.props.getTimeLogs(match.params.id);
     }
   }
 
@@ -347,6 +350,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   getSprintIssues: CommonActions.getSprintIssues,
   getSprint: CommonActions.getSprint,
+  getTimeLogs: Actions.getTimeLogs,
 };
 
 export default connect(
