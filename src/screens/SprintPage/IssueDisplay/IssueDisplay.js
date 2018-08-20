@@ -43,6 +43,11 @@ class IssueDisplay extends Component {
     if (selectedSprint.id !== prevProps.selectedSprint.id) {
       this._loadData(selectedSprint, issues);
     }
+    if (prevProps.issues !== issues) {
+      this.setState({
+        issueList: issues,
+      });
+    }
   }
 
   _loadData = (selectedSprint, issues) => {
@@ -113,9 +118,9 @@ class IssueDisplay extends Component {
   handleStatusSort = () => {
     const { issueList } = this.state;
     this.setState({
-      issueList: issueList.sort(
-        (a, b) => statusMap[a.status] - statusMap[b.status]
-      ),
+      issueList:
+        issueList &&
+        issueList.sort((a, b) => statusMap[a.status] - statusMap[b.status]),
       direction: "ascending",
       sortByColumn: "status",
     });
@@ -342,7 +347,7 @@ class IssueDisplay extends Component {
   };
 
   render() {
-    const { selectedSprint } = this.props;
+    const { selectedSprint, issues } = this.props;
     const {
       issueList,
       totalTimeSpent,
@@ -351,6 +356,10 @@ class IssueDisplay extends Component {
     } = this.state;
 
     if (!selectedSprint || !issueList) {
+      console.log("Not loading table");
+      console.log(selectedSprint);
+      console.log(issueList);
+      // issueList is null
       return <Loader active inline />;
     }
 
@@ -388,6 +397,7 @@ class IssueDisplay extends Component {
             </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
+        {/* {issues.map(this.renderIssue)} */}
         {issueList.map(this.renderIssue)}
         <Table.Footer fullWidth>
           <Table.Row>

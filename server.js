@@ -152,11 +152,11 @@ app.put("/issue/:id/showNotes", (req, res) => {
 // search: setTime
 app.put("/issue/:id/time", (req, res) => {
   const { stat, time } = req.body;
-  const query = `UPDATE issues SET ${stat}=(?) where id=(?)`;
-  db.insert(query, [time, req.params.id])
-    .then(() => {
-      console.log("issue success");
-      res.send({ status: "Success" });
+  const insert = `UPDATE issues SET ${stat}=(?) where id=(?)`;
+  const select = `SELECT * from issues where id=${req.params.id}`;
+  db.insertReturning(insert, select, [time, req.params.id])
+    .then(response => {
+      res.send(response[0]);
     })
     .catch(err => {
       res.send({ status: "Failure" });
@@ -188,7 +188,6 @@ app.post("/log", (req, res) => {
     `WHERE i.id=${issueId}`;
   db.insert(query)
     .then(() => {
-      console.log("log success");
       res.send({ status: "Success" });
     })
     .catch(err => {
