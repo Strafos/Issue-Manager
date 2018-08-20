@@ -52,32 +52,6 @@ class SprintGraphDisplay extends PureComponent {
     });
   };
 
-  updateSprint = selectedSprint => {
-    const sprintId = selectedSprint.id;
-
-    // Use the id from URL to get all timelogs
-    getTimeLogs(sprintId).then(logs => {
-      this.setState({
-        timeSpentLogs: logs.filter(log => log.time_stat === "time_spent"),
-        timeRemainingLogs: logs.filter(
-          log => log.time_stat === "time_remaining"
-        ),
-      });
-    });
-
-    this.setState({
-      selectedSprint,
-    });
-
-    getSprintIssues(sprintId).then(issues => {
-      this.setState({
-        totalTimeEstimate:
-          issues.length > 0 &&
-          issues.map(i => i.time_estimate).reduce((a, b) => a + b),
-      });
-    });
-  };
-
   render() {
     const {
       timeRemainingLogs,

@@ -39,7 +39,6 @@ class SprintDisplay extends Component {
 
   componentDidMount() {
     const { match } = this.props;
-    this.props.getSprints();
     this.props.getSprintIssues(match.params.id);
     this.props.getSprint(match.params.id);
   }
@@ -47,7 +46,6 @@ class SprintDisplay extends Component {
   componentDidUpdate(prevProps) {
     const { match } = this.props;
     if (prevProps.match.params.id !== match.params.id) {
-      this.props.getSprints();
       this.props.getSprintIssues(match.params.id);
       this.props.getSprint(match.params.id);
     }
@@ -347,7 +345,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  getSprints: CommonActions.getAllSprints,
   getSprintIssues: CommonActions.getSprintIssues,
   getSprint: CommonActions.getSprint,
 };

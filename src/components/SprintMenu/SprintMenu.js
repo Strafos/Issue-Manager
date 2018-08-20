@@ -2,12 +2,18 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
-import "./RecentMenu.css";
-import { Menu, Container, Button } from "semantic-ui-react";
+import "./SprintMenu.css";
+import { Menu, Loader, Button } from "semantic-ui-react";
+
+import * as CommonActions from "../../commonActions";
 
 import "react-datepicker/dist/react-datepicker.css";
 
-class RecentMenu extends Component {
+class SprintMenu extends Component {
+  componentDidMount() {
+    this.props.getSprints();
+  }
+
   renderSprints = sprint => {
     const { selectedSprint } = this.props;
     return (
@@ -24,14 +30,17 @@ class RecentMenu extends Component {
   };
 
   render() {
-    const { sprints } = this.props;
-    console.log(this.props.ssprint);
+    const { sprintList } = this.props;
 
-    sprints.sort((a, b) => {
+    if (!sprintList) {
+      return <Loader active inline />;
+    }
+
+    sprintList.sort((a, b) => {
       return new Date(a.start_date) - new Date(b.start_date);
     });
 
-    const len = sprints.length;
+    const len = sprintList.length;
 
     return (
       <div className="center">
@@ -40,7 +49,7 @@ class RecentMenu extends Component {
             <Menu.Header>Recent Sprints</Menu.Header>
 
             <Menu.Menu>
-              {sprints
+              {sprintList
                 .slice(len - 4, len)
                 .map(sprint => this.renderSprints(sprint))}
             </Menu.Menu>
@@ -52,12 +61,15 @@ class RecentMenu extends Component {
 }
 
 const mapStateToProps = state => ({
-  selectedSprint: state.commonData.sprint.data && state.commonData.sprint.data,
+  selectedSprint: state.commonData.sprint.data,
+  sprintList: state.commonData.sprintList.data,
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  getSprints: CommonActions.getAllSprints,
+};
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(RecentMenu);
+)(SprintMenu);
