@@ -42,7 +42,8 @@ class SprintDisplay extends Component {
     const { match } = this.props;
     this.props.getSprintIssues(match.params.id);
     this.props.getSprint(match.params.id);
-    this.props.getTimeLogs(match.params.id);
+    this.props.getSpentTimeLogs(match.params.id);
+    this.props.getRemainingTimeLogs(match.params.id);
   }
 
   componentDidUpdate(prevProps) {
@@ -50,7 +51,8 @@ class SprintDisplay extends Component {
     if (prevProps.match.params.id !== match.params.id) {
       this.props.getSprintIssues(match.params.id);
       this.props.getSprint(match.params.id);
-      this.props.getTimeLogs(match.params.id);
+      this.props.getSpentTimeLogs(match.params.id);
+      this.props.getRemainingTimeLogs(match.params.id);
     }
   }
 
@@ -350,7 +352,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   getSprintIssues: CommonActions.getSprintIssues,
   getSprint: CommonActions.getSprint,
-  getTimeLogs: Actions.getTimeLogs,
+  getSpentTimeLogs: Actions.getTimeSpentLogs,
+  getRemainingTimeLogs: Actions.getTimeRemainingLogs,
 };
 
 export default connect(

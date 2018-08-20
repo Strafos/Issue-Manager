@@ -198,12 +198,22 @@ app.post("/log", (req, res) => {
 // Get all timelogs for a sprint
 // search: getTimelogs
 app.get("/log/:id", (req, res) => {
-  // const query = `SELECT * FROM timelog where sprint_id=${req.params.id}`;
-  const query =
-    `SELECT timelog.id, timelog.issue_id, timelog.sprint_id, ` +
-    `timelog.time_delta, timelog.time_stat, timelog.created_at, issues.name, timelog.total ` +
-    `FROM timelog INNER JOIN issues ON timelog.issue_id = issues.id ` +
-    `WHERE timelog.sprint_id=${req.params.id};`;
+  let query;
+  if (req.query.type) {
+    query =
+      `SELECT timelog.id, timelog.issue_id, timelog.sprint_id, ` +
+      `timelog.time_delta, timelog.time_stat, timelog.created_at, issues.name, timelog.total ` +
+      `FROM timelog INNER JOIN issues ON timelog.issue_id = issues.id ` +
+      `WHERE timelog.sprint_id=${req.params.id} AND timelog.time_stat='${
+        req.query.type
+      }';`;
+  } else {
+    query =
+      `SELECT timelog.id, timelog.issue_id, timelog.sprint_id, ` +
+      `timelog.time_delta, timelog.time_stat, timelog.created_at, issues.name, timelog.total ` +
+      `FROM timelog INNER JOIN issues ON timelog.issue_id = issues.id ` +
+      `WHERE timelog.sprint_id=${req.params.id};`;
+  }
   db.read(query)
     .then(response => {
       res.send(response);
@@ -325,12 +335,12 @@ app.delete("/issue/:id", (req, res) => {
     });
 });
 
-// deleteissue
+// deleteTimeLog
 app.delete("/timelog/:id", (req, res) => {
   const query = `DELETE FROM timelog where id=${req.params.id}`;
   db.insert(query)
     .then(() => {
-      res.send({ status: "Success" });
+      res.send(req.params.id);
     })
     .catch(err => {
       res.send({ status: "Failure" });

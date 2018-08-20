@@ -3,47 +3,11 @@ import { Button, Table, Header, Icon, Grid } from "semantic-ui-react";
 import TimeAgo from "react-timeago";
 import { connect } from "react-redux";
 
-import { deleteLog } from "../../../utils/api";
 import * as Actions from "../sprintPageActions";
 
 class TimelogDisplay extends Component {
-  state = {
-    spentLogs: [],
-    remainLogs: [],
-  };
-
-  componentDidMount() {
-    this._parseLogs();
-  }
-
-  componentDidUpdate(prevProps) {
-    const { sprintId } = this.props;
-    if (sprintId !== prevProps.sprintId) {
-      this._parseLogs();
-    }
-  }
-
-  _parseLogs = () => {
-    const { timelogs } = this.props;
-    const spentLogs = timelogs
-      .filter(log => log.time_stat === "time_spent")
-      .reverse();
-    const remainLogs = timelogs
-      .filter(log => log.time_stat === "time_remaining")
-      .reverse();
-    this.setState({
-      spentLogs,
-      remainLogs,
-    });
-  };
-
   handleDeleteLog = id => {
-    const { spentLogs, remainLogs } = this.state;
-    deleteLog(id);
-    this.setState({
-      spentLogs: spentLogs.filter(log => log.id !== id),
-      remainLogs: remainLogs.filter(log => log.id !== id),
-    });
+    this.props.deleteLog(id);
   };
 
   renderLog = log => {
@@ -95,7 +59,7 @@ class TimelogDisplay extends Component {
   );
 
   render() {
-    const { spentLogs, remainLogs } = this.state;
+    const { spentLogs, remainLogs } = this.props;
 
     return (
       <Grid divided columns={2}>
@@ -113,10 +77,13 @@ class TimelogDisplay extends Component {
 }
 
 const mapStateToProps = state => ({
-  timelogs: state.sprintPage.timelogList.data,
+  spentLogs: state.sprintPage.timeSpentLogList.data,
+  remainLogs: state.sprintPage.timeRemainingLogList.data,
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  deleteLog: Actions.deleteLog,
+};
 
 export default connect(
   mapStateToProps,

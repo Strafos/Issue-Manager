@@ -23,7 +23,7 @@ export const getTimeLogs = sprintId => {
   });
 };
 
-export const getSpentTimeLogs = sprintId => {
+export const getTimeSpentLogs = sprintId => {
   return fetch(`/log/${sprintId}?type=time_spent`, {
     method: "GET",
     headers: {
@@ -35,7 +35,19 @@ export const getSpentTimeLogs = sprintId => {
   });
 };
 
-export const deleteLog = id => {
+export const getTimeRemainingLogs = sprintId => {
+  return fetch(`/log/${sprintId}?type=time_remaining`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  }).then(response => {
+    return response.json();
+  });
+};
+
+export const deleteTimeLog = id => {
   return fetch(`/timelog/${id}`, {
     method: "DELETE",
     headers: {
