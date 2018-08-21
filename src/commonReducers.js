@@ -39,6 +39,12 @@ const issueListReducer = (state, action) => {
             issue.id === action.responseJson.id ? action.responseJson : issue
         ),
       };
+    case ActionTypes.CREATE_ISSUE_SUCCESS:
+      console.log(action);
+      return {
+        ...state,
+        data: [...state.data, action.responseJson],
+      };
     default:
       return asyncSprintIssuesReducer(state, action);
   }

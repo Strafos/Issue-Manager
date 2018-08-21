@@ -97,10 +97,6 @@ class App extends Component {
     return sprints.find(sprint => sprint.start_date === lastMonday);
   };
 
-  updateComponent = () => {
-    this.forceUpdate();
-  };
-
   render() {
     const { sprints, projects, selectedSprint } = this.state;
 
@@ -120,7 +116,6 @@ class App extends Component {
                       projects={projects}
                       sprints={sprints}
                       selectedSprint={selectedSprint}
-                      update={this.updateComponent}
                     />
                   </Button.Group>
                 </Grid.Row>

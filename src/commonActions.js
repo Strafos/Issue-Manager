@@ -33,3 +33,13 @@ export const getSprint = sprintId =>
     },
     API.getSprint
   )(sprintId);
+
+export const createIssue = requestObj =>
+  asyncActionCreator(
+    {
+      pending: ActionTypes.CREATE_ISSUE_REQUEST,
+      complete: ActionTypes.CREATE_ISSUE_SUCCESS,
+      error: ActionTypes.CREATE_ISSUE_FAILURE,
+    },
+    API.createIssue
+  )(requestObj);

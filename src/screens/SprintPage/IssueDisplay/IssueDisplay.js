@@ -347,7 +347,7 @@ class IssueDisplay extends Component {
   };
 
   render() {
-    const { selectedSprint, issues } = this.props;
+    const { selectedSprint } = this.props;
     const {
       issueList,
       totalTimeSpent,
@@ -356,10 +356,6 @@ class IssueDisplay extends Component {
     } = this.state;
 
     if (!selectedSprint || !issueList) {
-      console.log("Not loading table");
-      console.log(selectedSprint);
-      console.log(issueList);
-      // issueList is null
       return <Loader active inline />;
     }
 

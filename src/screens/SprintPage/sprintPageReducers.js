@@ -32,7 +32,7 @@ const timeRemainingLogReducer = (state, action) => {
     case ActionTypes.DELETE_TIMELOGS_SUCCESS:
       return {
         ...state,
-        data: state.data.filter(log => log.id !== action.responseJson.id),
+        data: state.data.filter(log => log.id !== action.responseJson),
       };
     default:
       return asyncTimeRemainingLogListReducer(state, action);

@@ -1,14 +1,14 @@
 export const createIssue = async requestObj => {
-  const response = await fetch("/issue", {
+  return fetch("/issue", {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
     body: JSON.stringify(requestObj),
+  }).then(response => {
+    return response.json();
   });
-
-  return await response;
 };
 
 export const addRecentIssue = (id, name) => {
