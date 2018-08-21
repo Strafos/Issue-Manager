@@ -23,7 +23,7 @@ app.post("/sprint", (req, res) => {
 });
 
 // Create new issue
-// search: createissue
+// search: createIssue
 app.post("/issue", (req, res) => {
   const {
     sprintId,
@@ -36,15 +36,20 @@ app.post("/issue", (req, res) => {
     projectId,
     notes,
   } = req.body;
-  // const query = `INSERT INTO sprints values(null, (?), (?), (?), '')`;
-  // db.insert(query, [name, startDate, endDate])
   const query =
     `INSERT INTO issues values(null, ` +
     `${sprintId}, (?), '${status}', ` +
     `${timeEstimate}, ${timeRemaining}, ` +
     `${projectId}, '${blocked}', ${timeSpent}, (?), 0, 0)`;
-  db.insert(query, [name, notes]);
-  res.send({ dbconn: "Success" });
+  const select = `SELECT * FROM issues WHERE id in (SELECT last_insert_rowid());`;
+  db.insertReturning(query, select, [name, notes])
+    .then(response => {
+      console.log(response[0]);
+      res.send(response[0]);
+    })
+    .catch(err => {
+      res.send({ status: "Failure" });
+    });
 });
 
 // Get all sprints
