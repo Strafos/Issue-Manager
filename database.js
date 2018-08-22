@@ -1,7 +1,7 @@
 const path = require("path");
 const sqlite3 = require("sqlite3").verbose();
 
-const build = "dev";
+const build = "prod";
 
 let dbFile;
 if (build === "dev") {

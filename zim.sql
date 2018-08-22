@@ -49,8 +49,9 @@ CREATE TABLE timelog (
  sprint_id integer NOT NULL,
  time_delta integer NOT NULL DEFAULT 0,
  time_stat text NOT NULL,
- created_at text NOT NULL
-)
+ created_at text NOT NULL,
+ total integer not null default 0
+);
 
 CREATE TABLE projects (
  id integer PRIMARY KEY AUTOINCREMENT,
