@@ -14,7 +14,6 @@ import { connect } from "react-redux";
 
 import * as CommonActions from "../../../commonActions";
 
-import { createIssue } from "../../../utils/api";
 import ProjectDropDown from "../../ProjectDropDown/ProjectDropDown";
 import SprintDropDown from "./SprintDropDown";
 
@@ -100,7 +99,7 @@ class IssueModal extends Component {
   render() {
     const { modalOpen, sprintId } = this.state;
 
-    const { sprints, projects, selectedSprint } = this.props;
+    const { sprints, projects } = this.props;
 
     return (
       <Modal

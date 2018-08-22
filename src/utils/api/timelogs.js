@@ -1,5 +1,5 @@
 export const createTimeLog = async requestObj => {
-  const response = await fetch("/log", {
+  const response = await fetch("/Log", {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -12,7 +12,7 @@ export const createTimeLog = async requestObj => {
 };
 
 export const getTimeLogs = sprintId => {
-  return fetch(`/log/${sprintId}`, {
+  return fetch(`/Log/${sprintId}`, {
     method: "GET",
     headers: {
       Accept: "application/json",
@@ -48,7 +48,7 @@ export const getTimeRemainingLogs = sprintId => {
 };
 
 export const deleteTimeLog = id => {
-  return fetch(`/timelog/${id}`, {
+  return fetch(`/Log/${id}`, {
     method: "DELETE",
     headers: {
       Accept: "application/json",

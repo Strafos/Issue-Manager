@@ -24,6 +24,11 @@ const asyncSprintReducer = asyncStateReducer({
 
 const sprintListReducer = (state, action) => {
   switch (action.type) {
+    case ActionTypes.CREATE_SPRINT_SUCCESS:
+      return {
+        ...state,
+        data: [...state.data, action.responseJson],
+      };
     default:
       return asyncSprintListReducer(state, action);
   }
@@ -40,7 +45,6 @@ const issueListReducer = (state, action) => {
         ),
       };
     case ActionTypes.CREATE_ISSUE_SUCCESS:
-      console.log(action);
       return {
         ...state,
         data: [...state.data, action.responseJson],

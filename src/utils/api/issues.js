@@ -1,36 +1,11 @@
 export const createIssue = async requestObj => {
-  return fetch("/issue", {
+  return fetch("/Issue", {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
     body: JSON.stringify(requestObj),
-  }).then(response => {
-    return response.json();
-  });
-};
-
-export const addRecentIssue = (id, name) => {
-  return fetch(`/recentIssue/${id}`, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ name }),
-  }).then(response => {
-    return response.json();
-  });
-};
-
-export const getRecentIssues = () => {
-  return fetch(`/recentIssues`, {
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
   }).then(response => {
     return response.json();
   });
@@ -49,7 +24,7 @@ export const getIssue = id => {
 };
 
 export const setStatus = (id, status) => {
-  return fetch(`/issue/${id}/status`, {
+  return fetch(`/Issue/${id}/status`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -65,7 +40,7 @@ export const setStatus = (id, status) => {
 };
 
 export const setBlocked = (id, blocked) => {
-  return fetch(`/issue/${id}/blocked`, {
+  return fetch(`/Issue/${id}/blocked`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -78,7 +53,7 @@ export const setBlocked = (id, blocked) => {
 };
 
 export const setTime = (id, stat, time) => {
-  return fetch(`/issue/${id}/time`, {
+  return fetch(`/Issue/${id}/time`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -91,7 +66,7 @@ export const setTime = (id, stat, time) => {
 };
 
 export const updateIssueNotes = (id, notes) => {
-  return fetch(`/issue/${id}/notes`, {
+  return fetch(`/Issue/${id}/notes`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -104,7 +79,7 @@ export const updateIssueNotes = (id, notes) => {
 };
 
 export const updateIssue = (requestObj, id) => {
-  return fetch(`/issue/${id}`, {
+  return fetch(`/Issue/${id}`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -117,7 +92,7 @@ export const updateIssue = (requestObj, id) => {
 };
 
 export const deleteIssue = id => {
-  return fetch(`/issue/${id}`, {
+  return fetch(`/Issue/${id}`, {
     method: "DELETE",
     headers: {
       Accept: "application/json",
@@ -129,7 +104,7 @@ export const deleteIssue = id => {
 };
 
 export const updateShowNotes = (id, bool) => {
-  return fetch(`/issue/${id}/showNotes`, {
+  return fetch(`/Issue/${id}/showNotes`, {
     method: "PUT",
     headers: {
       Accept: "application/json",

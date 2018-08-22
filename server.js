@@ -9,13 +9,14 @@ app.use(bodyParser.json());
 const port = process.env.PORT || 5000;
 
 // Create new sprint
-// search: createsprint
-app.post("/sprint", (req, res) => {
+// search: createSprint
+app.post("/Sprint", (req, res) => {
   const { name, startDate, endDate } = req.body;
   const query = `INSERT INTO sprints values(null, (?), (?), (?), '', '')`;
-  db.insert(query, [name, startDate, endDate])
-    .then(() => {
-      res.send({ status: "Success" });
+  const select = `SELECT * FROM sprints WHERE id in (SELECT last_insert_rowid());`;
+  db.insertReturning(query, select, [name, startDate, endDate])
+    .then(response => {
+      res.send(response[0]);
     })
     .catch(err => {
       res.send({ status: "Failure" });
@@ -24,7 +25,7 @@ app.post("/sprint", (req, res) => {
 
 // Create new issue
 // search: createIssue
-app.post("/issue", (req, res) => {
+app.post("/Issue", (req, res) => {
   const {
     sprintId,
     name,
@@ -44,7 +45,6 @@ app.post("/issue", (req, res) => {
   const select = `SELECT * FROM issues WHERE id in (SELECT last_insert_rowid());`;
   db.insertReturning(query, select, [name, notes])
     .then(response => {
-      console.log(response[0]);
       res.send(response[0]);
     })
     .catch(err => {
@@ -53,8 +53,8 @@ app.post("/issue", (req, res) => {
 });
 
 // Get all sprints
-// search: getsprints
-app.get("/sprints", (req, res) => {
+// search: getSprints
+app.get("/Sprints", (req, res) => {
   const query = `SELECT * FROM sprints`;
   db.read(query)
     .then(response => {
@@ -67,7 +67,7 @@ app.get("/sprints", (req, res) => {
 
 // Get issues of particular sprint
 // search: getSprintIssues
-app.get("/sprint/:id/issues", (req, res) => {
+app.get("/Sprint/:id/issues", (req, res) => {
   const query = `SELECT * FROM issues where sprint_id=${req.params.id}`;
   db.read(query)
     .then(response => {
@@ -80,7 +80,7 @@ app.get("/sprint/:id/issues", (req, res) => {
 
 // Get single sprint by ID
 // search: getSprint
-app.get("/sprint/:id", (req, res) => {
+app.get("/Sprint/:id", (req, res) => {
   const query = `SELECT * FROM sprints where id=${req.params.id}`;
   db.read(query)
     .then(response => {
@@ -106,7 +106,7 @@ app.get("/Issue/:id", (req, res) => {
 
 // Update issue status
 // search: updatestatus
-app.put("/issue/:id/status", (req, res) => {
+app.put("/Issue/:id/status", (req, res) => {
   const { status } = req.body;
   const query = `UPDATE issues SET status='${status}' where id=${
     req.params.id
@@ -122,7 +122,7 @@ app.put("/issue/:id/status", (req, res) => {
 
 // Update blocked
 // search: updateblocked
-app.put("/issue/:id/blocked", (req, res) => {
+app.put("/Issue/:id/blocked", (req, res) => {
   const { blocked } = req.body;
   const query = `UPDATE issues SET blocked='${blocked}' where id=${
     req.params.id
@@ -138,7 +138,7 @@ app.put("/issue/:id/blocked", (req, res) => {
 
 // Update shownotes
 // search: updateshownotes
-app.put("/issue/:id/showNotes", (req, res) => {
+app.put("/Issue/:id/showNotes", (req, res) => {
   const { bool } = req.body;
   const query = `UPDATE issues SET show_notes=${bool} where id=${
     req.params.id
@@ -155,7 +155,7 @@ app.put("/issue/:id/showNotes", (req, res) => {
 // Update issueTime
 // search: updateIssueTime
 // search: setTime
-app.put("/issue/:id/time", (req, res) => {
+app.put("/Issue/:id/time", (req, res) => {
   const { stat, time } = req.body;
   const insert = `UPDATE issues SET ${stat}=(?) where id=(?)`;
   const select = `SELECT * from issues where id=${req.params.id}`;
@@ -170,7 +170,7 @@ app.put("/issue/:id/time", (req, res) => {
 
 // Create project
 // search: createProject
-app.post("/project", (req, res) => {
+app.post("/Project", (req, res) => {
   const { name } = req.body;
   const query = `INSERT INTO projects values(null, (?))`;
   db.insert(query, [name])
@@ -184,7 +184,7 @@ app.post("/project", (req, res) => {
 
 // Create timelog
 // search: createTimelog
-app.post("/log", (req, res) => {
+app.post("/Log", (req, res) => {
   const { issueId, delta, stat, createdAt, total } = req.body;
   const query =
     `INSERT INTO timelog (issue_id, sprint_id, time_delta, time_stat, created_at, total) ` +
@@ -202,7 +202,7 @@ app.post("/log", (req, res) => {
 
 // Get all timelogs for a sprint
 // search: getTimelogs
-app.get("/log/:id", (req, res) => {
+app.get("/Log/:id", (req, res) => {
   let query;
   if (req.query.type) {
     query =
@@ -230,7 +230,7 @@ app.get("/log/:id", (req, res) => {
 
 // Get projects
 // search: getprojects
-app.get("/projects", (req, res) => {
+app.get("/Projects", (req, res) => {
   const query = `SELECT * FROM projects`;
   db.read(query)
     .then(response => {
@@ -242,7 +242,7 @@ app.get("/projects", (req, res) => {
 });
 
 // updateNotes
-app.put("/sprint/:id/notes", (req, res) => {
+app.put("/Sprint/:id/notes", (req, res) => {
   const { notes } = req.body;
   const query = "UPDATE sprints SET notes=(?) where id=(?)";
   // const query = `UPDATE sprints SET notes='${notes}' where id=${req.params.id}`;
@@ -257,7 +257,7 @@ app.put("/sprint/:id/notes", (req, res) => {
 });
 
 // updateNotes
-app.put("/sprint/:id/quote", (req, res) => {
+app.put("/Sprint/:id/quote", (req, res) => {
   const { quote } = req.body;
   const query = "UPDATE sprints SET quote=(?) where id=(?)";
   db.insert(query, [quote, req.params.id])
@@ -270,7 +270,7 @@ app.put("/sprint/:id/quote", (req, res) => {
 });
 
 // updateIssueNotes
-app.put("/issue/:id/notes", (req, res) => {
+app.put("/Issue/:id/notes", (req, res) => {
   const { notes } = req.body;
   const query = "UPDATE issues SET notes=(?) where id=(?)";
   db.insert(query, [notes, req.params.id])
@@ -283,7 +283,7 @@ app.put("/issue/:id/notes", (req, res) => {
 });
 
 // updateIssue
-app.put("/issue/:id", (req, res) => {
+app.put("/Issue/:id", (req, res) => {
   const {
     name,
     sprintId,
@@ -296,17 +296,11 @@ app.put("/issue/:id", (req, res) => {
     notes,
     bad,
   } = req.body;
-  // const query =
-  //   `UPDATE issues SET name='${name}', sprint_id=${sprintId}, project_id=${projectId}, ` +
-  //   `status='${status}', time_estimate=${timeEstimate}, time_remaining=${timeRemaining}, ` +
-  //   `time_spent=${timeSpent}, blocked='${blocked}', notes='${notes}', bad=${bad} ` +
-  //   `where id=${req.params.id}`;
   const query =
     `UPDATE issues SET name=(?), sprint_id=(?), project_id=(?), ` +
     `status=(?), time_estimate=(?), time_remaining=(?), ` +
     `time_spent=(?), blocked=(?), notes=(?), bad=(?) ` +
     `where id=(?)`;
-  console.log(query);
   db.insert(query, [
     name,
     sprintId,
@@ -329,7 +323,7 @@ app.put("/issue/:id", (req, res) => {
 });
 
 // deleteissue
-app.delete("/issue/:id", (req, res) => {
+app.delete("/Issue/:id", (req, res) => {
   const query = `DELETE FROM issues where id=${req.params.id}`;
   db.insert(query)
     .then(() => {
@@ -341,7 +335,7 @@ app.delete("/issue/:id", (req, res) => {
 });
 
 // deleteTimeLog
-app.delete("/timelog/:id", (req, res) => {
+app.delete("/Log/:id", (req, res) => {
   const query = `DELETE FROM timelog where id=${req.params.id}`;
   db.insert(query)
     .then(() => {
@@ -352,33 +346,9 @@ app.delete("/timelog/:id", (req, res) => {
     });
 });
 
-app.get("/recentIssues", (req, res) => {
-  const query =
-    "SELECT DISTINCT issue_id, name FROM recent_issues ORDER BY id DESC LIMIT 5";
-  db.read(query)
-    .then(response => {
-      res.send(response);
-    })
-    .catch(err => {
-      console.log(err);
-    });
-});
-
-app.post("/recentIssue/:id", (req, res) => {
-  const { name } = req.body;
-  const query = `INSERT INTO recent_issues VALUES(null, ${req.params.id}, (?))`;
-  db.insert(query, [name])
-    .then(() => {
-      res.send({ status: "Success" });
-    })
-    .catch(err => {
-      res.send({ status: "Failure" });
-    });
-});
-
 // Get all todos that aren't done
 // search: getTodos
-app.get("/todos", (req, res) => {
+app.get("/Todos", (req, res) => {
   const query = `SELECT * FROM todos where done = 0`;
   db.read(query)
     .then(response => {
@@ -391,7 +361,7 @@ app.get("/todos", (req, res) => {
 
 // Get all todos that aren't done
 // search: addTodo
-app.put("/todos", (req, res) => {
+app.put("/Todos", (req, res) => {
   const query = `INSERT INTO todos values(null, '${req.body.todoName}', 0)`;
   db.read(query)
     .then(response => {
@@ -404,7 +374,7 @@ app.put("/todos", (req, res) => {
 
 // Set todo done to true (1)
 // search: finishTodo
-app.post("/todos/:id", (req, res) => {
+app.post("/Todos/:id", (req, res) => {
   const query = `UPDATE todos SET done=1 where id=${req.params.id}`;
   db.read(query)
     .then(response => {

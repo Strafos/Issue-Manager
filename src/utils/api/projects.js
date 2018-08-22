@@ -1,5 +1,5 @@
 export const createProject = async requestObj => {
-  const response = await fetch("/project", {
+  const response = await fetch("/Project", {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -12,7 +12,7 @@ export const createProject = async requestObj => {
 };
 
 export const getProjects = () => {
-  return fetch("/projects", {
+  return fetch("/Projects", {
     method: "GET",
     headers: {
       Accept: "application/json",

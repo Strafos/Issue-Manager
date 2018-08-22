@@ -1,5 +1,5 @@
 export const createSprint = async requestObj => {
-  const response = await fetch("/sprint", {
+  const response = await fetch("/Sprint", {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -15,7 +15,7 @@ export const createSprint = async requestObj => {
 };
 
 export const getSprints = () => {
-  return fetch("/sprints", {
+  return fetch("/Sprints", {
     method: "GET",
     headers: {
       Accept: "application/json",
@@ -27,7 +27,7 @@ export const getSprints = () => {
 };
 
 export const getSprintIssues = id => {
-  return fetch(`/sprint/${id}/issues`, {
+  return fetch(`/Sprint/${id}/issues`, {
     method: "GET",
     headers: {
       Accept: "application/json",
@@ -39,7 +39,7 @@ export const getSprintIssues = id => {
 };
 
 export const getSprint = id => {
-  return fetch(`/sprint/${id}`, {
+  return fetch(`/Sprint/${id}`, {
     method: "GET",
     headers: {
       Accept: "application/json",
@@ -51,7 +51,7 @@ export const getSprint = id => {
 };
 
 export const updateSprintNotes = (notes, id) => {
-  return fetch(`/sprint/${id}/notes`, {
+  return fetch(`/Sprint/${id}/notes`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -64,7 +64,7 @@ export const updateSprintNotes = (notes, id) => {
 };
 
 export const updateSprintQuote = (quote, id) => {
-  return fetch(`/sprint/${id}/quote`, {
+  return fetch(`/Sprint/${id}/quote`, {
     method: "PUT",
     headers: {
       Accept: "application/json",

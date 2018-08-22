@@ -18,7 +18,7 @@ import SprintPage from "./screens/SprintPage/SprintPage";
 import IssuePage from "./screens/IssuePage/IssuePage";
 import TimeSpentMiniGraph from "./screens/SprintPage/GraphDisplay/Graphs/TimeSpentMiniGraph";
 
-import { getSprints, getProjects, getRecentIssues } from "./utils/api";
+import { getSprints, getProjects } from "./utils/api";
 
 class App extends Component {
   state = {

@@ -1,5 +1,5 @@
 export const getTodos = () => {
-  return fetch(`/todos`, {
+  return fetch(`/Todos`, {
     method: "GET",
     headers: {
       Accept: "application/json",
@@ -11,7 +11,7 @@ export const getTodos = () => {
 };
 
 export const finishTodo = id => {
-  return fetch(`/todos/${id}`, {
+  return fetch(`/Todos/${id}`, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -23,7 +23,7 @@ export const finishTodo = id => {
 };
 
 export const addTodo = todoName => {
-  return fetch(`/todos`, {
+  return fetch(`/Todos`, {
     method: "PUT",
     headers: {
       Accept: "application/json",

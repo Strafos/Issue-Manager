@@ -19,7 +19,6 @@ import ProjectDropDown from "../../components/ProjectDropDown/ProjectDropDown";
 
 import {
   getIssue,
-  addRecentIssue,
   updateIssue,
   deleteIssue,
   createTimeLog,
@@ -66,7 +65,6 @@ class IssueDisplay extends Component {
         blocked: issue.blocked,
         bad: issue.bad,
       });
-      issueId && this.addRecentIssue(issueId, issue.name);
     });
   }
 
@@ -90,7 +88,6 @@ class IssueDisplay extends Component {
         blocked: issue.blocked,
         bad: issue.bad,
       });
-      issueId && this.addRecentIssue(issueId, issue.name);
     });
   }
 
@@ -267,14 +264,6 @@ class IssueDisplay extends Component {
       showMessage: false,
     });
     clearTimeout(this.timeout);
-  };
-
-  addRecentIssue = (id, name) => {
-    addRecentIssue(id, name).then(res => {
-      if (!res || res.status !== "Success") {
-        this.props.error("Failed to add recent issue");
-      }
-    });
   };
 
   renderTextArea = () => {
