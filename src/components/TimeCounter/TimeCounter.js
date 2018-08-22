@@ -151,9 +151,7 @@ class TimeCounter extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  // time: state.commonData.sprint.data && state.commonData.sprint.data,
-});
+const mapStateToProps = state => ({});
 
 const mapDispatchToProps = {
   setTime: Actions.setTime,

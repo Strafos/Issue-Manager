@@ -17,7 +17,6 @@ const statusMap = {
 
 class IssueDisplay extends Component {
   state = {
-    selectedSprint: null,
     issueList: [],
     showNoteList: {},
     editNoteList: {},
@@ -28,8 +27,6 @@ class IssueDisplay extends Component {
     totalTimeEstimate: 0,
     sortByColumn: null,
     direction: null,
-    editQuote: false,
-    quote: "",
     displayTimelogs: false,
   };
 
@@ -40,13 +37,11 @@ class IssueDisplay extends Component {
 
   componentDidUpdate(prevProps) {
     const { selectedSprint, issues } = this.props;
-    if (selectedSprint.id !== prevProps.selectedSprint.id) {
+    if (
+      selectedSprint.id !== prevProps.selectedSprint.id ||
+      prevProps.issues !== issues
+    ) {
       this._loadData(selectedSprint, issues);
-    }
-    if (prevProps.issues !== issues) {
-      this.setState({
-        issueList: issues,
-      });
     }
   }
 
@@ -62,26 +57,22 @@ class IssueDisplay extends Component {
     // Issues, note toggle array, summing times for footer
     this.setState(
       {
-        selectedSprint,
         issueList: issues,
         showNoteList,
         editNoteList,
         issueNoteList,
-        totalTimeEstimate:
-          issues &&
-          issues.length > 0 &&
-          issues.map(i => i.time_estimate).reduce((a, b) => a + b, 0),
-        totalTimeSpent:
-          issues &&
-          issues.length > 0 &&
-          issues
-            .filter(i => !i.bad)
-            .map(i => i.time_spent)
-            .reduce((a, b) => a + b, 0),
-        totalTimeRemaining:
-          issues &&
-          issues.length > 0 &&
-          issues.map(i => i.time_remaining).reduce((a, b) => a + b, 0),
+        totalTimeEstimate: issues
+          ? issues.map(i => i.time_estimate).reduce((a, b) => a + b, 0)
+          : 0,
+        totalTimeSpent: issues
+          ? issues
+              .filter(i => !i.bad)
+              .map(i => i.time_spent)
+              .reduce((a, b) => a + b, 0)
+          : 0,
+        totalTimeRemaining: issues
+          ? issues.map(i => i.time_remaining).reduce((a, b) => a + b, 0)
+          : 0,
       },
       this.handleStatusSort
     );
