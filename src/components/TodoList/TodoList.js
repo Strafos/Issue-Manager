@@ -12,7 +12,7 @@ import {
 
 import "react-datepicker/dist/react-datepicker.css";
 
-import { getTodos, addTodo, finishTodo } from "../../utils/api/api";
+import { getTodos, addTodo, finishTodo } from "../../utils/api";
 
 class TodoList extends Component {
   state = {

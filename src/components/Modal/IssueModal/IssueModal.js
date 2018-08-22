@@ -10,8 +10,11 @@ import {
   Form,
   Divider,
 } from "semantic-ui-react";
+import { connect } from "react-redux";
 
-import { createIssue } from "../../../utils/api/api";
+import * as CommonActions from "../../../commonActions";
+
+import { createIssue } from "../../../utils/api";
 import ProjectDropDown from "../../ProjectDropDown/ProjectDropDown";
 import SprintDropDown from "./SprintDropDown";
 
@@ -55,7 +58,6 @@ class IssueModal extends Component {
   };
 
   handleSprintSelect = (event, { value }) => {
-    console.log(value);
     this.setState({
       sprintId: value,
     });
@@ -91,9 +93,8 @@ class IssueModal extends Component {
       projectId,
       notes,
     };
-    createIssue(requestObj);
+    this.props.createIssue(requestObj);
     this.handleClose();
-    this.props.update();
   };
 
   render() {
@@ -163,4 +164,13 @@ class IssueModal extends Component {
   }
 }
 
-export default IssueModal;
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = {
+  createIssue: CommonActions.createIssue,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(IssueModal);

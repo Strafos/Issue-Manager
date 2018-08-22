@@ -23,7 +23,7 @@ app.post("/sprint", (req, res) => {
 });
 
 // Create new issue
-// search: createissue
+// search: createIssue
 app.post("/issue", (req, res) => {
   const {
     sprintId,
@@ -36,15 +36,20 @@ app.post("/issue", (req, res) => {
     projectId,
     notes,
   } = req.body;
-  // const query = `INSERT INTO sprints values(null, (?), (?), (?), '')`;
-  // db.insert(query, [name, startDate, endDate])
   const query =
     `INSERT INTO issues values(null, ` +
     `${sprintId}, (?), '${status}', ` +
     `${timeEstimate}, ${timeRemaining}, ` +
     `${projectId}, '${blocked}', ${timeSpent}, (?), 0, 0)`;
-  db.insert(query, [name, notes]);
-  res.send({ dbconn: "Success" });
+  const select = `SELECT * FROM issues WHERE id in (SELECT last_insert_rowid());`;
+  db.insertReturning(query, select, [name, notes])
+    .then(response => {
+      console.log(response[0]);
+      res.send(response[0]);
+    })
+    .catch(err => {
+      res.send({ status: "Failure" });
+    });
 });
 
 // Get all sprints
@@ -61,12 +66,25 @@ app.get("/sprints", (req, res) => {
 });
 
 // Get issues of particular sprint
-// search: getsprint
-app.get("/Sprint/:id", (req, res) => {
+// search: getSprintIssues
+app.get("/sprint/:id/issues", (req, res) => {
   const query = `SELECT * FROM issues where sprint_id=${req.params.id}`;
   db.read(query)
     .then(response => {
       res.send(response);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
+// Get single sprint by ID
+// search: getSprint
+app.get("/sprint/:id", (req, res) => {
+  const query = `SELECT * FROM sprints where id=${req.params.id}`;
+  db.read(query)
+    .then(response => {
+      res.send(response[0]);
     })
     .catch(err => {
       console.log(err);
@@ -139,11 +157,11 @@ app.put("/issue/:id/showNotes", (req, res) => {
 // search: setTime
 app.put("/issue/:id/time", (req, res) => {
   const { stat, time } = req.body;
-  const query = `UPDATE issues SET ${stat}=(?) where id=(?)`;
-  db.insert(query, [time, req.params.id])
-    .then(() => {
-      console.log("issue success");
-      res.send({ status: "Success" });
+  const insert = `UPDATE issues SET ${stat}=(?) where id=(?)`;
+  const select = `SELECT * from issues where id=${req.params.id}`;
+  db.insertReturning(insert, select, [time, req.params.id])
+    .then(response => {
+      res.send(response[0]);
     })
     .catch(err => {
       res.send({ status: "Failure" });
@@ -175,7 +193,6 @@ app.post("/log", (req, res) => {
     `WHERE i.id=${issueId}`;
   db.insert(query)
     .then(() => {
-      console.log("log success");
       res.send({ status: "Success" });
     })
     .catch(err => {
@@ -186,12 +203,22 @@ app.post("/log", (req, res) => {
 // Get all timelogs for a sprint
 // search: getTimelogs
 app.get("/log/:id", (req, res) => {
-  // const query = `SELECT * FROM timelog where sprint_id=${req.params.id}`;
-  const query =
-    `SELECT timelog.id, timelog.issue_id, timelog.sprint_id, ` +
-    `timelog.time_delta, timelog.time_stat, timelog.created_at, issues.name, timelog.total ` +
-    `FROM timelog INNER JOIN issues ON timelog.issue_id = issues.id ` +
-    `WHERE timelog.sprint_id=${req.params.id};`;
+  let query;
+  if (req.query.type) {
+    query =
+      `SELECT timelog.id, timelog.issue_id, timelog.sprint_id, ` +
+      `timelog.time_delta, timelog.time_stat, timelog.created_at, issues.name, timelog.total ` +
+      `FROM timelog INNER JOIN issues ON timelog.issue_id = issues.id ` +
+      `WHERE timelog.sprint_id=${req.params.id} AND timelog.time_stat='${
+        req.query.type
+      }';`;
+  } else {
+    query =
+      `SELECT timelog.id, timelog.issue_id, timelog.sprint_id, ` +
+      `timelog.time_delta, timelog.time_stat, timelog.created_at, issues.name, timelog.total ` +
+      `FROM timelog INNER JOIN issues ON timelog.issue_id = issues.id ` +
+      `WHERE timelog.sprint_id=${req.params.id};`;
+  }
   db.read(query)
     .then(response => {
       res.send(response);
@@ -313,12 +340,12 @@ app.delete("/issue/:id", (req, res) => {
     });
 });
 
-// deleteissue
+// deleteTimeLog
 app.delete("/timelog/:id", (req, res) => {
   const query = `DELETE FROM timelog where id=${req.params.id}`;
   db.insert(query)
     .then(() => {
-      res.send({ status: "Success" });
+      res.send(req.params.id);
     })
     .catch(err => {
       res.send({ status: "Failure" });

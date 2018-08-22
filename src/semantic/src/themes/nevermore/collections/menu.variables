@@ -1,0 +1,38 @@
+@background: @black;
+@itemTextColor: @white;
+@borderColor: @gray-dark;
+@hoverItemTextColor: #fff;
+@hoverItemBackground: @gray-base;
+@activeItemTextColor: #fff;
+@activeItemBackground: @black;
+@activeHoverItemColor: #fff;
+@labelTextColor: #fff;
+@labelBackground: @white;
+@pressedItemBackground: @gray-dark;
+@invertedItemTextColor: @gray-light;
+@invertedBackground: @gray-darker;
+@invertedItemTextColor: white;
+@invertedActiveBackground: white;
+@tabularBorderColor: @gray-dark;
+@tabularActiveBackground: @primaryColor;
+@tabularActiveColor: #fff;
+@dropdownBackground: @gray-darker;
+@subMenuTextColor: @gray-lighter;
+@darkTextColor: white;
+
+@textMenuActiveItemColor: #fff;
+@textMenuItemColor: @gray-light;
+
+@verticalBackground: @background;
+
+@secondaryActiveItemColor: #fff;
+@secondaryActiveItemBackground: @gray-dark;
+@secondaryItemTextColor: @gray-light;
+@secondaryHoverItemColor: #fff;
+@secondaryActiveHoverItemColor: #fff;
+@secondaryActiveHoverItemBackground: @gray-dark;
+@secondaryHoverItemBackground: @gray-dark;
+
+@secondaryPointingActiveTextColor: #fff;
+@secondaryPointingBorderColor: @gray-dark;
+@secondaryPointingActiveBorderColor: @gray;

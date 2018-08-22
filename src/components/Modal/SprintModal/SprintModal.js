@@ -3,7 +3,7 @@ import "./SprintModal.css";
 import { Icon, Grid, Button, Modal, Input, Form } from "semantic-ui-react";
 import ReactDatePicker from "react-datepicker";
 
-import { createSprint } from "../../../utils/api/api";
+import { createSprint } from "../../../utils/api";
 
 import "react-datepicker/dist/react-datepicker.css";
 

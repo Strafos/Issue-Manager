@@ -12,19 +12,13 @@ import ProjectModal from "./components/Modal/ProjectModal/ProjectModal";
 import SprintModal from "./components/Modal/SprintModal/SprintModal";
 
 import SprintDropDown from "./components/SprintDropDown/SprintDropDown";
-import RecentMenu from "./components/RecentMenu/RecentMenu";
+import SprintMenu from "./components/SprintMenu/SprintMenu";
 import TodoList from "./components/TodoList/TodoList";
-import SprintPage from "./components/SprintPage/SprintPage";
-import IssuePage from "./components/IssuePage/IssuePage";
-// import SprintGraphPage from "./components/SprintGraphPage/SprintGraphPage";
-import TimeSpentMiniGraph from "./components/SprintPage/GraphDisplay/Graphs/TimeSpentMiniGraph";
+import SprintPage from "./screens/SprintPage/SprintPage";
+import IssuePage from "./screens/IssuePage/IssuePage";
+import TimeSpentMiniGraph from "./screens/SprintPage/GraphDisplay/Graphs/TimeSpentMiniGraph";
 
-import {
-  getSprint,
-  getSprints,
-  getProjects,
-  getRecentIssues,
-} from "./utils/api/api";
+import { getSprints, getProjects, getRecentIssues } from "./utils/api";
 
 class App extends Component {
   state = {
@@ -32,7 +26,6 @@ class App extends Component {
     projects: [],
     selectedSprint: null,
     defaultSprint: null,
-    recentIssues: null,
     errorMessage: "",
     showErrorMessage: false,
   };
@@ -55,12 +48,6 @@ class App extends Component {
     });
   };
 
-  handleIssueMenuClick = (event, { index }) => {
-    this.setState({
-      selectedIssue: index,
-    });
-  };
-
   handleErrorMessage = () => {
     return (
       <Message negative>
@@ -77,12 +64,6 @@ class App extends Component {
   };
 
   componentDidMount() {
-    getRecentIssues().then(issues => {
-      this.setState({
-        recentIssues: issues,
-      });
-    });
-
     getProjects().then(projects => {
       this.setState({ projects });
     });
@@ -93,47 +74,15 @@ class App extends Component {
       const pathRe = /\/(.*)\/(.*)/g;
       const match = pathRe.exec(path);
 
-      if (match && match[1] === "issue") {
-        // If issue is in the URL, then set selectedIssue
-        this.setState({
-          selectedIssue: match[2],
-        });
-      } else {
-        // } else (match && match[1] === "sprint") {
-        // If sprint is in the URL, then set selectedSprint
-        this.setState(
-          {
-            selectedSprint: match
-              ? sprints.find(sprint => sprint.id == match[2])
-              : this.getDefaultSprint(sprints),
-          },
-          () => {
-            this.sumTimes(this.state.selectedSprint.id);
-          }
-        );
-      }
-    });
-  }
-
-  // Calculate totals for times
-  sumTimes = sprintId => {
-    getSprint(sprintId).then(issues => {
+      // } else (match && match[1] === "sprint") {
+      // If sprint is in the URL, then set selectedSprint
       this.setState({
-        totalTimeEstimate:
-          issues.length > 0 &&
-          issues.map(i => i.time_estimate).reduce((a, b) => a + b),
-        totalTimeSpent:
-          issues.length > 0 &&
-          issues
-            .filter(i => !i.bad)
-            .map(i => i.time_spent)
-            .reduce((a, b) => a + b),
-        totalTimeRemaining:
-          issues.length > 0 &&
-          issues.map(i => i.time_remaining).reduce((a, b) => a + b),
+        selectedSprint: match
+          ? sprints.find(sprint => sprint.id == match[2])
+          : this.getDefaultSprint(sprints),
       });
     });
-  };
+  }
 
   // Calculate default sprint by getting the last Monday (unless today is Monday)
   getDefaultSprint = sprints => {
@@ -148,30 +97,8 @@ class App extends Component {
     return sprints.find(sprint => sprint.start_date === lastMonday);
   };
 
-  updateComponent = () => {
-    this.forceUpdate();
-  };
-
-  renderSprintPage = () => {
-    const { projects, selectedSprint } = this.state;
-
-    return (
-      <SprintPage
-        projects={projects}
-        selectedSprint={selectedSprint}
-        sprintId={selectedSprint && selectedSprint.id}
-      />
-    );
-  };
-
   render() {
-    const {
-      sprints,
-      projects,
-      selectedSprint,
-      recentIssues,
-      selectedIssue,
-    } = this.state;
+    const { sprints, projects, selectedSprint } = this.state;
 
     return (
       <Router>
@@ -189,7 +116,6 @@ class App extends Component {
                       projects={projects}
                       sprints={sprints}
                       selectedSprint={selectedSprint}
-                      update={this.updateComponent}
                     />
                   </Button.Group>
                 </Grid.Row>
@@ -197,14 +123,12 @@ class App extends Component {
 
                 <Grid.Row>
                   <div className="center">
-                    <RecentMenu
-                      selectedSprint={selectedSprint}
-                      selectedIssue={selectedIssue}
+                    <SprintMenu
                       handleSprintMenuClick={this.handleSprintMenuClick}
                       handleIssueMenuClick={this.handleIssueMenuClick}
                       sprints={sprints}
-                      recentIssues={recentIssues}
                     />
+                    <br />
                     <TodoList />
                   </div>
 
@@ -228,7 +152,7 @@ class App extends Component {
 
               <Grid.Column width={13}>
                 {this.state.showErrorMessage && this.handleErrorMessage()}
-                <Route
+                {/* <Route
                   exact
                   path="/"
                   render={props => {
@@ -241,7 +165,7 @@ class App extends Component {
                       />
                     );
                   }}
-                />
+                /> */}
 
                 <Route
                   exact

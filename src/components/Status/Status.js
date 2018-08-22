@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Menu, Icon } from "semantic-ui-react";
 
-import { setStatus, setBlocked } from "../../utils/api/api";
+import { setStatus, setBlocked } from "../../utils/api";
 
 class Status extends Component {
   state = {

@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import "./TimeCounter.css";
 import { Button, Modal, Form, Input, Label, Icon } from "semantic-ui-react";
+import { connect } from "react-redux";
 
-import { setTime, createTimeLog } from "../../utils/api/api";
+import { setTime, createTimeLog } from "../../utils/api";
+
+import * as Actions from "./timeCounterActions";
 
 class TimeCounter extends Component {
   state = {
@@ -11,12 +13,12 @@ class TimeCounter extends Component {
     tempTime: "",
   };
 
-  componentDidMount() {
-    const { time } = this.props;
-    this.setState({
-      time,
-    });
-  }
+  // componentDidMount() {
+  //   const { time } = this.props;
+  //   this.setState({
+  //     time,
+  //   });
+  // }
 
   handleOpen = () => {
     this.setState({
@@ -45,13 +47,13 @@ class TimeCounter extends Component {
 
   // Click from an icon
   handleIconClick = () => {
-    const { issueId, inc, stat } = this.props;
-    const { time } = this.state;
+    const { issueId, inc, stat, time } = this.props;
+    // const { time } = this.state;
     let newTime = inc ? time + 1 : time - 1;
     newTime = newTime < 0 ? 0 : newTime;
     const delta = newTime - time;
 
-    //Log time delta
+    // Log time delta
     if (!this.props.bad) {
       const reqObj = {
         issueId,
@@ -68,12 +70,12 @@ class TimeCounter extends Component {
 
     // Update time displayed in TimeCounter
     this.setState({
-      time: newTime,
       openModal: false,
     });
 
-    //Update time in database
-    setTime(issueId, stat, newTime);
+    // Update time in database
+    // setTime(issueId, stat, newTime);
+    this.props.setTime(issueId, stat, newTime);
   };
 
   handleSubmit = () => {
@@ -109,8 +111,8 @@ class TimeCounter extends Component {
   };
 
   render() {
-    const { inc } = this.props;
-    const { openModal, time } = this.state;
+    const { inc, time } = this.props;
+    const { openModal } = this.state;
 
     return (
       <div>
@@ -149,4 +151,15 @@ class TimeCounter extends Component {
   }
 }
 
-export default TimeCounter;
+const mapStateToProps = state => ({
+  // time: state.commonData.sprint.data && state.commonData.sprint.data,
+});
+
+const mapDispatchToProps = {
+  setTime: Actions.setTime,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TimeCounter);
