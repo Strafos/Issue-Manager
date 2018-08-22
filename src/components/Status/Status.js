@@ -9,20 +9,22 @@ class Status extends Component {
     blocked: false,
   };
 
-  componentWillReceiveProps(nextProps) {
-    const { status, blocked } = nextProps;
-    this.setState({
-      status: status,
-      blocked: blocked,
-    });
-  }
-
   componentDidMount() {
     const { status, blocked } = this.props;
     this.setState({
       status: status,
       blocked: blocked,
     });
+  }
+
+  componentDidUpdate(prevProps) {
+    const { status, blocked } = this.props;
+    if (status !== prevProps.status || blocked !== prevProps.blocked) {
+      this.setState({
+        status,
+        blocked,
+      });
+    }
   }
 
   handleItemClick = (e, { name }) => {

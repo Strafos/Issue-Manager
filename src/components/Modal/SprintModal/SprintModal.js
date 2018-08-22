@@ -1,9 +1,11 @@
 import React, { Component } from "react";
-import "./SprintModal.css";
 import { Icon, Grid, Button, Modal, Input, Form } from "semantic-ui-react";
 import ReactDatePicker from "react-datepicker";
+import { connect } from "react-redux";
 
-import { createSprint } from "../../../utils/api";
+import * as CommonActions from "../../../commonActions";
+
+import "./SprintModal.css";
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -65,7 +67,7 @@ class SprintModal extends Component {
       startDate: startDate.format("MM/DD/YY"),
       endDate: endDate.format("MM/DD/YY"),
     };
-    createSprint(requestObj);
+    this.props.createSprint(requestObj);
     this.handleClose();
   };
 
@@ -77,7 +79,7 @@ class SprintModal extends Component {
       startDate,
       endDate: this.futureMonday(weeksAdv + 1),
     };
-    createSprint(requestObj);
+    this.props.createSprint(requestObj);
     this.handleClose();
   };
 
@@ -166,4 +168,13 @@ class SprintModal extends Component {
   }
 }
 
-export default SprintModal;
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = {
+  createSprint: CommonActions.createSprint,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SprintModal);

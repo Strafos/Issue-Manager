@@ -43,3 +43,13 @@ export const createIssue = requestObj =>
     },
     API.createIssue
   )(requestObj);
+
+export const createSprint = requestObj =>
+  asyncActionCreator(
+    {
+      pending: ActionTypes.CREATE_SPRINT_REQUEST,
+      complete: ActionTypes.CREATE_SPRINT_SUCCESS,
+      error: ActionTypes.CREATE_SPRINT_FAILURE,
+    },
+    API.createSprint
+  )(requestObj);
