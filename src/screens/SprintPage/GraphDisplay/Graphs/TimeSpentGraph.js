@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Segment, Loader, Dimmer } from "semantic-ui-react";
+import { Loader } from "semantic-ui-react";
 
 import { XYPlot, XAxis, YAxis, Hint, LineMarkSeries } from "react-vis";
 
