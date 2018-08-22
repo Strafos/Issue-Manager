@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
-import { Message, Header, Divider, Button, Grid } from "semantic-ui-react";
+import { Message, Button, Grid } from "semantic-ui-react";
 import "react-datepicker/dist/react-datepicker.css";
 
 import "./semantic/dist/semantic.min.css";
@@ -112,11 +112,7 @@ class App extends Component {
                   <Button.Group color="black" vertical>
                     <SprintModal sprints={sprints} />
                     <ProjectModal sprints={sprints} projects={projects} />
-                    <IssueModal
-                      projects={projects}
-                      sprints={sprints}
-                      selectedSprint={selectedSprint}
-                    />
+                    <IssueModal projects={projects} sprints={sprints} />
                   </Button.Group>
                 </Grid.Row>
                 <br />

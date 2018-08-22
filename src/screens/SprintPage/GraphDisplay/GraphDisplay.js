@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import { Header, Grid, Divider, Loader } from "semantic-ui-react";
 
-import { getSprintIssues, getTimeLogs } from "../../../utils/api";
+import { getTimeLogs } from "../../../utils/api";
 import TimeRemainingGraph from "./Graphs/TimeRemainingGraph";
 import TimeSpentGraph from "./Graphs/TimeSpentGraph";
 import DayBarGraph from "./Graphs/DayBarGraph";

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Dropdown } from "semantic-ui-react";
+import { connect } from "react-redux";
 
 class SprintDropDown extends Component {
   sprintOptions = sprints =>
@@ -13,6 +14,7 @@ class SprintDropDown extends Component {
 
   render() {
     const { sprints, value, onChange } = this.props;
+    console.log(value);
 
     return (
       <Dropdown
@@ -26,30 +28,14 @@ class SprintDropDown extends Component {
     );
   }
 }
-// sprintOptions = sprints => {
-//   sprints.map(sprint => {
-//     return {
-//       text: sprint.name,
-//       key: sprint.id,
-//       value: sprint.id,
-//     };
-//   });
-// };
 
-// render() {
-//   const { sprints, onChange, value } = this.props;
-//   return (
-//     <Dropdown
-//       placeholder="Select Sprint"
-//       search
-//       selection
-//       // defaultValue={0}
-//       value={value}
-//       onChange={onChange}
-//       options={this.sprintOptions(sprints)}
-//     />
-//   );
-// }
-// }
+const mapStateToProps = state => ({
+  sprints: state.commonData.sprintList.data,
+});
 
-export default SprintDropDown;
+const mapDispatchToProps = {};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SprintDropDown);

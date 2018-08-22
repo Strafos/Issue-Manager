@@ -1,14 +1,6 @@
 import React, { Component } from "react";
 import "./TodoList.css";
-import {
-  Menu,
-  Container,
-  Icon,
-  Input,
-  Checkbox,
-  Divider,
-  Segment,
-} from "semantic-ui-react";
+import { Menu, Input, Checkbox, Segment } from "semantic-ui-react";
 
 import "react-datepicker/dist/react-datepicker.css";
 
