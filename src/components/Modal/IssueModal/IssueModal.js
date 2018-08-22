@@ -27,11 +27,20 @@ class IssueModal extends Component {
     notes: "",
   };
 
-  componentWillReceiveProps(nextProps) {
-    const { selectedSprint } = nextProps;
+  componentWillMount() {
+    const { selectedSprint } = this.props;
     this.setState({
       sprintId: selectedSprint && selectedSprint.id,
     });
+  }
+
+  componentDidUpdate(prevProps) {
+    const { selectedSprint } = this.props;
+    if (selectedSprint != prevProps.selectedSprint) {
+      this.setState({
+        sprintId: selectedSprint && selectedSprint.id,
+      });
+    }
   }
 
   handleOpen = () =>
@@ -99,7 +108,7 @@ class IssueModal extends Component {
   render() {
     const { modalOpen, sprintId } = this.state;
 
-    const { sprints, projects } = this.props;
+    const { projects } = this.props;
 
     return (
       <Modal
@@ -127,7 +136,6 @@ class IssueModal extends Component {
               <label>Sprint</label>
               <SprintDropDown
                 value={sprintId}
-                sprints={sprints}
                 onChange={this.handleSprintSelect}
               />
             </Form.Field>
@@ -163,7 +171,9 @@ class IssueModal extends Component {
   }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  selectedSprint: state.commonData.sprint.data && state.commonData.sprint.data,
+});
 
 const mapDispatchToProps = {
   createIssue: CommonActions.createIssue,

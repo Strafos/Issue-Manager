@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
 import "./SprintMenu.css";
-import { Menu, Loader, Button } from "semantic-ui-react";
+import { Menu, Loader } from "semantic-ui-react";
 
 import * as CommonActions from "../../commonActions";
 
@@ -49,9 +49,11 @@ class SprintMenu extends Component {
             <Menu.Header>Recent Sprints</Menu.Header>
 
             <Menu.Menu>
-              {sprintList
-                .slice(len - 4, len)
-                .map(sprint => this.renderSprints(sprint))}
+              {len > 4
+                ? sprintList
+                    .slice(len - 4, len)
+                    .map(sprint => this.renderSprints(sprint))
+                : sprintList.map(sprint => this.renderSprints(sprint))}
             </Menu.Menu>
           </Menu.Item>
         </Menu>

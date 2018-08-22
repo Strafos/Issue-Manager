@@ -112,11 +112,7 @@ class App extends Component {
                   <Button.Group color="black" vertical>
                     <SprintModal sprints={sprints} />
                     <ProjectModal sprints={sprints} projects={projects} />
-                    <IssueModal
-                      projects={projects}
-                      sprints={sprints}
-                      selectedSprint={selectedSprint}
-                    />
+                    <IssueModal projects={projects} sprints={sprints} />
                   </Button.Group>
                 </Grid.Row>
                 <br />
