@@ -70,18 +70,18 @@ class IssueDisplay extends Component {
         totalTimeEstimate:
           issues &&
           issues.length > 0 &&
-          issues.map(i => i.time_estimate).reduce((a, b) => a + b),
+          issues.map(i => i.time_estimate).reduce((a, b) => a + b, 0),
         totalTimeSpent:
           issues &&
           issues.length > 0 &&
           issues
             .filter(i => !i.bad)
             .map(i => i.time_spent)
-            .reduce((a, b) => a + b),
+            .reduce((a, b) => a + b, 0),
         totalTimeRemaining:
           issues &&
           issues.length > 0 &&
-          issues.map(i => i.time_remaining).reduce((a, b) => a + b),
+          issues.map(i => i.time_remaining).reduce((a, b) => a + b, 0),
       },
       this.handleStatusSort
     );

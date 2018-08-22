@@ -47,7 +47,7 @@ class SprintGraphDisplay extends PureComponent {
     this.setState({
       totalTimeEstimate:
         issueList.length > 0 &&
-        issueList.map(i => i.time_estimate).reduce((a, b) => a + b),
+        issueList.map(i => i.time_estimate).reduce((a, b) => a + b, 0),
       issueList,
     });
   };
