@@ -24,5 +24,4 @@ yarn-error.log*
 .vscode/
 
 forest-themes/
-src/semantic*
 db/

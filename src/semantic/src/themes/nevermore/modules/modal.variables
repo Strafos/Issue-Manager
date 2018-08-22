@@ -1,0 +1,6 @@
+@contentBackground: @pageBackground;
+@headerBorder: @gray-dark;
+@headerColor: #fff;
+@background: @pageBackground;
+@headerBackground: @pageBackground;
+@actionBackground: @pageBackground;

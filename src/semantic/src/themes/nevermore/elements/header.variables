@@ -1,0 +1,7 @@
+@textColor: #fff;
+@subHeaderColor: @gray-light;
+
+@blockBackground: @gray-base;
+@blockBorder: @blockBorderWidth solid @gray-dark;
+@attachedBackground: @gray-base;
+@attachedBorder: @blockBorderWidth solid @gray-dark;
