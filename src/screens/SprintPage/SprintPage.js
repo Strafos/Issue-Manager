@@ -188,7 +188,7 @@ class SprintDisplay extends Component {
       isSprintNoteSaving,
       isSaving,
     } = this.state;
-    const { projects, sprints, issueList, selectedSprint } = this.props;
+    const { projectList, sprintList, issueList, selectedSprint } = this.props;
 
     if (!selectedSprint) {
       return <Loader active inline />;
@@ -208,8 +208,8 @@ class SprintDisplay extends Component {
         <IssueDisplay
           issueList={issueList}
           selectedSprint={selectedSprint}
-          projects={projects}
-          sprints={sprints}
+          projects={projectList}
+          sprints={sprintList}
           issues={issueList}
           saving={this.setSaving}
         />
@@ -352,6 +352,7 @@ const mapStateToProps = state => ({
   sprintList: state.commonData.sprintList.data,
   issueList: state.commonData.sprintIssues.data,
   selectedSprint: state.commonData.sprint.data && state.commonData.sprint.data,
+  projectList: state.commonData.projects.data || [],
 });
 
 const mapDispatchToProps = {
