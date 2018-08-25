@@ -1,13 +1,6 @@
 .App {
   text-align: center;
-  padding: 20px;
-}
-
-.App-header {
-  background-color: #222;
-  height: 20;
-  padding: 20px;
-  color: white;
+  padding: 10px;
 }
 
 .ModalForm {

@@ -144,6 +144,20 @@ class IssueDisplay extends Component {
         return;
       }
 
+      if (clickedColumn === "project_id") {
+        this.setState({
+          sortByColumn: clickedColumn,
+          issueList: _.orderBy(
+            issueList,
+            [user => this.mapProjectId(user.project_id)],
+            ["desc"]
+          ),
+        });
+        return;
+      }
+
+      console.log(clickedColumn);
+      console.log(issueList);
       this.setState({
         sortByColumn: clickedColumn,
         issueList: _.orderBy(

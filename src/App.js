@@ -30,12 +30,6 @@ class App extends Component {
     showErrorMessage: false,
   };
 
-  handleSprintIndex = index => {
-    this.setState({
-      selectedSprint: this.state.sprints.find(sprint => sprint.id == index),
-    });
-  };
-
   handleSprintSelect = (event, { value }) => {
     this.setState({
       selectedSprint: this.state.sprints.find(sprint => sprint.id === value),

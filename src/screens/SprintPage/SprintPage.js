@@ -53,6 +53,11 @@ class SprintDisplay extends Component {
       this.props.getSprint(match.params.id);
       this.props.getSpentTimeLogs(match.params.id);
       this.props.getRemainingTimeLogs(match.params.id);
+
+      // Default to sprint notes when sprint changes
+      this.setState({
+        notes: null,
+      });
     }
   }
 
