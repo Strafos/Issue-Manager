@@ -1,5 +1,4 @@
 // Express server hosting API endpoints
-
 const express = require("express");
 const bodyParser = require("body-parser");
 const editJsonFile = require("edit-json-file");
