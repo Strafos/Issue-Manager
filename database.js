@@ -1,7 +1,9 @@
 const path = require("path");
 const sqlite3 = require("sqlite3").verbose();
+const editJsonFile = require("edit-json-file");
 
-const build = "prod";
+const file = editJsonFile(`${__dirname}/config.json`);
+const build = file.get("build");
 
 let dbFile;
 if (build === "dev") {

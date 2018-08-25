@@ -1,7 +1,7 @@
 // Express server hosting API endpoints
-
 const express = require("express");
 const bodyParser = require("body-parser");
+const editJsonFile = require("edit-json-file");
 
 const db = require("./database");
 const app = express();
@@ -245,8 +245,6 @@ app.get("/Projects", (req, res) => {
 app.put("/Sprint/:id/notes", (req, res) => {
   const { notes } = req.body;
   const query = "UPDATE sprints SET notes=(?) where id=(?)";
-  // const query = `UPDATE sprints SET notes='${notes}' where id=${req.params.id}`;
-  console.log(query);
   db.insert(query, [notes, req.params.id])
     .then(() => {
       res.send({ status: "Success" });
@@ -383,6 +381,13 @@ app.post("/Todos/:id", (req, res) => {
     .catch(err => {
       console.log(err);
     });
+});
+
+// Settings
+// search: settings
+app.get("/Settings", (req, res) => {
+  const file = editJsonFile(`${__dirname}/config.json`);
+  res.send(file.get());
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

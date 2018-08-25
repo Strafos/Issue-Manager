@@ -144,6 +144,18 @@ class IssueDisplay extends Component {
         return;
       }
 
+      if (clickedColumn === "project_id") {
+        this.setState({
+          sortByColumn: clickedColumn,
+          issueList: _.orderBy(
+            issueList,
+            [user => this.mapProjectId(user.project_id)],
+            ["desc"]
+          ),
+        });
+        return;
+      }
+
       this.setState({
         sortByColumn: clickedColumn,
         issueList: _.orderBy(
@@ -160,30 +172,6 @@ class IssueDisplay extends Component {
     this.setState({
       issueList: issueList.reverse(),
       direction: direction === "ascending" ? "descending" : "ascending",
-    });
-  };
-
-  // Resort after status is clicked. Not implementable currently because
-  // the state management is handled by the Status component
-  handleResort = () => {
-    const { sortByColumn, issueList } = this.state;
-    if (sortByColumn === "status") {
-      this.handleStatusSort();
-      return;
-    }
-
-    if (sortByColumn.includes("time")) {
-      this.setState({
-        sortByColumn: sortByColumn,
-        issueList: _.sortBy(issueList, [sortByColumn]).reverse(),
-        direction: "ascending",
-      });
-    }
-
-    this.setState({
-      sortByColumn: sortByColumn,
-      issueList: _.sortBy(issueList, [sortByColumn]),
-      direction: "descending",
     });
   };
 

@@ -18,6 +18,7 @@ class SprintDropDown extends Component {
 
   render() {
     const { sprints, onChange, simple, value } = this.props;
+
     return (
       <Dropdown
         placeholder="Select Sprint"
@@ -28,7 +29,9 @@ class SprintDropDown extends Component {
         onChange={onChange}
       >
         <Dropdown.Menu>
-          {sprints.map(sprint => this.renderItem(sprint))}
+          {sprints
+            .sort((a, b) => new Date(b.start_date) - new Date(a.start_date))
+            .map(sprint => this.renderItem(sprint))}
         </Dropdown.Menu>
       </Dropdown>
     );

@@ -22,6 +22,18 @@ const asyncSprintReducer = asyncStateReducer({
   [ActionTypes.FETCH_SPRINT_SUCCESS]: "complete",
 });
 
+const asyncProjectReducer = asyncStateReducer({
+  [ActionTypes.FETCH_PROJECTS_REQUEST]: "pending",
+  [ActionTypes.FETCH_PROJECTS_FAILURE]: "error",
+  [ActionTypes.FETCH_PROJECTS_SUCCESS]: "complete",
+});
+
+const asyncSettingReducer = asyncStateReducer({
+  [ActionTypes.FETCH_SETTINGS_REQUEST]: "pending",
+  [ActionTypes.FETCH_SETTINGS_FAILURE]: "error",
+  [ActionTypes.FETCH_SETTINGS_SUCCESS]: "complete",
+});
+
 const sprintListReducer = (state, action) => {
   switch (action.type) {
     case ActionTypes.CREATE_SPRINT_SUCCESS:
@@ -31,6 +43,13 @@ const sprintListReducer = (state, action) => {
       };
     default:
       return asyncSprintListReducer(state, action);
+  }
+};
+
+const projectListReducer = (state, action) => {
+  switch (action.type) {
+    default:
+      return asyncProjectReducer(state, action);
   }
 };
 
@@ -54,8 +73,17 @@ const issueListReducer = (state, action) => {
   }
 };
 
+const settingReducer = (state, action) => {
+  switch (action.type) {
+    default:
+      return asyncSettingReducer(state, action);
+  }
+};
+
 export default combineReducers({
   sprintList: sprintListReducer,
   sprintIssues: issueListReducer,
   sprint: asyncSprintReducer,
+  settings: settingReducer,
+  projects: projectListReducer,
 });

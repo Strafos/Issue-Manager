@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./IssuePage.css";
+import { connect } from "react-redux";
 import {
   Modal,
   Grid,
@@ -12,6 +12,8 @@ import {
   Header,
 } from "semantic-ui-react";
 import { Link } from "react-router-dom";
+
+import "./IssuePage.css";
 
 import StatusDisplay from "../../components/Status/StatusDisplay";
 import SprintDropDown from "../../components/SprintDropDown/SprintDropDown";
@@ -292,7 +294,7 @@ class IssueDisplay extends Component {
       showMessage,
       bad,
     } = this.state;
-    const { sprints, projects } = this.props;
+    const { sprintList, projectList } = this.props;
 
     return (
       <div>
@@ -337,7 +339,7 @@ class IssueDisplay extends Component {
             <label>Sprint</label>
             <SprintDropDown
               value={sprintId}
-              sprints={sprints}
+              sprints={sprintList}
               onChange={this.handleSprintSelect}
             />
           </Form.Field>
@@ -347,7 +349,7 @@ class IssueDisplay extends Component {
 
             <ProjectDropDown
               value={projectId}
-              projects={projects}
+              projects={projectList}
               onChange={this.handleProjectSelect}
             />
           </Form.Field>
@@ -460,4 +462,14 @@ class IssueDisplay extends Component {
   }
 }
 
-export default IssueDisplay;
+const mapStateToProps = state => ({
+  projectList: state.commonData.projects.data || [],
+  sprintList: state.commonData.sprintList.data,
+});
+
+const mapDispatchToProps = {};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(IssueDisplay);
