@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Loader } from "semantic-ui-react";
 import TimeAgo from "react-timeago";
+import { connect } from "react-redux";
 
 import { XYPlot, Hint, LineMarkSeries } from "react-vis";
 
@@ -74,17 +75,17 @@ class TimeSpentMiniGraph extends Component {
   };
 
   constructProjectedTimeSpent = () => {
-    const { sprint } = this.props;
+    const { sprint, weekdayHours, weekendHours } = this.props;
 
     const startDate = new Date(sprint.start_date);
     const dateMap = {
-      0: 35,
+      0: weekdayHours * 5 + weekendHours,
       1: 0,
-      2: 5,
-      3: 10,
-      4: 15,
-      5: 20,
-      6: 25,
+      2: weekdayHours,
+      3: weekdayHours * 2,
+      4: weekdayHours * 3,
+      5: weekdayHours * 4,
+      6: weekdayHours * 5,
     };
 
     const projection = [];
@@ -100,7 +101,7 @@ class TimeSpentMiniGraph extends Component {
     nextMonday.setDate(startDate.getDate() + 7);
     projection.push({
       x: nextMonday,
-      y: 45,
+      y: weekdayHours * 5 + weekendHours * 2,
     });
 
     this.setState({
@@ -192,4 +193,18 @@ class TimeSpentMiniGraph extends Component {
   }
 }
 
-export default TimeSpentMiniGraph;
+const mapStateToProps = state => ({
+  weekdayHours: state.commonData.settings.data
+    ? state.commonData.settings.data.weekdayHours
+    : 5,
+  weekendHours: state.commonData.settings.data
+    ? state.commonData.settings.data.weekendHours
+    : 10,
+});
+
+const mapDispatchToProps = {};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TimeSpentMiniGraph);
