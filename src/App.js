@@ -61,25 +61,22 @@ class App extends Component {
 
   componentDidMount() {
     this.props.getSettings();
+    this.props.getProjects();
 
-    getProjects().then(projects => {
-      this.setState({ projects });
-    });
+    // getSprints().then(sprints => {
+    //   this.setState({ sprints });
+    //   const path = window.location.pathname;
+    //   const pathRe = /\/(.*)\/(.*)/g;
+    //   const match = pathRe.exec(path);
 
-    getSprints().then(sprints => {
-      this.setState({ sprints });
-      const path = window.location.pathname;
-      const pathRe = /\/(.*)\/(.*)/g;
-      const match = pathRe.exec(path);
-
-      // } else (match && match[1] === "sprint") {
-      // If sprint is in the URL, then set selectedSprint
-      this.setState({
-        selectedSprint: match
-          ? sprints.find(sprint => sprint.id == match[2])
-          : this.getDefaultSprint(sprints),
-      });
-    });
+    //   // } else (match && match[1] === "sprint") {
+    //   // If sprint is in the URL, then set selectedSprint
+    //   this.setState({
+    //     selectedSprint: match
+    //       ? sprints.find(sprint => sprint.id == match[2])
+    //       : this.getDefaultSprint(sprints),
+    //   });
+    // });
   }
 
   // Calculate default sprint by getting the last Monday (unless today is Monday)
@@ -96,13 +93,13 @@ class App extends Component {
   };
 
   render() {
-    const { sprints, projects, selectedSprint } = this.state;
+    const { sprints, selectedSprint } = this.state;
+    const { projects } = this.props;
 
     return (
       <Router>
         <div className="App">
           <Grid columns={2} divided>
-            <Grid.Row />
             <Grid.Row>
               <Grid.Column width={3}>
                 <Grid.Row>
@@ -198,13 +195,18 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  projects: state.commonData.projects.data || [],
+});
 
 const mapDispatchToProps = {
   getSettings: CommonActions.getSettings,
+  getProjects: CommonActions.getProjects,
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(App);
+
+// export default App;

@@ -63,3 +63,13 @@ export const getSettings = () =>
     },
     API.getSettings
   )();
+
+export const getProjects = () =>
+  asyncActionCreator(
+    {
+      pending: ActionTypes.FETCH_PROJECTS_REQUEST,
+      complete: ActionTypes.FETCH_PROJECTS_SUCCESS,
+      error: ActionTypes.FETCH_PROJECTS_FAILURE,
+    },
+    API.getProjects
+  )();
