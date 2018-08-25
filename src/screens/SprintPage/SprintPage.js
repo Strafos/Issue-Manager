@@ -9,7 +9,6 @@ import {
   Form,
   TextArea,
   Header,
-  Progress,
   Container,
   Loader,
   Divider,
@@ -18,6 +17,7 @@ import {
 import GraphDisplay from "./GraphDisplay/GraphDisplay";
 import TimelogDisplay from "./TimelogDisplay/TimelogDisplay";
 import IssueDisplay from "./IssueDisplay/IssueDisplay";
+import ScratchpadDisplay from "./ScratchpadDisplay/ScratchpadDisplay";
 
 import * as CommonActions from "../../commonActions";
 
@@ -25,11 +25,10 @@ import { updateSprintNotes, updateSprintQuote } from "../../utils/api";
 
 class SprintDisplay extends Component {
   state = {
-    selectedSprint: null,
     issueList: [],
     displayTimelogs: false,
     displayGraphs: false,
-    displayIssues: true,
+    displayScratchpad: false,
     notes: "",
     quote: "",
     editQuote: false,
@@ -106,30 +105,6 @@ class SprintDisplay extends Component {
     });
   };
 
-  projectedProgress = () => {
-    const { selectedSprint } = this.state;
-    const now = new Date();
-    const sprintEnd = new Date(selectedSprint && selectedSprint.end_date);
-    const delta = sprintEnd - now;
-
-    // Sprint has past, so set projected to 100%
-    if (delta / 1000 / 3600 / 24 < 0) {
-      return 100;
-    }
-
-    // 5hrs per weekday, 10 hours per weekend
-    const dateMap = {
-      1: 5,
-      2: 10,
-      3: 15,
-      4: 20,
-      5: 25,
-      6: 35,
-      0: 45,
-    };
-    return Math.round((dateMap[new Date().getDay()] / 45) * 100);
-  };
-
   toggleEditSprintQuote = () => {
     this.setState({
       editQuote: !this.state.editQuote,
@@ -168,6 +143,7 @@ class SprintDisplay extends Component {
       quote,
       displayTimelogs,
       displayGraphs,
+      displayScratchpad,
       isSprintNoteSaving,
       isSaving,
     } = this.state;
@@ -186,6 +162,13 @@ class SprintDisplay extends Component {
       display = (
         <GraphDisplay selectedSprint={selectedSprint} issueList={issueList} />
       );
+    } else if (displayScratchpad) {
+      display = (
+        <ScratchpadDisplay
+          selectedSprint={selectedSprint}
+          issueList={issueList}
+        />
+      );
     } else {
       display = (
         <IssueDisplay
@@ -202,7 +185,7 @@ class SprintDisplay extends Component {
     return (
       <div>
         <Grid verticalAlign="top" columns={2} stretched>
-          <Grid.Column textAlign="left" width={4}>
+          <Grid.Column textAlign="left" width={5}>
             <Grid.Row>
               <Header floated="left" as="h1">
                 {selectedSprint && selectedSprint.name}
@@ -232,7 +215,7 @@ class SprintDisplay extends Component {
                     </div>
                   ) : (
                     <Container onClick={this.toggleEditSprintQuote}>
-                      {quote || selectedSprint.quote || "you idiot"}
+                      {quote || selectedSprint.quote || "no quote"}
                     </Container>
                   )}
                 </Header.Subheader>
@@ -245,6 +228,7 @@ class SprintDisplay extends Component {
                   this.setState({
                     displayGraphs: false,
                     displayTimelogs: false,
+                    displayScratchpad: false,
                   })
                 }
                 color="black"
@@ -254,7 +238,11 @@ class SprintDisplay extends Component {
               </Button>
               <Button
                 onClick={() =>
-                  this.setState({ displayGraphs: true, displayTimelogs: false })
+                  this.setState({
+                    displayGraphs: true,
+                    displayTimelogs: false,
+                    displayScratchpad: false,
+                  })
                 }
                 color="black"
                 floated="left"
@@ -263,69 +251,66 @@ class SprintDisplay extends Component {
               </Button>
               <Button
                 onClick={() =>
-                  this.setState({ displayGraphs: false, displayTimelogs: true })
+                  this.setState({
+                    displayGraphs: false,
+                    displayTimelogs: true,
+                    displayScratchpad: false,
+                  })
                 }
                 color="black"
                 floated="left"
               >
                 {"Timelogs"}
               </Button>
+              <Button
+                onClick={() =>
+                  this.setState({
+                    displayGraphs: false,
+                    displayTimelogs: false,
+                    displayScratchpad: true,
+                  })
+                }
+                color="black"
+                floated="left"
+              >
+                {"Scratchpad"}
+              </Button>
             </Grid.Row>
           </Grid.Column>
-          <Grid.Column width={12}>
-            <Container>
-              {/* <Progress
-                percent={Math.round((totalTimeSpent / 45) * 100)}
-                progress
-                color="black"
-                size="small"
-                label="Time Spent"
-              />
-              <Progress
-                percent={Math.round(
-                  (1 - totalTimeRemaining / totalTimeEstimate) * 100
-                )}
-                progress
-                color="black"
-                label="Task Progress"
-                size="small"
-              />
-              <Progress
-                percent={this.projectedProgress()}
-                progress
-                color="black"
-                size="small"
-                label="Projected"
-              /> */}
-            </Container>
+          <Grid.Column width={11}>
+            <Container />
           </Grid.Column>
         </Grid>
 
         {display}
 
-        <Form>
-          <Form.Field control={this.renderTextArea} label="Sprint Notes" />
-        </Form>
-        <br />
-        <div>
-          <Button
-            floated="left"
-            color="red"
-            onClick={this.handleSaveSprintNotes}
-          >
-            Save notes
-          </Button>
-          <Icon
-            style={{
-              position: "relative",
-              left: "10px",
-              top: "8px",
-              float: "left",
-            }}
-            loading={isSprintNoteSaving}
-            name={isSprintNoteSaving ? "redo" : "check"}
-          />
-        </div>
+        {!displayScratchpad && (
+          <div>
+            <Form>
+              <Form.Field control={this.renderTextArea} label="Sprint Notes" />
+            </Form>
+            <br />
+            <div>
+              <Button
+                floated="left"
+                color="red"
+                onClick={this.handleSaveSprintNotes}
+              >
+                Save notes
+              </Button>
+              <Icon
+                style={{
+                  position: "relative",
+                  left: "10px",
+                  top: "8px",
+                  float: "left",
+                }}
+                loading={isSprintNoteSaving}
+                name={isSprintNoteSaving ? "redo" : "check"}
+              />
+            </div>
+          </div>
+        )}
       </div>
     );
   }
