@@ -54,7 +54,11 @@ class TimelogDisplay extends Component {
           </Table.HeaderCell>
         </Table.Row>
       </Table.Header>
-      <Table.Body>{logs.map(this.renderLog)}</Table.Body>
+      <Table.Body>
+        {logs
+          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+          .map(this.renderLog)}
+      </Table.Body>
     </Table>
   );
 
