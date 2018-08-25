@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import "./App.css";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-
 import { Message, Button, Grid } from "semantic-ui-react";
-import "react-datepicker/dist/react-datepicker.css";
+import { connect } from "react-redux";
 
+import "react-datepicker/dist/react-datepicker.css";
 import "./semantic/dist/semantic.min.css";
+import "./App.css";
 
 import IssueModal from "./components/Modal/IssueModal/IssueModal";
 import ProjectModal from "./components/Modal/ProjectModal/ProjectModal";
@@ -17,6 +17,8 @@ import TodoList from "./components/TodoList/TodoList";
 import SprintPage from "./screens/SprintPage/SprintPage";
 import IssuePage from "./screens/IssuePage/IssuePage";
 import TimeSpentMiniGraph from "./screens/SprintPage/GraphDisplay/Graphs/TimeSpentMiniGraph";
+
+import * as CommonActions from "./commonActions";
 
 import { getSprints, getProjects } from "./utils/api";
 
@@ -58,6 +60,8 @@ class App extends Component {
   };
 
   componentDidMount() {
+    this.props.getSettings();
+
     getProjects().then(projects => {
       this.setState({ projects });
     });
@@ -194,4 +198,13 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = {
+  getSettings: CommonActions.getSettings,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);

@@ -53,3 +53,13 @@ export const createSprint = requestObj =>
     },
     API.createSprint
   )(requestObj);
+
+export const getSettings = () =>
+  asyncActionCreator(
+    {
+      pending: ActionTypes.FETCH_SETTINGS_REQUEST,
+      complete: ActionTypes.FETCH_SETTINGS_SUCCESS,
+      error: ActionTypes.FETCH_SETTINGS_FAILURE,
+    },
+    API.getSettings
+  )();

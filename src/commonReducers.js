@@ -22,6 +22,12 @@ const asyncSprintReducer = asyncStateReducer({
   [ActionTypes.FETCH_SPRINT_SUCCESS]: "complete",
 });
 
+const asyncSettingReducer = asyncStateReducer({
+  [ActionTypes.FETCH_SETTINGS_REQUEST]: "pending",
+  [ActionTypes.FETCH_SETTINGS_FAILURE]: "error",
+  [ActionTypes.FETCH_SETTINGS_SUCCESS]: "complete",
+});
+
 const sprintListReducer = (state, action) => {
   switch (action.type) {
     case ActionTypes.CREATE_SPRINT_SUCCESS:
@@ -54,8 +60,16 @@ const issueListReducer = (state, action) => {
   }
 };
 
+const settingReducer = (state, action) => {
+  switch (action.type) {
+    default:
+      return asyncSettingReducer(state, action);
+  }
+};
+
 export default combineReducers({
   sprintList: sprintListReducer,
   sprintIssues: issueListReducer,
   sprint: asyncSprintReducer,
+  settings: settingReducer,
 });
