@@ -122,7 +122,9 @@ class TimeSpentMiniGraph extends Component {
       );
     }
 
-    const lastPoint = timeSpentData[timeSpentData.length - 2];
+    const lastPoint =
+      timeSpentData[timeSpentData.length - 2] ||
+      timeSpentData[timeSpentData.length - 1];
 
     return (
       <div>
@@ -181,7 +183,6 @@ class TimeSpentMiniGraph extends Component {
                   hoveredNode.x.toLocaleTimeString() +
                   " on " +
                   hoveredNode.x.toDateString()}
-                {/* <TimeAgo date={hoveredNode.x} /> */}
               </div>
             </Hint>
           )}
