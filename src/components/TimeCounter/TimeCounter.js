@@ -48,8 +48,8 @@ class TimeCounter extends Component {
   // Click from an icon
   handleIconClick = () => {
     const { issueId, inc, stat, time, timeDeltaSetting } = this.props;
-    let newTime = inc ? time + 1 : time - 1;
-    // let newTime = inc ? time + timeDeltaSetting : time - timeDeltaSetting;
+    // let newTime = inc ? time + 1 : time - 1;
+    let newTime = inc ? time + timeDeltaSetting : time - timeDeltaSetting;
     newTime = newTime < 0 ? 0 : newTime;
     const delta = newTime - time;
 
@@ -155,7 +155,6 @@ const mapStateToProps = state => ({
   timeDeltaSetting: state.commonData.settings.data
     ? state.commonData.settings.data.timeDelta
     : 1,
-  // timeDeltaSetting: state.commonData.settings.data.timeDelta || 1,
 });
 
 const mapDispatchToProps = {
