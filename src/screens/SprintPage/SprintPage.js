@@ -20,7 +20,6 @@ import TimelogDisplay from "./TimelogDisplay/TimelogDisplay";
 import IssueDisplay from "./IssueDisplay/IssueDisplay";
 
 import * as CommonActions from "../../commonActions";
-import * as Actions from "./sprintPageActions";
 
 import { updateSprintNotes, updateSprintQuote } from "../../utils/api";
 
@@ -42,8 +41,6 @@ class SprintDisplay extends Component {
     const { match } = this.props;
     this.props.getSprintIssues(match.params.id);
     this.props.getSprint(match.params.id);
-    this.props.getSpentTimeLogs(match.params.id);
-    this.props.getRemainingTimeLogs(match.params.id);
   }
 
   componentDidUpdate(prevProps) {
@@ -51,8 +48,6 @@ class SprintDisplay extends Component {
     if (prevProps.match.params.id !== match.params.id) {
       this.props.getSprintIssues(match.params.id);
       this.props.getSprint(match.params.id);
-      this.props.getSpentTimeLogs(match.params.id);
-      this.props.getRemainingTimeLogs(match.params.id);
 
       // Default to sprint notes when sprint changes
       this.setState({
@@ -60,18 +55,6 @@ class SprintDisplay extends Component {
       });
     }
   }
-
-  getDefaultSprint = sprints => {
-    const d = new Date();
-    if (d.getDay() !== 1) {
-      // Get last monday unless today is Monday
-      d.setDate(d.getDate() + ((1 + 7 - d.getDay()) % 7) - 7);
-    }
-
-    const options = { month: "2-digit", day: "2-digit", year: "2-digit" };
-    const lastMonday = d.toLocaleDateString("en-US", options);
-    return sprints.find(sprint => sprint.start_date === lastMonday);
-  };
 
   handleSprintNotes = (event, { value }) => {
     this.setState({
@@ -358,8 +341,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   getSprintIssues: CommonActions.getSprintIssues,
   getSprint: CommonActions.getSprint,
-  getSpentTimeLogs: Actions.getTimeSpentLogs,
-  getRemainingTimeLogs: Actions.getTimeRemainingLogs,
 };
 
 export default connect(

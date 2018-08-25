@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Table, Header, Icon, Grid } from "semantic-ui-react";
+import { Button, Table, Header, Icon, Grid, Loader } from "semantic-ui-react";
 import TimeAgo from "react-timeago";
 import { connect } from "react-redux";
 
@@ -9,6 +9,20 @@ class TimelogDisplay extends Component {
   handleDeleteLog = id => {
     this.props.deleteLog(id);
   };
+
+  componentDidMount() {
+    const { sprintId } = this.props;
+    this.props.getSpentTimeLogs(sprintId);
+    this.props.getRemainingTimeLogs(sprintId);
+  }
+
+  componentDidUpdate(prevProps) {
+    const { sprintId } = this.props;
+    if (prevProps.sprintId !== sprintId) {
+      this.props.getSprintIssues(sprintId);
+      this.props.getSprint(sprintId);
+    }
+  }
 
   renderLog = log => {
     const { id, time_delta, name, created_at, total } = log;
@@ -65,6 +79,10 @@ class TimelogDisplay extends Component {
   render() {
     const { spentLogs, remainLogs } = this.props;
 
+    if (!spentLogs || !remainLogs) {
+      return <Loader active inline />;
+    }
+
     return (
       <Grid divided columns={2}>
         <Grid.Column>
@@ -86,6 +104,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
+  getSpentTimeLogs: Actions.getTimeSpentLogs,
+  getRemainingTimeLogs: Actions.getTimeRemainingLogs,
   deleteLog: Actions.deleteLog,
 };
 

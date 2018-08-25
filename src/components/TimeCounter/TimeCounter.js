@@ -48,7 +48,6 @@ class TimeCounter extends Component {
   // Click from an icon
   handleIconClick = () => {
     const { issueId, inc, stat, time, timeDeltaSetting } = this.props;
-    // let newTime = inc ? time + 1 : time - 1;
     let newTime = inc ? time + timeDeltaSetting : time - timeDeltaSetting;
     newTime = newTime < 0 ? 0 : newTime;
     const delta = newTime - time;
