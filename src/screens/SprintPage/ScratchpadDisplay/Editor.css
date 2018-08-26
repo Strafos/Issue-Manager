@@ -1,0 +1,7 @@
+::selection {
+  background: #ffb7b7; /* WebKit/Blink Browsers */
+}
+
+.ql-editor {
+  font-size: 18px;
+}
