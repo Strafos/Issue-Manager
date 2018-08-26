@@ -34,9 +34,6 @@ class Editor extends Component {
     const { data } = this.props;
     this.saveTimer = setTimeout(this.handleSave, saveTime);
     if (prevContent !== content) {
-      console.log(data.id);
-      console.log(content);
-      console.log(prevContent);
       this.props.setScratchpad(data.id, content);
       this.setState({ prevContent: content });
     }
