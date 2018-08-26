@@ -464,7 +464,7 @@ class IssueDisplay extends Component {
 
 const mapStateToProps = state => ({
   projectList: state.commonData.projects.data || [],
-  sprintList: state.commonData.sprintList.data,
+  sprintList: state.commonData.sprintList.data || [],
 });
 
 const mapDispatchToProps = {};
