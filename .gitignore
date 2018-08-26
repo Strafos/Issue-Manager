@@ -21,8 +21,8 @@ yarn-debug.log*
 yarn-error.log*
 
 /db
-/backup_db
+/prod_db
 .vscode/
 
 forest-themes/
-db/
+/config.json
