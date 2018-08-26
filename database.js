@@ -9,7 +9,7 @@ let dbFile;
 if (build === "dev") {
   dbFile = path.normalize(path.join(__dirname, "/db/", "dev.db"));
 } else if (build === "prod") {
-  dbFile = path.normalize(path.join(__dirname, "/db/", "zim.db"));
+  dbFile = path.normalize(path.join(__dirname, "/prod_db/", "zim.db"));
 }
 
 let db = new sqlite3.Database(dbFile, sqlite3.OPEN_READWRITE, err => {
