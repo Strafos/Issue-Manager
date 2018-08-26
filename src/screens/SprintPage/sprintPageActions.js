@@ -33,3 +33,23 @@ export const deleteLog = id =>
     },
     API.deleteTimeLog
   )(id);
+
+export const getScratchpads = () =>
+  asyncActionCreator(
+    {
+      pending: ActionTypes.FETCH_SCRATCHPADS_REQUEST,
+      complete: ActionTypes.FETCH_SCRATCHPADS_SUCCESS,
+      error: ActionTypes.FETCH_SCRATCHPADS_FAILURE,
+    },
+    API.getScratchpads
+  )();
+
+export const setScratchpad = (id, content) =>
+  asyncActionCreator(
+    {
+      pending: ActionTypes.SET_SCRATCHPAD_REQUEST,
+      complete: ActionTypes.SET_SCRATCHPAD_SUCCESS,
+      error: ActionTypes.SET_SCRATCHPAD_FAILURE,
+    },
+    API.setScratchpad
+  )(id, content);

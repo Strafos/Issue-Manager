@@ -1,18 +1,26 @@
 import React, { Component } from "react";
 import ReactQuill, { Quill } from "react-quill"; // ES6
+import { connect } from "react-redux";
+import { Loader, Segment } from "semantic-ui-react";
 
 import "./Editor.css";
 
-import { Loader, Segment } from "semantic-ui-react";
+import * as Actions from "../sprintPageActions";
 
 import "react-quill/dist/quill.bubble.css"; // ES6
+
+const saveTime = 2000;
 
 class Editor extends Component {
   constructor(props) {
     super(props);
-    this.state = { content: "" };
+    const { data } = props;
+    this.state = {
+      content: data ? data.content : "",
+      prevContent: data ? data.content : "",
+    };
     this.handleContentChange = this.handleContentChange.bind(this);
-    this.saveTimer = setInterval(this.handleSave, 3000);
+    this.saveTimer = setTimeout(this.handleSave, saveTime);
   }
 
   componentDidMount() {}
@@ -22,13 +30,22 @@ class Editor extends Component {
   _loadData = selectedSprint => {};
 
   handleSave = () => {
-    const { content } = this.state;
-    console.log(content);
-    this.saveTimer = setInterval(this.handleSave, 3000);
+    const { content, prevContent } = this.state;
+    const { data } = this.props;
+    this.saveTimer = setTimeout(this.handleSave, saveTime);
+    if (prevContent !== content) {
+      console.log(data.id);
+      console.log(content);
+      console.log(prevContent);
+      this.props.setScratchpad(data.id, content);
+      this.setState({ prevContent: content });
+    }
   };
 
   handleContentChange(content, delta, source, editor) {
+    clearTimeout(this.saveTimer);
     this.setState({ content });
+    this.saveTimer = setTimeout(this.handleSave, saveTime);
   }
 
   render() {
@@ -53,4 +70,13 @@ class Editor extends Component {
   }
 }
 
-export default Editor;
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = {
+  setScratchpad: Actions.setScratchpad,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Editor);

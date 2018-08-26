@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import { Loader, Grid } from "semantic-ui-react";
+import { connect } from "react-redux";
 
 import Editor from "./Editor";
+
+import * as Actions from "../sprintPageActions";
 
 class ScratchpadDisplay extends Component {
   state = {};
@@ -18,26 +21,39 @@ class ScratchpadDisplay extends Component {
     }
   }
 
-  _loadData = selectedSprint => {};
+  _loadData = selectedSprint => {
+    this.props.getScratchpads();
+  };
 
   render() {
-    const { selectedSprint } = this.props;
+    const { scratchpads } = this.props;
 
-    if (!selectedSprint) {
+    if (!scratchpads) {
       return <Loader active inline />;
     }
 
     return (
       <Grid divided columns={2}>
         <Grid.Column>
-          <Editor />
+          <Editor data={scratchpads[0]} />
         </Grid.Column>
         <Grid.Column>
-          <Editor />
+          <Editor data={scratchpads[1]} />
         </Grid.Column>
       </Grid>
     );
   }
 }
 
-export default ScratchpadDisplay;
+const mapStateToProps = state => ({
+  scratchpads: state.sprintPage.scratchpads.data,
+});
+
+const mapDispatchToProps = {
+  getScratchpads: Actions.getScratchpads,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ScratchpadDisplay);

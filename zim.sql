@@ -63,3 +63,11 @@ CREATE TABLE todos (
  name text NOT NULL,
  done integer DEFAULT 0
 );
+
+CREATE TABLE scratchpads (
+ id integer PRIMARY KEY AUTOINCREMENT,
+ content text NOT NULL
+);
+
+INSERT INTO scratchpads VALUES(null, '');
+INSERT INTO scratchpads VALUES(null, '');
