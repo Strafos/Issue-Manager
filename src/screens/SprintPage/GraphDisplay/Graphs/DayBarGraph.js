@@ -43,15 +43,17 @@ class DayBarGraph extends PureComponent {
       .forEach(log => {
         if (timeSpentMap[log.issue_id]) {
           timeSpentMap[log.issue_id] =
-            timeSpentMap[log.issue_id] + parseInt(log.time_delta, 10);
+            timeSpentMap[log.issue_id] + parseFloat(log.time_delta, 10);
         } else {
-          timeSpentMap[log.issue_id] = parseInt(log.time_delta, 10);
+          timeSpentMap[log.issue_id] = parseFloat(log.time_delta, 10);
         }
       });
 
     const timeSpentData = [];
     Object.keys(timeSpentMap).forEach(key => {
-      const mappedIssue = issues.find(issue => issue.id === parseInt(key, 10));
+      const mappedIssue = issues.find(
+        issue => issue.id === parseFloat(key, 10)
+      );
       mappedIssue &&
         timeSpentData.push({ y: mappedIssue.name, x: timeSpentMap[key] });
     });
