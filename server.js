@@ -6,7 +6,7 @@ const editJsonFile = require("edit-json-file");
 const db = require("./database");
 const app = express();
 app.use(bodyParser.json());
-const port = process.env.PORT || 5001;
+const port = process.env.PORT || 5000;
 
 // Create new sprint
 // search: createSprint

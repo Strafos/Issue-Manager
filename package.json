@@ -13,6 +13,7 @@
     "moment": "^2.22.2",
     "orama": "^2.0.4",
     "prettier": "^1.13.7",
+    "rc-animate": "^2.4.4",
     "rc-time-picker": "^3.4.0",
     "react": "^16.4.1",
     "react-datepicker": "^1.5.0",
@@ -30,7 +31,7 @@
     "semantic-ui-react": "^0.81.3",
     "sqlite3": "^4.0.1"
   },
-  "proxy": "http://localhost:5001/",
+  "proxy": "http://localhost:5000/",
   "scripts": {
     "build-semantic": "cd src/semantic && gulp build-css build-assets",
     "watch-semantic": "cd src/semantic && npm run build-semantic && gulp watch",
