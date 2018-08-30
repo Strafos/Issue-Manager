@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import "./IssueModal.css";
+import ReactDatePicker from "react-datepicker";
+import TimePicker from "rc-time-picker";
+import moment from "moment";
+
 import {
-  TextArea,
   Container,
-  Icon,
   Button,
   Modal,
   Input,
@@ -12,148 +13,148 @@ import {
 } from "semantic-ui-react";
 import { connect } from "react-redux";
 
-import * as CommonActions from "../../../commonActions";
+import "react-datepicker/dist/react-datepicker.css";
+import "rc-time-picker/assets/index.css";
 
-import ProjectDropDown from "../../ProjectDropDown/ProjectDropDown";
-import SprintDropDown from "./SprintDropDown";
+import "./EventModal.css";
 
-class IssueModal extends Component {
+class EventModal extends Component {
   state = {
-    name: "",
-    timeEstimate: 0,
-    projectId: 0,
-    sprintId: 0,
+    startDate: null,
+    endDate: null,
+    title: "",
     modalOpen: false,
-    notes: "",
+    isRepeated: false,
+    weeksRepeated: 0,
   };
 
   componentWillMount() {
-    const { selectedSprint } = this.props;
-    this.setState({
-      sprintId: selectedSprint && selectedSprint.id,
-    });
+    const { modalOpen } = this.props;
+    this.setState({ modalOpen });
   }
 
   componentDidUpdate(prevProps) {
-    const { selectedSprint } = this.props;
-    if (selectedSprint != prevProps.selectedSprint) {
-      this.setState({
-        sprintId: selectedSprint && selectedSprint.id,
-      });
+    const { modalOpen } = this.props;
+    const modalOpenState = this.state.modalOpen;
+    if (modalOpen !== modalOpenState) {
+      this.setState({ modalOpen });
     }
   }
 
-  handleOpen = () =>
+  handleTitle = (event, { value }) => {
     this.setState({
-      modalOpen: true,
-    });
-
-  handleClose = () =>
-    this.setState({
-      modalOpen: false,
-    });
-
-  handleName = (event, { value }) => {
-    this.setState({
-      name: value,
+      title: value,
     });
   };
 
-  handleTime = (event, { value }) => {
+  handleRepeat = (event, { value }) => {
     this.setState({
-      timeEstimate: value,
-    });
-  };
-
-  handleSprintSelect = (event, { value }) => {
-    this.setState({
-      sprintId: value,
-    });
-  };
-
-  handleProjectSelect = (event, { value }) => {
-    this.setState({
-      projectId: value,
-    });
-  };
-
-  handleNotes = (event, { value }) => {
-    this.setState({
-      notes: value,
+      weeksRepeated: value,
     });
   };
 
   handleValidate = () => {
-    const { name, timeEstimate, sprintId } = this.state;
-    return name.length === 0 || timeEstimate === 0 || sprintId === 0;
+    const { title } = this.state;
+    return title.length === 0;
   };
 
   handleSubmit = () => {
-    const { sprintId, name, timeEstimate, projectId, notes } = this.state;
-    const requestObj = {
-      sprintId,
-      name,
-      timeSpent: 0,
-      timeEstimate,
-      timeRemaining: timeEstimate,
-      status: "In queue", //In queue
-      blocked: 0, // not blocked
-      projectId,
-      notes,
-    };
-    this.props.createIssue(requestObj);
-    this.handleClose();
+    const { onModalClose, createEvent } = this.props;
+    const { title, startDate, endDate, isRepeated, weeksRepeated } = this.state;
+    const eventList = [
+      {
+        title,
+        start: startDate.format("MM/DD/YY"),
+        // end: endDate.format("MM/DD/YY"),
+        allDay: true,
+      },
+    ];
+    if (isRepeated) {
+      for (let i = 1; i < parseInt(weeksRepeated, 10); i++) {
+        startDate.add(7, "days");
+        const eventObj = {
+          title,
+          start: startDate.format("MM/DD/YY"),
+          allDay: true,
+        };
+        eventList.push(eventObj);
+      }
+    }
+    console.log(eventList);
+
+    createEvent(eventList);
+
+    onModalClose();
+  };
+
+  handleChangeStartDate = date => {
+    this.setState({
+      startDate: date,
+    });
+  };
+
+  handleChangeEndDate = date => {
+    this.setState({
+      endDate: date,
+    });
   };
 
   render() {
-    const { modalOpen, sprintId } = this.state;
-
-    const { projects } = this.props;
+    const { modalOpen, startDate, endDate, isRepeated } = this.state;
+    const { onModalClose } = this.props;
 
     return (
       <Modal
         size="mini"
         closeIcon
         centered
-        onClose={this.handleClose}
+        onClose={onModalClose}
         open={modalOpen}
-        trigger={
-          <Button icon labelPosition="left" onClick={this.handleOpen} primary>
-            <Icon color="red" name="plus" />
-            New issue
-          </Button>
-        }
-        className="Modal"
+        classTitle="Modal"
+        closeOnDimmerClick={false}
       >
-        <Modal.Header textAlign="left">Create Issue</Modal.Header>
         <Container textAlign="left">
           <Form>
             <Form.Field>
-              <label>Issue Name</label>
-              <Input size="tiny" type="text" onChange={this.handleName} />
+              <label>Event Title</label>
+              <Input size="tiny" type="text" onChange={this.handleTitle} />
             </Form.Field>
             <Form.Field>
-              <label>Sprint</label>
-              <SprintDropDown
-                value={sprintId}
-                onChange={this.handleSprintSelect}
+              <label>Start</label>
+              <ReactDatePicker
+                selected={startDate}
+                onChange={this.handleChangeStartDate}
+              />
+              <TimePicker
+                defaultValue={undefined}
+                showSecond={false}
+                minuteStep={15}
               />
             </Form.Field>
             <Form.Field>
-              <label>Time Est.</label>
-              <Input size="tiny" type="text" onChange={this.handleTime} />
-            </Form.Field>
-            <Form.Field>
-              <label>Project</label>
-              <ProjectDropDown
-                projects={projects}
-                onChange={this.handleProjectSelect}
+              <label>End</label>
+              <ReactDatePicker
+                selected={endDate}
+                onChange={this.handleChangeEndDate}
+              />
+              <TimePicker
+                defaultValue={undefined}
+                showSecond={false}
+                minuteStep={15}
+                onChange={this.handleChangeEndTime}
               />
             </Form.Field>
-            <Form.Field>
-              <label>Notes</label>
-              <TextArea onChange={this.handleNotes} />
-            </Form.Field>
+            <Form.Checkbox
+              label={"Repeated"}
+              onClick={() => this.setState({ isRepeated: !isRepeated })}
+              value={isRepeated}
+            />
+            {isRepeated && (
+              <Form.Field>
+                <label>Weeks Repeated</label>
+                <Input size="tiny" type="text" onChange={this.handleRepeat} />
+              </Form.Field>
+            )}
           </Form>
           <Divider />
           <Button
@@ -162,7 +163,7 @@ class IssueModal extends Component {
             style={this.padding}
             color="green"
           >
-            Create Issue
+            Create Event
           </Button>
         </Container>
         <Container textAlign="center" />
@@ -171,15 +172,11 @@ class IssueModal extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  selectedSprint: state.commonData.sprint.data && state.commonData.sprint.data,
-});
+const mapStateToProps = state => ({});
 
-const mapDispatchToProps = {
-  createIssue: CommonActions.createIssue,
-};
+const mapDispatchToProps = {};
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(IssueModal);
+)(EventModal);

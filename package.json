@@ -13,6 +13,7 @@
     "moment": "^2.22.2",
     "orama": "^2.0.4",
     "prettier": "^1.13.7",
+    "rc-time-picker": "^3.4.0",
     "react": "^16.4.1",
     "react-datepicker": "^1.5.0",
     "react-dom": "^16.4.2",

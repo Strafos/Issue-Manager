@@ -1,82 +1,57 @@
 import React, { Component } from "react";
+import { Segment } from "semantic-ui-react";
 
 import "./CalendarDisplay.css";
 
 import FullCalendar from "fullcalendar-reactwrapper";
 import "fullcalendar-reactwrapper/dist/css/fullcalendar.min.css";
+import EventModal from "../../../components/Modal/EventModal/EventModal";
 
 class CalendarDisplay extends Component {
   state = {
-    openModal: false,
-    events: [
-      {
-        title: "All Day Event",
-        start: "2017-05-01",
-      },
-      {
-        title: "Long Event",
-        start: "2017-05-07",
-        end: "2017-05-10",
-      },
-      {
-        id: 999,
-        title: "Repeating Event",
-        start: "2017-05-09T16:00:00",
-      },
-      {
-        id: 999,
-        title: "Repeating Event",
-        start: "2017-05-16T16:00:00",
-      },
-      {
-        title: "Conference",
-        start: "2017-05-11",
-        end: "2017-05-13",
-      },
-      {
-        title: "Meeting",
-        start: "2017-05-12T10:30:00",
-        end: "2017-05-12T12:30:00",
-      },
-      {
-        title: "Birthday Party",
-        start: "2017-05-13T07:00:00",
-      },
-      {
-        title: "Click for Google",
-        url: "http://google.com/",
-        start: "2017-05-28",
-      },
-    ],
+    modalOpen: false,
+    events: [],
   };
 
-  addEvent = () => {};
+  createEvent = newEvents => {
+    const { events } = this.state;
+    events.concat(newEvents);
+    this.setState({
+      events: events.concat(newEvents),
+    });
+  };
 
   render() {
+    const { modalOpen, events } = this.state;
+    console.log(events);
+
     return (
-      <div id="Calendar">
+      <Segment id="Calendar">
+        <EventModal
+          createEvent={this.createEvent}
+          onModalClose={() => this.setState({ modalOpen: false })}
+          modalOpen={modalOpen}
+        />
         <FullCalendar
           id="your-custom-ID"
           header={{
             left: "prev,next today createEvent",
             center: "title",
-            right: "basicWeek",
+            right: "month,basicWeek,basicDay",
           }}
           customButtons={{
             createEvent: {
               text: "New event",
-              click: () => this.setState({ openModal: true }),
+              click: () => this.setState({ modalOpen: true }),
             },
           }}
           height={800}
-          defaultView={"basicWeek"}
-          // defaultDate={"2017-05-12"}
           navLinks={true} // can click day/week names to navigate views
           editable={true}
           eventLimit={true} // allow "more" link when too many events
-          events={this.state.events}
+          events={events}
         />
-      </div>
+      </Segment>
     );
   }
 }

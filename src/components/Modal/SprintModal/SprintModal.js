@@ -66,6 +66,7 @@ class SprintModal extends Component {
       name,
       startDate: startDate.format("MM/DD/YY"),
       endDate: endDate.format("MM/DD/YY"),
+      allDay: true,
     };
     this.props.createSprint(requestObj);
     this.handleClose();
