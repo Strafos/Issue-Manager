@@ -12,10 +12,12 @@ import SprintDropDown from "../SprintDropDown/SprintDropDown";
 
 class SideBar extends Component {
   render() {
-    const { sprintList, projectList, selectedSprint } = this.props;
+    const { sprintList, projectList, selectedSprint, build } = this.props;
 
     return (
       <Grid.Column width={3}>
+        {build === "dev" && <Grid.Row>DEV BUILD</Grid.Row>}
+
         <Grid.Row>
           <br />
           <Button.Group color="black" vertical>
@@ -62,6 +64,7 @@ const mapStateToProps = state => ({
   projectList: state.commonData.projects.data || [],
   sprintList: state.commonData.sprintList.data || [],
   selectedSprint: state.commonData.sprint.data,
+  build: state.commonData.settings.data && state.commonData.settings.data.build,
 });
 
 const mapDispatchToProps = {};

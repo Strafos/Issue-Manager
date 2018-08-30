@@ -390,4 +390,31 @@ app.get("/Settings", (req, res) => {
   res.send(file.get());
 });
 
+// Get all todos that aren't done
+// search: getScratchpads
+app.get("/Scratchpads", (req, res) => {
+  const query = "SELECT * FROM scratchpads";
+  db.read(query)
+    .then(response => {
+      res.send(response);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
+// Get all todos that aren't done
+// search: setScratchpad
+app.put("/Scratchpad/:id", (req, res) => {
+  const { content } = req.body;
+  const query = `UPDATE scratchpads SET content=(?) where id=(?)`;
+  db.insert(query, [content, req.params.id])
+    .then(response => {
+      res.send(response);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
 app.listen(port, () => console.log(`Listening on port ${port}`));
