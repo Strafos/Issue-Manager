@@ -30,8 +30,8 @@ class SprintDisplay extends Component {
     issueList: [],
     displayTimelogs: false,
     displayGraphs: false,
-    displayIssues: false,
-    displayCalendar: true,
+    displayIssues: true,
+    displayCalendar: false,
     notes: "",
     quote: "",
     editQuote: false,
@@ -255,6 +255,7 @@ class SprintDisplay extends Component {
                   this.setState({
                     displayGraphs: false,
                     displayTimelogs: false,
+                    displayCalendar: false,
                   })
                 }
                 color="black"
@@ -264,7 +265,11 @@ class SprintDisplay extends Component {
               </Button>
               <Button
                 onClick={() =>
-                  this.setState({ displayGraphs: true, displayTimelogs: false })
+                  this.setState({
+                    displayGraphs: true,
+                    displayTimelogs: false,
+                    displayCalendar: false,
+                  })
                 }
                 color="black"
                 floated="left"
@@ -273,12 +278,29 @@ class SprintDisplay extends Component {
               </Button>
               <Button
                 onClick={() =>
-                  this.setState({ displayGraphs: false, displayTimelogs: true })
+                  this.setState({
+                    displayGraphs: false,
+                    displayTimelogs: true,
+                    displayCalendar: false,
+                  })
                 }
                 color="black"
                 floated="left"
               >
                 {"Timelogs"}
+              </Button>
+              <Button
+                onClick={() =>
+                  this.setState({
+                    displayGraphs: false,
+                    displayTimelogs: false,
+                    displayCalendar: true,
+                  })
+                }
+                color="black"
+                floated="left"
+              >
+                {"Calendar"}
               </Button>
             </Grid.Row>
           </Grid.Column>

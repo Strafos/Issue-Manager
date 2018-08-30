@@ -131,7 +131,7 @@ class EventModal extends Component {
                 minuteStep={15}
               />
             </Form.Field>
-            <Form.Field>
+            {/* <Form.Field>
               <label>End</label>
               <ReactDatePicker
                 selected={endDate}
@@ -143,7 +143,7 @@ class EventModal extends Component {
                 minuteStep={15}
                 onChange={this.handleChangeEndTime}
               />
-            </Form.Field>
+            </Form.Field> */}
             <Form.Checkbox
               label={"Repeated"}
               onClick={() => this.setState({ isRepeated: !isRepeated })}

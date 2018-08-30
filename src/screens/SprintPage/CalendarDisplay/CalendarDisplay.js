@@ -15,6 +15,10 @@ class CalendarDisplay extends Component {
     events: [],
   };
 
+  componentDidMount() {
+    API.getEvents().then(events => this.setState({ events }));
+  }
+
   createEvent = newEvents => {
     const { events } = this.state;
     events.concat(newEvents);
@@ -48,6 +52,7 @@ class CalendarDisplay extends Component {
               click: () => this.setState({ modalOpen: true }),
             },
           }}
+          defaultView={"basicWeek"}
           height={800}
           navLinks={true} // can click day/week names to navigate views
           editable={true}
