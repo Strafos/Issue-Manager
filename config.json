@@ -1,6 +1,0 @@
-{
-  "weekdayHours": 5,
-  "weekendHours": 10,
-  "timeDelta": 0.5,
-  "build": "dev"
-}
