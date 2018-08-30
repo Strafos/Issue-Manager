@@ -18,6 +18,7 @@ import {
 import GraphDisplay from "./GraphDisplay/GraphDisplay";
 import TimelogDisplay from "./TimelogDisplay/TimelogDisplay";
 import IssueDisplay from "./IssueDisplay/IssueDisplay";
+import CalendarDisplay from "./CalendarDisplay/CalendarDisplay";
 
 import * as CommonActions from "../../commonActions";
 
@@ -29,7 +30,8 @@ class SprintDisplay extends Component {
     issueList: [],
     displayTimelogs: false,
     displayGraphs: false,
-    displayIssues: true,
+    displayIssues: false,
+    displayCalendar: true,
     notes: "",
     quote: "",
     editQuote: false,
@@ -168,6 +170,7 @@ class SprintDisplay extends Component {
       quote,
       displayTimelogs,
       displayGraphs,
+      displayCalendar,
       isSprintNoteSaving,
       isSaving,
     } = this.state;
@@ -185,6 +188,13 @@ class SprintDisplay extends Component {
     } else if (displayGraphs) {
       display = (
         <GraphDisplay selectedSprint={selectedSprint} issueList={issueList} />
+      );
+    } else if (displayCalendar) {
+      display = (
+        <CalendarDisplay
+          selectedSprint={selectedSprint}
+          issueList={issueList}
+        />
       );
     } else {
       display = (
