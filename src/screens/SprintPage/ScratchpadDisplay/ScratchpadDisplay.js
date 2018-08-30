@@ -10,20 +10,8 @@ class ScratchpadDisplay extends Component {
   state = {};
 
   componentDidMount() {
-    const { selectedSprint, issues } = this.props;
-    this._loadData(selectedSprint, issues);
-  }
-
-  componentDidUpdate(prevProps) {
-    const { selectedSprint } = this.props;
-    if (selectedSprint.id !== prevProps.selectedSprint.id) {
-      this._loadData(selectedSprint);
-    }
-  }
-
-  _loadData = selectedSprint => {
     this.props.getScratchpads();
-  };
+  }
 
   render() {
     const { scratchpads } = this.props;

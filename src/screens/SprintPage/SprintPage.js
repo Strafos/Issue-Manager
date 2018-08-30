@@ -186,7 +186,7 @@ class SprintDisplay extends Component {
     return (
       <div>
         <Grid verticalAlign="top" columns={2} stretched>
-          <Grid.Column textAlign="left" width={5}>
+          <Grid.Column textAlign="left" width={7}>
             <Grid.Row>
               <Header floated="left" as="h1">
                 {selectedSprint && selectedSprint.name}
@@ -296,7 +296,7 @@ class SprintDisplay extends Component {
               </Button>
             </Grid.Row>
           </Grid.Column>
-          <Grid.Column width={11}>
+          <Grid.Column width={9}>
             <Container />
           </Grid.Column>
         </Grid>
