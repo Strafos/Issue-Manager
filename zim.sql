@@ -63,3 +63,11 @@ CREATE TABLE todos (
  name text NOT NULL,
  done integer DEFAULT 0
 );
+
+CREATE TABLE events (
+ id integer NOT NULL,
+ title text NOT NULL,
+ start text NOT NULL,
+ allDay integer NOT NULL default 0,
+ end text
+);
