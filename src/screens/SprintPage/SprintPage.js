@@ -18,6 +18,7 @@ import GraphDisplay from "./GraphDisplay/GraphDisplay";
 import TimelogDisplay from "./TimelogDisplay/TimelogDisplay";
 import IssueDisplay from "./IssueDisplay/IssueDisplay";
 import ScratchpadDisplay from "./ScratchpadDisplay/ScratchpadDisplay";
+import CalendarDisplay from "./CalendarDisplay/CalendarDisplay";
 
 import * as CommonActions from "../../commonActions";
 
@@ -29,6 +30,8 @@ class SprintDisplay extends Component {
     displayTimelogs: false,
     displayGraphs: false,
     displayScratchpad: false,
+    displayCalendar: false,
+    displayIssues: true,
     notes: "",
     quote: "",
     editQuote: false,
@@ -144,6 +147,7 @@ class SprintDisplay extends Component {
       displayTimelogs,
       displayGraphs,
       displayScratchpad,
+      displayCalendar,
       isSprintNoteSaving,
       isSaving,
     } = this.state;
@@ -163,12 +167,9 @@ class SprintDisplay extends Component {
         <GraphDisplay selectedSprint={selectedSprint} issueList={issueList} />
       );
     } else if (displayScratchpad) {
-      display = (
-        <ScratchpadDisplay
-          selectedSprint={selectedSprint}
-          issueList={issueList}
-        />
-      );
+      display = <ScratchpadDisplay />;
+    } else if (displayCalendar) {
+      display = <CalendarDisplay />;
     } else {
       display = (
         <IssueDisplay
@@ -229,6 +230,7 @@ class SprintDisplay extends Component {
                     displayGraphs: false,
                     displayTimelogs: false,
                     displayScratchpad: false,
+                    displayCalendar: false,
                   })
                 }
                 color="black"
@@ -242,6 +244,7 @@ class SprintDisplay extends Component {
                     displayGraphs: true,
                     displayTimelogs: false,
                     displayScratchpad: false,
+                    displayCalendar: false,
                   })
                 }
                 color="black"
@@ -255,6 +258,7 @@ class SprintDisplay extends Component {
                     displayGraphs: false,
                     displayTimelogs: true,
                     displayScratchpad: false,
+                    displayCalendar: false,
                   })
                 }
                 color="black"
@@ -268,12 +272,27 @@ class SprintDisplay extends Component {
                     displayGraphs: false,
                     displayTimelogs: false,
                     displayScratchpad: true,
+                    displayCalendar: false,
                   })
                 }
                 color="black"
                 floated="left"
               >
                 {"Scratchpad"}
+              </Button>
+              <Button
+                onClick={() =>
+                  this.setState({
+                    displayGraphs: false,
+                    displayTimelogs: false,
+                    displayScratchpad: false,
+                    displayCalendar: true,
+                  })
+                }
+                color="black"
+                floated="left"
+              >
+                {"Calendar"}
               </Button>
             </Grid.Row>
           </Grid.Column>

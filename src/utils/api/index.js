@@ -5,3 +5,4 @@ export * from "./timelogs";
 export * from "./todos";
 export * from "./settings";
 export * from "./scratchpad";
+export * from "./events";

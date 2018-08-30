@@ -6,7 +6,7 @@ const editJsonFile = require("edit-json-file");
 const db = require("./database");
 const app = express();
 app.use(bodyParser.json());
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;
 
 // Create new sprint
 // search: createSprint
@@ -414,6 +414,32 @@ app.put("/Scratchpad/:id", (req, res) => {
     })
     .catch(err => {
       console.log(err);
+      res.send({ status: "Failure" });
+    });
+});
+
+// Events
+// search: getEvents
+app.get("/Events", (req, res) => {
+  const query = `SELECT * FROM events`;
+  db.read(query)
+    .then(response => {
+      res.send(response);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
+app.post("/Event", (req, res) => {
+  const { id, title, start, allDay } = req.body;
+  const query = `INSERT INTO events values((?), (?), (?), (?), NULL)`;
+  db.insert(query, [id, title, start, allDay])
+    .then(() => {
+      res.send({ status: "Success" });
+    })
+    .catch(err => {
+      res.send({ status: "Failure" });
     });
 });
 

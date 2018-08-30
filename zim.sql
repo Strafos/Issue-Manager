@@ -71,3 +71,11 @@ CREATE TABLE scratchpads (
 
 INSERT INTO scratchpads VALUES(null, '');
 INSERT INTO scratchpads VALUES(null, '');
+
+CREATE TABLE events (
+ id integer NOT NULL,
+ title text NOT NULL,
+ start text NOT NULL,
+ allDay integer NOT NULL default 0,
+ end text
+);
