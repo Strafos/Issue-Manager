@@ -390,4 +390,29 @@ app.get("/Settings", (req, res) => {
   res.send(file.get());
 });
 
+// Events
+// search: getEvents
+app.get("/Events", (req, res) => {
+  // const query = `DELETE FROM timelog where id=${req.params.id}`;
+  // db.insert(query)
+  // .then(() => {
+  //   res.send(req.params.id);
+  // })
+  // .catch(err => {
+  //   res.send({ status: "Failure" });
+  // });
+});
+
+app.post("/Event", (req, res) => {
+  const { id, title, start, allDay } = req.body;
+  const query = `INSERT INTO events values((?), (?), (?), (?))`;
+  db.insert(query, [id, title, start, allDay])
+    .then(() => {
+      res.send({ status: "Success" });
+    })
+    .catch(err => {
+      res.send({ status: "Failure" });
+    });
+});
+
 app.listen(port, () => console.log(`Listening on port ${port}`));
