@@ -59,28 +59,28 @@ class EventModal extends Component {
   };
 
   handleSubmit = () => {
-    const { onModalClose, createEvent } = this.props;
+    const { onModalClose, createEvent, id } = this.props;
     const { title, startDate, endDate, isRepeated, weeksRepeated } = this.state;
     const eventList = [
       {
+        id,
         title,
         start: startDate.format("MM/DD/YY"),
-        // end: endDate.format("MM/DD/YY"),
-        allDay: true,
+        allDay: 1,
       },
     ];
     if (isRepeated) {
       for (let i = 1; i < parseInt(weeksRepeated, 10); i++) {
         startDate.add(7, "days");
         const eventObj = {
+          id,
           title,
           start: startDate.format("MM/DD/YY"),
-          allDay: true,
+          allDay: 1,
         };
         eventList.push(eventObj);
       }
     }
-    console.log(eventList);
 
     createEvent(eventList);
 

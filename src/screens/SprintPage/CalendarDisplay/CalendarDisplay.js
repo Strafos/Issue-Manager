@@ -7,6 +7,8 @@ import FullCalendar from "fullcalendar-reactwrapper";
 import "fullcalendar-reactwrapper/dist/css/fullcalendar.min.css";
 import EventModal from "../../../components/Modal/EventModal/EventModal";
 
+import * as API from "../../../utils/api";
+
 class CalendarDisplay extends Component {
   state = {
     modalOpen: false,
@@ -19,15 +21,16 @@ class CalendarDisplay extends Component {
     this.setState({
       events: events.concat(newEvents),
     });
+    newEvents.map(event => API.createEvent(event));
   };
 
   render() {
     const { modalOpen, events } = this.state;
-    console.log(events);
 
     return (
       <Segment id="Calendar">
         <EventModal
+          id={events.length + 1}
           createEvent={this.createEvent}
           onModalClose={() => this.setState({ modalOpen: false })}
           modalOpen={modalOpen}
