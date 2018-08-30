@@ -393,19 +393,19 @@ app.get("/Settings", (req, res) => {
 // Events
 // search: getEvents
 app.get("/Events", (req, res) => {
-  // const query = `DELETE FROM timelog where id=${req.params.id}`;
-  // db.insert(query)
-  // .then(() => {
-  //   res.send(req.params.id);
-  // })
-  // .catch(err => {
-  //   res.send({ status: "Failure" });
-  // });
+  const query = `SELECT * FROM events`;
+  db.read(query)
+    .then(response => {
+      res.send(response);
+    })
+    .catch(err => {
+      res.send({ status: "Failure" });
+    });
 });
 
 app.post("/Event", (req, res) => {
   const { id, title, start, allDay } = req.body;
-  const query = `INSERT INTO events values((?), (?), (?), (?))`;
+  const query = `INSERT INTO events values((?), (?), (?), (?), NULL)`;
   db.insert(query, [id, title, start, allDay])
     .then(() => {
       res.send({ status: "Success" });
