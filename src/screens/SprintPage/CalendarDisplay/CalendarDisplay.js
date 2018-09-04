@@ -52,7 +52,7 @@ class CalendarDisplay extends Component {
               click: () => this.setState({ modalOpen: true }),
             },
           }}
-          defaultView={"basicWeek"}
+          defaultView={"month"}
           height={800}
           navLinks={true} // can click day/week names to navigate views
           editable={true}
