@@ -303,7 +303,8 @@ class SprintDisplay extends Component {
 
         {display}
 
-        {!displayScratchpad && (
+        {true && (
+          // {!displayScratchpad && (
           <div>
             <Form>
               <Form.Field control={this.renderTextArea} label="Sprint Notes" />

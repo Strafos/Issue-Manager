@@ -24,9 +24,11 @@ class ScratchpadDisplay extends Component {
       <Grid divided columns={2}>
         <Grid.Column>
           <Editor data={scratchpads[0]} />
+          <Editor data={scratchpads[2]} />
         </Grid.Column>
         <Grid.Column>
           <Editor data={scratchpads[1]} />
+          <Editor data={scratchpads[3]} />
         </Grid.Column>
       </Grid>
     );

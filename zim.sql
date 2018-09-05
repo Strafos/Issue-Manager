@@ -71,6 +71,8 @@ CREATE TABLE scratchpads (
 
 INSERT INTO scratchpads VALUES(null, '');
 INSERT INTO scratchpads VALUES(null, '');
+INSERT INTO scratchpads VALUES(null, '');
+INSERT INTO scratchpads VALUES(null, '');
 
 CREATE TABLE events (
  id integer NOT NULL,
