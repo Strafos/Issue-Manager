@@ -50,8 +50,10 @@
 
 .ql-container {
   height: auto !important;
+  min-height: 200px;
 }
 
 .ql-editor {
   height: auto !important;
+  min-height: 200px;
 }

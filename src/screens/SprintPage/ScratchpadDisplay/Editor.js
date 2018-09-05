@@ -22,19 +22,19 @@ class Editor extends Component {
   }
 
   componentDidMount() {
-    const { data } = this.props;
+    const { content } = this.props;
     this.setState({
-      content: data ? data.content : "",
-      prevContent: data ? data.content : "",
+      content: content || "",
+      prevContent: content || "",
     });
   }
 
   componentDidUpdate(prevProps) {
-    const { data } = this.props;
-    if (prevProps.data !== data) {
+    const { content } = this.props;
+    if (content !== prevProps.content) {
       this.setState({
-        content: data ? data.content : "",
-        prevContent: data ? data.content : "",
+        content: content || "",
+        prevContent: content || "",
       });
     }
   }
@@ -42,16 +42,16 @@ class Editor extends Component {
   componentWillUnmount() {
     clearTimeout(this.saveTimer);
     const { content } = this.state;
-    const { data } = this.props;
-    this.handleAPI(data.id, content);
+    const { id } = this.props;
+    this.handleAPI(id, content);
   }
 
   handleSave = () => {
     const { content, prevContent } = this.state;
-    const { data } = this.props;
+    const { id } = this.props;
     if (prevContent !== content) {
       this.setState({ prevContent: content });
-      this.handleAPI(data.id, content);
+      this.handleAPI(id, content);
     }
     this.saveTimer = setTimeout(this.handleSave, saveTime);
   };

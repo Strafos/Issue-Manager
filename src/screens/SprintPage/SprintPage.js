@@ -221,10 +221,8 @@ class SprintDisplay extends Component {
         <Editor
           sprintScratchpad
           autoSize
-          data={{
-            id: selectedSprint.id,
-            content: selectedSprint.notes,
-          }}
+          id={selectedSprint.id}
+          content={selectedSprint.notes}
         />
       </div>
     );
