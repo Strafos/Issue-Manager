@@ -113,7 +113,7 @@ class EventModal extends Component {
         classTitle="Modal"
         closeOnDimmerClick={false}
       >
-        <Container textAlign="left">
+        <Container style={{ padding: "20px" }} textAlign="left">
           <Form>
             <Form.Field>
               <label>Event Title</label>
@@ -125,11 +125,11 @@ class EventModal extends Component {
                 selected={startDate}
                 onChange={this.handleChangeStartDate}
               />
-              <TimePicker
+              {/* <TimePicker
                 defaultValue={undefined}
                 showSecond={false}
                 minuteStep={15}
-              />
+              /> */}
             </Form.Field>
             {/* <Form.Field>
               <label>End</label>
