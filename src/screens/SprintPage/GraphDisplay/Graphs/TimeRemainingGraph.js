@@ -26,6 +26,7 @@ class TimeRemainingGraph extends Component {
 
   // totalTimeEstimate is calculated after an async db call for issues
   // using this method is hacky b/c it's deprecated, but at least it works
+  // It's annoying to convert this to componentDidUpdate()
   componentWillReceiveProps(nextProps) {
     const { logs, sprint, totalTimeEstimate } = nextProps;
     this.constructTimeRemainingData(logs, sprint, totalTimeEstimate);
@@ -57,12 +58,9 @@ class TimeRemainingGraph extends Component {
     });
   };
 
-  // Projected benchmarks are specified by the dateMap
-  // On week days, reduce time remaining by 1/9
-  // On weekends, reduce time remaining by 2/9
   constructProjectedTimeRemaining = (sprint, totalTimeEstimate) => {
     const { weekdayHours, weekendHours } = this.props;
-    const estimate = totalTimeEstimate === 0 ? 40 : totalTimeEstimate;
+    const estimate = totalTimeEstimate || 40;
 
     const startDate = new Date(sprint.start_date);
     const endDate = new Date(sprint.end_date);
