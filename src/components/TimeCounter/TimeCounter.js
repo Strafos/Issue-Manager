@@ -9,7 +9,6 @@ import { cleanNumber } from "../../utils/arithUtils";
 
 class TimeCounter extends Component {
   state = {
-    time: 0,
     openModal: false,
     tempTime: "",
   };
