@@ -323,7 +323,7 @@ class IssueDisplay extends Component {
               </Form.Field>
             </Form>
           ) : (
-            <Header as="h2">
+            <Header as="h1">
               <Header.Content>
                 {name}
                 <Icon
@@ -337,7 +337,6 @@ class IssueDisplay extends Component {
             </Header>
           )}
         </div>
-        <br />
 
         <Form className="Left">
           <Form.Field width={3}>
@@ -418,7 +417,7 @@ class IssueDisplay extends Component {
 
         <Grid columns={2}>
           <Grid.Column className="Left" width={8}>
-            <Button onClick={this.handleSubmit} color="green">
+            <Button onClick={this.handleSubmit} color="black">
               Save Changes
             </Button>
           </Grid.Column>
