@@ -13,13 +13,6 @@ class TimeCounter extends Component {
     tempTime: "",
   };
 
-  // componentDidMount() {
-  //   const { time } = this.props;
-  //   this.setState({
-  //     time,
-  //   });
-  // }
-
   handleOpen = () => {
     this.setState({
       openModal: true,
@@ -41,14 +34,17 @@ class TimeCounter extends Component {
   // Time is composed of digits, so it must be positive
   handleValidate = () => {
     const { tempTime } = this.state;
-    const digitRe = /^[0-9]+$/;
+    const digitRe = /^([0-9]|\.)+$/;
     return !tempTime.length > 0 || !digitRe.test(tempTime);
   };
 
   // Click from an icon
   handleIconClick = () => {
     const { issueId, inc, stat, time, timeDeltaSetting } = this.props;
-    let newTime = inc ? time + timeDeltaSetting : time - timeDeltaSetting;
+    let newTime = (inc
+      ? time + timeDeltaSetting
+      : time - timeDeltaSetting
+    ).toFixed(2);
     newTime = newTime < 0 ? 0 : newTime;
     const delta = newTime - time;
 
@@ -67,11 +63,6 @@ class TimeCounter extends Component {
     // Update total time in sprint display
     this.props.timeTotals(stat, delta);
 
-    // Update time displayed in TimeCounter
-    this.setState({
-      openModal: false,
-    });
-
     // Update time in database
     // setTime(issueId, stat, newTime);
     this.props.setTime(issueId, stat, newTime);
@@ -80,7 +71,7 @@ class TimeCounter extends Component {
   handleSubmit = () => {
     const { issueId, stat } = this.props;
     const { tempTime, time } = this.state;
-    const newTime = parseInt(tempTime, 10);
+    const newTime = parseFloat(tempTime, 10);
 
     const delta = newTime - time;
 
@@ -99,19 +90,18 @@ class TimeCounter extends Component {
     // Update total time in sprint display
     this.props.timeTotals(stat, delta);
 
-    // Update time displayed in TimeCounter
     this.setState({
-      time: newTime,
       openModal: false,
     });
 
-    //Update time in database
-    setTime(issueId, stat, newTime);
+    // Update time in database
+    this.props.setTime(issueId, stat, newTime);
   };
 
   render() {
     const { inc, time } = this.props;
     const { openModal } = this.state;
+    console.log(time);
 
     return (
       <div>
