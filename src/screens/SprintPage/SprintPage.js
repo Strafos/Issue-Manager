@@ -28,7 +28,7 @@ import { updateSprintQuote } from "../../utils/api";
 class SprintDisplay extends Component {
   state = {
     issueList: [],
-    display: "issue",
+    display: "graph",
     quote: "",
     editQuote: false,
     isSaving: false,

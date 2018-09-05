@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { XYPlot, XAxis, YAxis, Hint, LineMarkSeries } from "react-vis";
 
 import { cleanNumber } from "../../../../utils/arithUtils";
+import { dayDiff, isWeekend } from "../../../../utils/dateUtils";
 
 class TimeSpentGraph extends Component {
   state = {
@@ -48,6 +49,30 @@ class TimeSpentGraph extends Component {
   };
 
   constructProjectedTimeSpent = sprint => {
+    const { weekdayHours, weekendHours } = this.props;
+    const startDate = new Date(sprint.start_date);
+    const endDate = new Date(sprint.end_date);
+
+    const projection = [];
+    let time = 0;
+    for (let i = 0; i < dayDiff(startDate, endDate) + 1; i++) {
+      const day = new Date(startDate.getTime());
+      day.setDate(startDate.getDate() + i);
+
+      projection.push({
+        x: day,
+        y: time,
+      });
+
+      time += isWeekend(day) ? weekendHours : weekdayHours;
+    }
+
+    this.setState({
+      timeSpentProjection: projection,
+    });
+  };
+
+  aconstructProjectedTimeSpent = sprint => {
     const { weekdayHours, weekendHours } = this.props;
     const startDate = new Date(sprint.start_date);
 
