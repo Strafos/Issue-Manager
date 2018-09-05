@@ -1,5 +1,5 @@
 # Zaibo's Issue Manager
 
-I found that a SCRUM manager really helps me be productive so I made one for myself
+A completely custom, self-hosted webapp to keep my life together
 
 ![homepage](https://i.imgur.com/6MFn17E.png)
