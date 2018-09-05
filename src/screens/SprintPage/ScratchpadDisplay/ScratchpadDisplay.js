@@ -13,7 +13,6 @@ class ScratchpadDisplay extends Component {
 
   render() {
     const { scratchpads } = this.props;
-    console.log(scratchpads && scratchpads[0]);
 
     if (!scratchpads) {
       return <Loader active inline />;

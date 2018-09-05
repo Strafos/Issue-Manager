@@ -72,6 +72,7 @@ class Editor extends Component {
   }
 
   render() {
+    const { autoSize } = this.props;
     const { content } = this.state;
 
     if (!true) {
@@ -79,9 +80,9 @@ class Editor extends Component {
     }
 
     return (
-      <Segment style={{ paddingTop: "10px" }}>
+      <Segment>
         <ReactQuill
-          style={{ height: "500px" }}
+          style={autoSize ? {} : { height: "500px" }}
           className="quill-container"
           theme="bubble"
           value={content}

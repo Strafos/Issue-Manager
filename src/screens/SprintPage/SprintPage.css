@@ -47,3 +47,11 @@
   background-color: #303030;
   color: white;
 }
+
+.ql-container {
+  height: auto !important;
+}
+
+.ql-editor {
+  height: auto !important;
+}

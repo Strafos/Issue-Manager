@@ -28,12 +28,7 @@ import { updateSprintNotes, updateSprintQuote } from "../../utils/api";
 class SprintDisplay extends Component {
   state = {
     issueList: [],
-    displayTimelogs: false,
-    displayGraphs: false,
-    displayScratchpad: false,
-    displayCalendar: false,
-    displayIssues: true,
-    display: "scratchpad",
+    display: "issue",
     notes: "",
     quote: "",
     editQuote: false,
@@ -174,7 +169,7 @@ class SprintDisplay extends Component {
       case "calendar":
         displayComponent = <CalendarDisplay />;
         break;
-      default:
+      case "issue":
         displayComponent = (
           <IssueDisplay
             issueList={issueList}
@@ -185,6 +180,9 @@ class SprintDisplay extends Component {
             saving={this.setSaving}
           />
         );
+        break;
+      default:
+        displayComponent = null;
     }
 
     return (
@@ -273,40 +271,13 @@ class SprintDisplay extends Component {
         {displayComponent}
 
         <Editor
+          sprintScratchpad
+          autoSize
           data={{
-            id: 5,
+            id: selectedSprint.id,
             content: selectedSprint.notes,
           }}
         />
-
-        {true && (
-          // {!displayScratchpad && (
-          <div>
-            <Form>
-              <Form.Field control={this.renderTextArea} label="Sprint Notes" />
-            </Form>
-            <br />
-            <div>
-              <Button
-                floated="left"
-                color="red"
-                onClick={this.handleSaveSprintNotes}
-              >
-                Save notes
-              </Button>
-              <Icon
-                style={{
-                  position: "relative",
-                  left: "10px",
-                  top: "8px",
-                  float: "left",
-                }}
-                loading={isSprintNoteSaving}
-                name={isSprintNoteSaving ? "redo" : "check"}
-              />
-            </div>
-          </div>
-        )}
       </div>
     );
   }
