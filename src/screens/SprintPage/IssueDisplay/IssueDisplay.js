@@ -7,6 +7,7 @@ import Status from "../../../components/Status/Status";
 import TimeCounter from "../../../components/TimeCounter/TimeCounter";
 
 import { updateIssueNotes, updateShowNotes } from "../../../utils/api";
+import { cleanNumber } from "../../../utils/arithUtils";
 
 const statusMap = {
   "In queue": 1,
@@ -81,15 +82,15 @@ class IssueDisplay extends Component {
   handleTimeTotals = (timeStat, delta) => {
     if (timeStat === "time_spent") {
       this.setState({
-        totalTimeSpent: this.state.totalTimeSpent + delta,
+        totalTimeSpent: cleanNumber(this.state.totalTimeSpent + delta),
       });
     } else if (timeStat === "time_remaining") {
       this.setState({
-        totalTimeRemaining: this.state.totalTimeRemaining + delta,
+        totalTimeRemaining: cleanNumber(this.state.totalTimeRemaining + delta),
       });
     } else if (timeStat === "time_estimate") {
       this.setState({
-        totalTimeEstimate: this.state.totalTimeEstimate + delta,
+        totalTimeEstimate: cleanNumber(this.state.totalTimeEstimate + delta),
       });
     }
   };

@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import { Button, Modal, Form, Input, Label, Icon } from "semantic-ui-react";
 import { connect } from "react-redux";
 
-import { setTime, createTimeLog } from "../../utils/api";
+import { createTimeLog } from "../../utils/api";
 
 import * as Actions from "./timeCounterActions";
+import { cleanNumber } from "../../utils/arithUtils";
 
 class TimeCounter extends Component {
   state = {
@@ -41,38 +42,26 @@ class TimeCounter extends Component {
   // Click from an icon
   handleIconClick = () => {
     const { issueId, inc, stat, time, timeDeltaSetting } = this.props;
-    let newTime = (inc
-      ? time + timeDeltaSetting
-      : time - timeDeltaSetting
-    ).toFixed(2);
+    let newTime = inc ? time + timeDeltaSetting : time - timeDeltaSetting;
     newTime = newTime < 0 ? 0 : newTime;
     const delta = newTime - time;
 
-    // Log time delta
-    if (!this.props.bad) {
-      const reqObj = {
-        issueId,
-        delta,
-        stat,
-        createdAt: new Date().toISOString(),
-        total: newTime,
-      };
-      createTimeLog(reqObj);
-    }
-
-    // Update total time in sprint display
-    this.props.timeTotals(stat, delta);
-
-    // Update time in database
-    this.props.setTime(issueId, stat, newTime);
+    this.handleTimeChange(issueId, delta, stat, newTime);
   };
 
-  handleSubmit = () => {
-    const { issueId, stat } = this.props;
-    const { tempTime, time } = this.state;
-    const newTime = parseFloat(tempTime, 10).toFixed(2);
-
+  handleModalSubmit = () => {
+    const { issueId, stat, time } = this.props;
+    const { tempTime } = this.state;
+    const newTime = parseFloat(tempTime, 10);
     const delta = newTime - time;
+
+    this.handleTimeChange(issueId, delta, stat, newTime);
+  };
+
+  handleTimeChange = (issueId, delta, stat, newTime) => {
+    // Make sure both numbers are precise to two decimals
+    delta = cleanNumber(delta);
+    newTime = cleanNumber(newTime);
 
     // Log time delta
     if (!this.props.bad) {
@@ -116,7 +105,7 @@ class TimeCounter extends Component {
                 <Input size="tiny" type="text" onChange={this.handleTempTime} />
               </Form.Field>
               <Button
-                onClick={this.handleSubmit}
+                onClick={this.handleModalSubmit}
                 disabled={this.handleValidate()}
                 color="green"
               >
