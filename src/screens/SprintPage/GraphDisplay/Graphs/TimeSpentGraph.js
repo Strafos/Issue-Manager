@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { Loader } from "semantic-ui-react";
 import { connect } from "react-redux";
-
 import { XYPlot, XAxis, YAxis, Hint, LineMarkSeries } from "react-vis";
+
+import { cleanNumber } from "../../../../utils/arithUtils";
 
 class TimeSpentGraph extends Component {
   state = {
@@ -37,7 +38,7 @@ class TimeSpentGraph extends Component {
       const timestamp = new Date(log.created_at);
       timeSpentData.push({
         x: timestamp,
-        y: total,
+        y: cleanNumber(total),
       });
     });
 
