@@ -72,41 +72,6 @@ class TimeSpentGraph extends Component {
     });
   };
 
-  aconstructProjectedTimeSpent = sprint => {
-    const { weekdayHours, weekendHours } = this.props;
-    const startDate = new Date(sprint.start_date);
-
-    const dateMap = {
-      0: weekdayHours * 5 + weekendHours,
-      1: 0,
-      2: weekdayHours,
-      3: weekdayHours * 2,
-      4: weekdayHours * 3,
-      5: weekdayHours * 4,
-      6: weekdayHours * 5,
-    };
-
-    const projection = [];
-    for (let i = 0; i < 7; i++) {
-      const day = new Date(startDate.getTime());
-      day.setDate(startDate.getDate() + i);
-      projection.push({
-        x: day,
-        y: dateMap[day.getDay()],
-      });
-    }
-    const nextMonday = new Date(startDate.getTime());
-    nextMonday.setDate(startDate.getDate() + 7);
-    projection.push({
-      x: nextMonday,
-      y: weekdayHours * 5 + weekendHours * 2,
-    });
-
-    this.setState({
-      timeSpentProjection: projection,
-    });
-  };
-
   render() {
     const { timeSpentProjection, timeSpentData, hoveredNode } = this.state;
 
