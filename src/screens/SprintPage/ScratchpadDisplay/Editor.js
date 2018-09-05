@@ -23,12 +23,6 @@ class Editor extends Component {
     this.saveTimer = setTimeout(this.handleSave, saveTime);
   }
 
-  componentDidMount() {}
-
-  componentDidUpdate(prevProps) {}
-
-  _loadData = selectedSprint => {};
-
   handleSave = () => {
     const { content, prevContent } = this.state;
     const { data } = this.props;

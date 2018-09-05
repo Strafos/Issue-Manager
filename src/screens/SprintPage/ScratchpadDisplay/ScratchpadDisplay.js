@@ -19,6 +19,7 @@ class ScratchpadDisplay extends Component {
     if (!scratchpads) {
       return <Loader active inline />;
     }
+    console.log(scratchpads[1]);
 
     return (
       <Grid divided columns={2}>

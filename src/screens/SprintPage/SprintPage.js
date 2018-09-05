@@ -19,6 +19,7 @@ import TimelogDisplay from "./TimelogDisplay/TimelogDisplay";
 import IssueDisplay from "./IssueDisplay/IssueDisplay";
 import ScratchpadDisplay from "./ScratchpadDisplay/ScratchpadDisplay";
 import CalendarDisplay from "./CalendarDisplay/CalendarDisplay";
+import Editor from "./ScratchpadDisplay/Editor";
 
 import * as CommonActions from "../../commonActions";
 
@@ -32,6 +33,7 @@ class SprintDisplay extends Component {
     displayScratchpad: false,
     displayCalendar: false,
     displayIssues: true,
+    display: "issues",
     notes: "",
     quote: "",
     editQuote: false,
@@ -144,10 +146,7 @@ class SprintDisplay extends Component {
     const {
       editQuote,
       quote,
-      displayTimelogs,
-      displayGraphs,
-      displayScratchpad,
-      displayCalendar,
+      display,
       isSprintNoteSaving,
       isSaving,
     } = this.state;
@@ -157,30 +156,35 @@ class SprintDisplay extends Component {
       return <Loader active inline />;
     }
 
-    let display;
-    if (displayTimelogs) {
-      display = (
-        <TimelogDisplay sprintId={selectedSprint && selectedSprint.id} />
-      );
-    } else if (displayGraphs) {
-      display = (
-        <GraphDisplay selectedSprint={selectedSprint} issueList={issueList} />
-      );
-    } else if (displayScratchpad) {
-      display = <ScratchpadDisplay />;
-    } else if (displayCalendar) {
-      display = <CalendarDisplay />;
-    } else {
-      display = (
-        <IssueDisplay
-          issueList={issueList}
-          selectedSprint={selectedSprint}
-          projects={projectList}
-          sprints={sprintList}
-          issues={issueList}
-          saving={this.setSaving}
-        />
-      );
+    let displayComponent;
+    switch (display) {
+      case "graph":
+        displayComponent = (
+          <GraphDisplay selectedSprint={selectedSprint} issueList={issueList} />
+        );
+        break;
+      case "timelog":
+        displayComponent = (
+          <TimelogDisplay sprintId={selectedSprint && selectedSprint.id} />
+        );
+        break;
+      case "scratchpad":
+        displayComponent = <ScratchpadDisplay />;
+        break;
+      case "calendar":
+        displayComponent = <CalendarDisplay />;
+        break;
+      default:
+        displayComponent = (
+          <IssueDisplay
+            issueList={issueList}
+            selectedSprint={selectedSprint}
+            projects={projectList}
+            sprints={sprintList}
+            issues={issueList}
+            saving={this.setSaving}
+          />
+        );
     }
 
     return (
@@ -225,70 +229,35 @@ class SprintDisplay extends Component {
             <Divider />
             <Grid.Row>
               <Button
-                onClick={() =>
-                  this.setState({
-                    displayGraphs: false,
-                    displayTimelogs: false,
-                    displayScratchpad: false,
-                    displayCalendar: false,
-                  })
-                }
+                onClick={() => this.setState({ display: "issue" })}
                 color="black"
                 floated="left"
               >
                 {"Issues"}
               </Button>
               <Button
-                onClick={() =>
-                  this.setState({
-                    displayGraphs: true,
-                    displayTimelogs: false,
-                    displayScratchpad: false,
-                    displayCalendar: false,
-                  })
-                }
+                onClick={() => this.setState({ display: "graph" })}
                 color="black"
                 floated="left"
               >
                 {"Graphs"}
               </Button>
               <Button
-                onClick={() =>
-                  this.setState({
-                    displayGraphs: false,
-                    displayTimelogs: true,
-                    displayScratchpad: false,
-                    displayCalendar: false,
-                  })
-                }
+                onClick={() => this.setState({ display: "timelog" })}
                 color="black"
                 floated="left"
               >
                 {"Timelogs"}
               </Button>
               <Button
-                onClick={() =>
-                  this.setState({
-                    displayGraphs: false,
-                    displayTimelogs: false,
-                    displayScratchpad: true,
-                    displayCalendar: false,
-                  })
-                }
+                onClick={() => this.setState({ display: "scratchpad" })}
                 color="black"
                 floated="left"
               >
                 {"Scratchpad"}
               </Button>
               <Button
-                onClick={() =>
-                  this.setState({
-                    displayGraphs: false,
-                    displayTimelogs: false,
-                    displayScratchpad: false,
-                    displayCalendar: true,
-                  })
-                }
+                onClick={() => this.setState({ display: "calendar" })}
                 color="black"
                 floated="left"
               >
@@ -301,7 +270,13 @@ class SprintDisplay extends Component {
           </Grid.Column>
         </Grid>
 
-        {display}
+        {displayComponent}
+
+        {/* <Editor
+          data={{
+            content: selectedSprint.notes,
+          }}
+        /> */}
 
         {true && (
           // {!displayScratchpad && (
