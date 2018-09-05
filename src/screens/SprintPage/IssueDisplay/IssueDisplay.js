@@ -215,8 +215,8 @@ class IssueDisplay extends Component {
 
   renderName = (name, id) => (
     <div>
-      {name}
-      <a href={`/issue/${id}`}>
+      <a href={`/issue/${id}`} style={{ color: "#888" }}>
+        {name}
         <Icon color="red" className="super" name="plus" size="small" />
       </a>
     </div>

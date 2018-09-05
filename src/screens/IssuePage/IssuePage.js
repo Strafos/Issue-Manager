@@ -272,7 +272,12 @@ class IssueDisplay extends Component {
     return (
       <TextArea
         onChange={this.handleNotes}
-        style={{ minHeight: 150 }}
+        style={{
+          minHeight: 250,
+          backgroundColor: "#282828",
+          color: "#BEBEBE",
+          fontSize: 17,
+        }}
         placeholder="Issue notes..."
         value={this.state.notes}
       />
