@@ -34,7 +34,7 @@ class TimeCounter extends Component {
   // Time is composed of digits, so it must be positive
   handleValidate = () => {
     const { tempTime } = this.state;
-    const digitRe = /^([0-9]|\.)+$/;
+    const digitRe = /^[0-9]+(\.[0-9]*)?$/;
     return !tempTime.length > 0 || !digitRe.test(tempTime);
   };
 
@@ -64,14 +64,13 @@ class TimeCounter extends Component {
     this.props.timeTotals(stat, delta);
 
     // Update time in database
-    // setTime(issueId, stat, newTime);
     this.props.setTime(issueId, stat, newTime);
   };
 
   handleSubmit = () => {
     const { issueId, stat } = this.props;
     const { tempTime, time } = this.state;
-    const newTime = parseFloat(tempTime, 10);
+    const newTime = parseFloat(tempTime, 10).toFixed(2);
 
     const delta = newTime - time;
 
@@ -101,7 +100,6 @@ class TimeCounter extends Component {
   render() {
     const { inc, time } = this.props;
     const { openModal } = this.state;
-    console.log(time);
 
     return (
       <div>
