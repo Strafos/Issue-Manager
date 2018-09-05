@@ -3,35 +3,66 @@ import ReactQuill, { Quill } from "react-quill"; // ES6
 import { connect } from "react-redux";
 import { Loader, Segment } from "semantic-ui-react";
 
+import "react-quill/dist/quill.bubble.css"; // ES6
+
 import "./Editor.css";
 
 import * as Actions from "../sprintPageActions";
-
-import "react-quill/dist/quill.bubble.css"; // ES6
+import { updateSprintNotes } from "../../../utils/api";
 
 const saveTime = 1000;
 
 class Editor extends Component {
+  state = {};
+
   constructor(props) {
     super(props);
-    const { data } = props;
-    console.log(data.content);
-    this.state = {
-      content: data ? data.content : "",
-      prevContent: data ? data.content : "",
-    };
     this.handleContentChange = this.handleContentChange.bind(this);
     this.saveTimer = setTimeout(this.handleSave, saveTime);
+  }
+
+  componentDidMount() {
+    const { data } = this.props;
+    this.setState({
+      content: data ? data.content : "",
+      prevContent: data ? data.content : "",
+    });
+  }
+
+  componentDidUpdate(prevProps) {
+    const { data } = this.props;
+    if (prevProps.data !== data) {
+      this.setState({
+        content: data ? data.content : "",
+        prevContent: data ? data.content : "",
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.saveTimer);
+    const { content } = this.state;
+    const { data } = this.props;
+    this.handleAPI(data.id, content);
   }
 
   handleSave = () => {
     const { content, prevContent } = this.state;
     const { data } = this.props;
     if (prevContent !== content) {
-      this.props.setScratchpad(data.id, content);
       this.setState({ prevContent: content });
+      this.handleAPI(data.id, content);
     }
     this.saveTimer = setTimeout(this.handleSave, saveTime);
+  };
+
+  handleAPI = (id, content) => {
+    const { setScratchpad, sprintScratchpad } = this.props;
+    if (sprintScratchpad) {
+      updateSprintNotes(id, content);
+    } else {
+      setScratchpad(id, content);
+    }
   };
 
   handleContentChange(content, delta, source, editor) {

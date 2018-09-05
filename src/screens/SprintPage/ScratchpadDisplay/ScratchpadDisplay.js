@@ -7,19 +7,17 @@ import Editor from "./Editor";
 import * as Actions from "../sprintPageActions";
 
 class ScratchpadDisplay extends Component {
-  state = {};
-
   componentDidMount() {
     this.props.getScratchpads();
   }
 
   render() {
     const { scratchpads } = this.props;
+    console.log(scratchpads && scratchpads[0]);
 
     if (!scratchpads) {
       return <Loader active inline />;
     }
-    console.log(scratchpads[1]);
 
     return (
       <Grid divided columns={2}>

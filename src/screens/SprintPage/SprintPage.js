@@ -272,12 +272,12 @@ class SprintDisplay extends Component {
 
         {displayComponent}
 
-        {/* <Editor
+        <Editor
           data={{
             id: 5,
             content: selectedSprint.notes,
           }}
-        /> */}
+        />
 
         {true && (
           // {!displayScratchpad && (

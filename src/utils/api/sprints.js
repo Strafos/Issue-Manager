@@ -50,7 +50,7 @@ export const getSprint = id => {
   });
 };
 
-export const updateSprintNotes = (notes, id) => {
+export const updateSprintNotes = (id, notes) => {
   return fetch(`/Sprint/${id}/notes`, {
     method: "PUT",
     headers: {
