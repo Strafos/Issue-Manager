@@ -33,7 +33,7 @@ class SprintDisplay extends Component {
     displayScratchpad: false,
     displayCalendar: false,
     displayIssues: true,
-    display: "issues",
+    display: "scratchpad",
     notes: "",
     quote: "",
     editQuote: false,
@@ -274,6 +274,7 @@ class SprintDisplay extends Component {
 
         {/* <Editor
           data={{
+            id: 5,
             content: selectedSprint.notes,
           }}
         /> */}
