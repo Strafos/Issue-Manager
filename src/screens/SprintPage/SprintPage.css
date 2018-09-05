@@ -41,19 +41,10 @@
   white-space: pre-line;
 }
 
-.textArea {
-  width: 100%;
-  min-height: 150px;
-  background-color: #303030;
-  color: white;
-}
-
 .ql-container {
-  height: auto !important;
   min-height: 200px;
 }
 
 .ql-editor {
-  height: auto !important;
   min-height: 200px;
 }
