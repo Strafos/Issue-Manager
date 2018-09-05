@@ -1,7 +1,13 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Loader } from "semantic-ui-react";
-
 import { XYPlot, XAxis, YAxis, Hint, LineMarkSeries } from "react-vis";
+
+import {
+  dayDiff,
+  dateRangeHours,
+  isWeekend,
+} from "../../../../utils/dateUtils";
 
 class TimeRemainingGraph extends Component {
   state = {
@@ -55,34 +61,32 @@ class TimeRemainingGraph extends Component {
   // On week days, reduce time remaining by 1/9
   // On weekends, reduce time remaining by 2/9
   constructProjectedTimeRemaining = (sprint, totalTimeEstimate) => {
+    const { weekdayHours, weekendHours } = this.props;
     const estimate = totalTimeEstimate === 0 ? 40 : totalTimeEstimate;
 
     const startDate = new Date(sprint.start_date);
-    const dateMap = {
-      1: 1,
-      2: 8 / 9,
-      3: 7 / 9,
-      4: 6 / 9,
-      5: 5 / 9,
-      6: 4 / 9,
-      0: 2 / 9,
-    };
+    const endDate = new Date(sprint.end_date);
+
+    const totalHours = dateRangeHours(
+      new Date(startDate.getTime()),
+      new Date(endDate.getTime()),
+      weekdayHours,
+      weekendHours
+    );
 
     const projection = [];
-    for (let i = 0; i < 7; i++) {
+    let currHours = 0;
+    for (let i = 0; i < dayDiff(startDate, endDate) + 1; i++) {
       const day = new Date(startDate.getTime());
       day.setDate(startDate.getDate() + i);
+
       projection.push({
         x: day,
-        y: estimate * dateMap[day.getDay()],
+        y: estimate * (1 - currHours / totalHours),
       });
+
+      currHours += isWeekend(day) ? weekendHours : weekdayHours;
     }
-    const nextMonday = new Date(startDate.getTime());
-    nextMonday.setDate(startDate.getDate() + 7);
-    projection.push({
-      x: nextMonday,
-      y: 0,
-    });
 
     this.setState({
       timeRemainingProjection: projection,
@@ -145,4 +149,18 @@ class TimeRemainingGraph extends Component {
   }
 }
 
-export default TimeRemainingGraph;
+const mapStateToProps = state => ({
+  weekdayHours: state.commonData.settings.data
+    ? state.commonData.settings.data.weekdayHours
+    : 5,
+  weekendHours: state.commonData.settings.data
+    ? state.commonData.settings.data.weekendHours
+    : 10,
+});
+
+const mapDispatchToProps = {};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TimeRemainingGraph);
