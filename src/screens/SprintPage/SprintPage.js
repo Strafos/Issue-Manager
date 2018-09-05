@@ -23,16 +23,14 @@ import Editor from "./ScratchpadDisplay/Editor";
 
 import * as CommonActions from "../../commonActions";
 
-import { updateSprintNotes, updateSprintQuote } from "../../utils/api";
+import { updateSprintQuote } from "../../utils/api";
 
 class SprintDisplay extends Component {
   state = {
     issueList: [],
     display: "issue",
-    notes: "",
     quote: "",
     editQuote: false,
-    isSprintNoteSaving: false,
     isSaving: false,
   };
 
@@ -47,35 +45,8 @@ class SprintDisplay extends Component {
     if (prevProps.match.params.id !== match.params.id) {
       this.props.getSprintIssues(match.params.id);
       this.props.getSprint(match.params.id);
-
-      // Default to sprint notes when sprint changes
-      this.setState({
-        notes: null,
-      });
     }
   }
-
-  handleSprintNotes = (event, { value }) => {
-    this.setState({
-      notes: value,
-    });
-  };
-
-  handleSaveSprintNotes = () => {
-    const { selectedSprint } = this.props;
-    const { notes } = this.state;
-
-    this.setState({ isSprintNoteSaving: true });
-    updateSprintNotes(notes || selectedSprint.notes, selectedSprint.id).then(
-      res => {
-        if (!res || res.status !== "Success") {
-          this.props.error("Failed to save notes");
-        } else {
-          this.setState({ isSprintNoteSaving: false });
-        }
-      }
-    );
-  };
 
   handleSaveSprintQuote = () => {
     const { selectedSprint } = this.props;
@@ -111,23 +82,6 @@ class SprintDisplay extends Component {
     });
   };
 
-  renderTextArea = () => {
-    const { selectedSprint } = this.props;
-    return (
-      <TextArea
-        onChange={this.handleSprintNotes}
-        style={{
-          minHeight: 350,
-          backgroundColor: "#282828",
-          color: "#BEBEBE",
-          fontSize: 17,
-        }}
-        placeholder="Sprint notes..."
-        value={this.state.notes || selectedSprint.notes}
-      />
-    );
-  };
-
   renderName = (name, id) => (
     <div>
       {name}
@@ -138,13 +92,7 @@ class SprintDisplay extends Component {
   );
 
   render() {
-    const {
-      editQuote,
-      quote,
-      display,
-      isSprintNoteSaving,
-      isSaving,
-    } = this.state;
+    const { editQuote, quote, display } = this.state;
     const { projectList, sprintList, issueList, selectedSprint } = this.props;
 
     if (!selectedSprint) {
