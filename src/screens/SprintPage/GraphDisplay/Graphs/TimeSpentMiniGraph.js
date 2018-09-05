@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { XYPlot, Hint, LineMarkSeries } from "react-vis";
 
 import { getTimeLogs } from "../../../../utils/api";
+import { isWeekend, dayDiff } from "../../../../utils/dateUtils";
 
 class TimeSpentMiniGraph extends Component {
   state = {
@@ -76,33 +77,22 @@ class TimeSpentMiniGraph extends Component {
 
   constructProjectedTimeSpent = () => {
     const { sprint, weekdayHours, weekendHours } = this.props;
-
     const startDate = new Date(sprint.start_date);
-    const dateMap = {
-      0: weekdayHours * 5 + weekendHours,
-      1: 0,
-      2: weekdayHours,
-      3: weekdayHours * 2,
-      4: weekdayHours * 3,
-      5: weekdayHours * 4,
-      6: weekdayHours * 5,
-    };
+    const endDate = new Date(sprint.end_date);
 
     const projection = [];
-    for (let i = 0; i < 7; i++) {
+    let time = 0;
+    for (let i = 0; i < dayDiff(startDate, endDate) + 1; i++) {
       const day = new Date(startDate.getTime());
       day.setDate(startDate.getDate() + i);
+
       projection.push({
         x: day,
-        y: dateMap[day.getDay()],
+        y: time,
       });
+
+      time += isWeekend(day) ? weekendHours : weekdayHours;
     }
-    const nextMonday = new Date(startDate.getTime());
-    nextMonday.setDate(startDate.getDate() + 7);
-    projection.push({
-      x: nextMonday,
-      y: weekdayHours * 5 + weekendHours * 2,
-    });
 
     this.setState({
       timeSpentProjection: projection,
