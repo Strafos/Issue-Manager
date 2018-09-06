@@ -76,6 +76,7 @@ class TodoList extends Component {
           </Menu.Menu>
         </Menu>
         <Input
+          style={{ color: "black" }}
           placeholder="Add todo..."
           action={{
             icon: "plus",
@@ -84,7 +85,6 @@ class TodoList extends Component {
           value={this.state.newTodo}
           size="small"
           onChange={this.handleInput}
-          inverted
         />
       </div>
     );

@@ -3,14 +3,8 @@ const sqlite3 = require("sqlite3").verbose();
 const editJsonFile = require("edit-json-file");
 
 const file = editJsonFile(`${__dirname}/config.json`);
-const build = file.get("build");
 
-let dbFile;
-if (build === "dev") {
-  dbFile = path.normalize(path.join(__dirname, "/db/", "dev.db"));
-} else if (build === "prod") {
-  dbFile = path.normalize(path.join(__dirname, "/prod_db/", "zim.db"));
-}
+const dbFile = path.normalize(path.join(__dirname, "/prod_db/", "zim.db"));
 
 let db = new sqlite3.Database(dbFile, sqlite3.OPEN_READWRITE, err => {
   if (err) {

@@ -4,6 +4,7 @@ import { Message, Grid } from "semantic-ui-react";
 import { connect } from "react-redux";
 
 import "react-datepicker/dist/react-datepicker.css";
+
 import "./semantic/dist/semantic.min.css";
 import "./App.css";
 
