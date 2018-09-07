@@ -53,3 +53,13 @@ export const setScratchpad = (id, content) =>
     },
     API.setScratchpad
   )(id, content);
+
+export const createScratchpad = () =>
+  asyncActionCreator(
+    {
+      pending: ActionTypes.CREATE_SCRATCHPADS_REQUEST,
+      complete: ActionTypes.CREATE_SCRATCHPADS_SUCCESS,
+      error: ActionTypes.CREATE_SCRATCHPADS_FAILURE,
+    },
+    API.createScratchpad
+  )();

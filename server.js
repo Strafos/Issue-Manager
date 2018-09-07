@@ -413,7 +413,21 @@ app.put("/Scratchpad/:id", (req, res) => {
       res.send(response);
     })
     .catch(err => {
-      console.log(err);
+      res.send({ status: "Failure" });
+    });
+});
+
+// Get all todos that aren't done
+// search: createScratchpad
+app.post("/Scratchpad", (req, res) => {
+  const { content } = req.body;
+  const query = `INSERT INTO scratchpads values(null, (?), "")`;
+  const select = `SELECT * FROM scratchpads WHERE id in (SELECT last_insert_rowid());`;
+  db.insertReturning(query, select, [(content, req.params.id)])
+    .then(response => {
+      res.send(response[0]);
+    })
+    .catch(err => {
       res.send({ status: "Failure" });
     });
 });

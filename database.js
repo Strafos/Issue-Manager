@@ -1,8 +1,5 @@
 const path = require("path");
 const sqlite3 = require("sqlite3").verbose();
-const editJsonFile = require("edit-json-file");
-
-const file = editJsonFile(`${__dirname}/config.json`);
 
 const dbFile = path.normalize(path.join(__dirname, "/prod_db/", "zim.db"));
 

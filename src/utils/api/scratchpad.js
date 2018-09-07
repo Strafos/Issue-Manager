@@ -22,3 +22,15 @@ export const setScratchpad = (id, content) => {
     return response.json();
   });
 };
+
+export const createScratchpad = () => {
+  return fetch("/Scratchpad", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  }).then(response => {
+    return response.json();
+  });
+};

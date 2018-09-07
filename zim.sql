@@ -66,13 +66,9 @@ CREATE TABLE todos (
 
 CREATE TABLE scratchpads (
  id integer PRIMARY KEY AUTOINCREMENT,
- content text NOT NULL
+ content text NOT NULL,
+ title text DEFAULT ""
 );
-
-INSERT INTO scratchpads VALUES(null, '');
-INSERT INTO scratchpads VALUES(null, '');
-INSERT INTO scratchpads VALUES(null, '');
-INSERT INTO scratchpads VALUES(null, '');
 
 CREATE TABLE events (
  id integer NOT NULL,

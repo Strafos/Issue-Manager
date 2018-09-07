@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import { Loader, Grid } from "semantic-ui-react";
+import { Loader, Grid, Button, Icon } from "semantic-ui-react";
 import { connect } from "react-redux";
 
 import Editor from "./Editor";
-import "./ScratchpadDisplay.css";
 
 import * as Actions from "../sprintPageActions";
 
@@ -27,6 +26,20 @@ class ScratchpadDisplay extends Component {
 
     return (
       <div>
+        <Button.Group style={{ paddingTop: 0 }}>
+          <Button icon>
+            <Icon inverted name="align left" />
+          </Button>
+          <Button icon>
+            <Icon name="align center" />
+          </Button>
+          <Button icon>
+            <Icon name="align right" />
+          </Button>
+          <Button icon>
+            <Icon name="align justify" />
+          </Button>
+        </Button.Group>
         <Grid columns={2}>
           <Grid.Column style={{ paddingRight: 5 }}>
             {scratchpads
