@@ -88,7 +88,9 @@ class Editor extends Component {
           value={content}
           onChange={this.handleContentChange}
           bounds={".app"}
-          modules={{ clipboard: { matchVisual: false } }}
+          modules={{
+            clipboard: { matchVisual: false },
+          }}
         />
       </Segment>
     );

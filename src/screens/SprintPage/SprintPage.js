@@ -5,6 +5,8 @@ import {
   Icon,
   Grid,
   Button,
+  Menu,
+  Dropdown,
   Form,
   TextArea,
   Header,
@@ -25,15 +27,10 @@ import "./SprintPage.css";
 
 import { updateSprintQuote } from "../../utils/api";
 
-const map = {
-  snapLeft: "command+left",
-  deleteNode: ["del", "backspace"],
-};
-
 class SprintDisplay extends Component {
   state = {
     issueList: [],
-    display: "issue",
+    display: "scratchpad",
     quote: "",
     editQuote: false,
     isSaving: false,
@@ -179,7 +176,7 @@ class SprintDisplay extends Component {
       >
         <div>
           <Grid verticalAlign="top" columns={2} stretched>
-            <Grid.Column textAlign="left" width={7}>
+            <Grid.Column textAlign="left" width={4}>
               <Grid.Row>
                 <Header floated="left" as="h1">
                   {selectedSprint && selectedSprint.name}
@@ -208,56 +205,50 @@ class SprintDisplay extends Component {
                         </Button>
                       </div>
                     ) : (
-                      <Container onClick={this.toggleEditSprintQuote}>
+                      <div onClick={this.toggleEditSprintQuote}>
                         {quote || selectedSprint.quote || "no quote"}
-                      </Container>
+                      </div>
                     )}
                   </Header.Subheader>
                 </Header>
               </Grid.Row>
-              <Divider />
-              <Grid.Row>
-                <Button
-                  onClick={() => this.setState({ display: "issue" })}
-                  color="black"
-                  floated="left"
-                >
-                  {"Issues"}
-                </Button>
-                <Button
-                  onClick={() => this.setState({ display: "graph" })}
-                  color="black"
-                  floated="left"
-                >
-                  {"Graphs"}
-                </Button>
-                <Button
-                  onClick={() => this.setState({ display: "timelog" })}
-                  color="black"
-                  floated="left"
-                >
-                  {"Timelogs"}
-                </Button>
-                <Button
-                  onClick={() => this.setState({ display: "scratchpad" })}
-                  color="black"
-                  floated="left"
-                >
-                  {"Scratchpad"}
-                </Button>
-                <Button
-                  onClick={() => this.setState({ display: "calendar" })}
-                  color="black"
-                  floated="left"
-                >
-                  {"Calendar"}
-                </Button>
-              </Grid.Row>
             </Grid.Column>
-            <Grid.Column width={9}>
+            <Grid.Column width={6}>
               <Container />
             </Grid.Column>
+            <Grid.Column width={6}>
+              <Container>
+                <Menu pointing compact style={{ float: "right" }}>
+                  <Menu.Item
+                    name="issue"
+                    active={display === "issue"}
+                    onClick={() => this.setState({ display: "issue" })}
+                  />
+                  <Menu.Item
+                    name="graph"
+                    active={display === "graph"}
+                    onClick={() => this.setState({ display: "graph" })}
+                  />
+                  <Menu.Item
+                    name="timelog"
+                    active={display === "timelog"}
+                    onClick={() => this.setState({ display: "timelog" })}
+                  />
+                  <Menu.Item
+                    name="scratchpad"
+                    active={display === "scratchpad"}
+                    onClick={() => this.setState({ display: "scratchpad" })}
+                  />
+                  <Menu.Item
+                    name="calendar"
+                    active={display === "calendar"}
+                    onClick={() => this.setState({ display: "calendar" })}
+                  />
+                </Menu>
+              </Container>
+            </Grid.Column>
           </Grid>
+          <Divider />
 
           {displayComponent}
 
@@ -272,7 +263,6 @@ class SprintDisplay extends Component {
     );
   }
 }
-
 const mapStateToProps = state => ({
   sprintList: state.commonData.sprintList.data,
   issueList: state.commonData.sprintIssues.data,

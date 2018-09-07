@@ -3,6 +3,7 @@ import { Loader, Grid } from "semantic-ui-react";
 import { connect } from "react-redux";
 
 import Editor from "./Editor";
+import "./ScratchpadDisplay.css";
 
 import * as Actions from "../sprintPageActions";
 
@@ -11,6 +12,10 @@ class ScratchpadDisplay extends Component {
     this.props.getScratchpads();
   }
 
+  renderEditor = scratchpad => {
+    return <Editor content={scratchpad.content} id={scratchpad.id} />;
+  };
+
   render() {
     const { scratchpads } = this.props;
 
@@ -18,17 +23,23 @@ class ScratchpadDisplay extends Component {
       return <Loader active inline />;
     }
 
+    const half = Math.ceil(scratchpads.length / 2);
+
     return (
-      <Grid divided columns={2}>
-        <Grid.Column>
-          <Editor content={scratchpads[0].content} id={scratchpads[0].id} />
-          <Editor content={scratchpads[2].content} id={scratchpads[2].id} />
-        </Grid.Column>
-        <Grid.Column>
-          <Editor content={scratchpads[1].content} id={scratchpads[1].id} />
-          <Editor content={scratchpads[3].content} id={scratchpads[3].id} />
-        </Grid.Column>
-      </Grid>
+      <div>
+        <Grid columns={2}>
+          <Grid.Column style={{ paddingRight: 5 }}>
+            {scratchpads
+              .slice(0, half)
+              .map(scratchpad => this.renderEditor(scratchpad))}
+          </Grid.Column>
+          <Grid.Column style={{ paddingLeft: 5 }}>
+            {scratchpads
+              .slice(half, scratchpads.length)
+              .map(scratchpad => this.renderEditor(scratchpad))}
+          </Grid.Column>
+        </Grid>
+      </div>
     );
   }
 }
