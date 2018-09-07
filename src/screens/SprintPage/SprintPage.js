@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-
-import "./SprintPage.css";
+import { HotKeys } from "react-hotkeys";
 import {
   Icon,
   Grid,
@@ -22,8 +21,14 @@ import CalendarDisplay from "./CalendarDisplay/CalendarDisplay";
 import Editor from "./ScratchpadDisplay/Editor";
 
 import * as CommonActions from "../../commonActions";
+import "./SprintPage.css";
 
 import { updateSprintQuote } from "../../utils/api";
+
+const map = {
+  snapLeft: "command+left",
+  deleteNode: ["del", "backspace"],
+};
 
 class SprintDisplay extends Component {
   state = {
@@ -82,6 +87,39 @@ class SprintDisplay extends Component {
     });
   };
 
+  overrideMousetrap(HotKeys) {
+    //define previous stopCallback handler for mousetrap
+    HotKeys.__mousetrap__.stopCallback = function(e, element, combo) {
+      // if the element has the class "mousetrap" then no need to stop
+      if ((" " + element.className + " ").indexOf(" mousetrap ") > -1) {
+        return false;
+      }
+      // stop for input, select, and textarea
+      return (
+        element.tagName === "INPUT" ||
+        element.tagName === "SELECT" ||
+        element.tagName === "TEXTAREA" ||
+        (element.contentEditable && element.contentEditable === "true")
+      );
+    };
+  }
+
+  keyMap = {
+    changeToIssues: "1",
+    changeToGraphs: "2",
+    changeToTimelogs: "3",
+    changeToScratchpad: "4",
+    changeToCalendar: "5",
+  };
+
+  handlers = {
+    changeToIssues: () => this.setState({ display: "issue" }),
+    changeToGraphs: () => this.setState({ display: "graph" }),
+    changeToTimelogs: () => this.setState({ display: "timelog" }),
+    changeToScratchpad: () => this.setState({ display: "scratchpad" }),
+    changeToCalendar: () => this.setState({ display: "calendar" }),
+  };
+
   renderName = (name, id) => (
     <div>
       {name}
@@ -134,14 +172,19 @@ class SprintDisplay extends Component {
     }
 
     return (
-      <div>
-        <Grid verticalAlign="top" columns={2} stretched>
-          <Grid.Column textAlign="left" width={7}>
-            <Grid.Row>
-              <Header floated="left" as="h1">
-                {selectedSprint && selectedSprint.name}
-                <Header.Subheader>
-                  {/* <Icon
+      <HotKeys
+        keyMap={this.keyMap}
+        handlers={this.handlers}
+        ref={this.overrideMousetrap}
+      >
+        <div>
+          <Grid verticalAlign="top" columns={2} stretched>
+            <Grid.Column textAlign="left" width={7}>
+              <Grid.Row>
+                <Header floated="left" as="h1">
+                  {selectedSprint && selectedSprint.name}
+                  <Header.Subheader>
+                    {/* <Icon
                     style={{
                       position: "relative",
                       left: "280px",
@@ -150,81 +193,82 @@ class SprintDisplay extends Component {
                     loading={isSaving}
                     name={isSaving ? "redo" : "check"}
                   /> */}
-                  {editQuote ? (
-                    <div>
-                      <TextArea
-                        onChange={this.handleSprintQuoteChange}
-                        defaultValue={quote || selectedSprint.quote}
-                      />
-                      <Button
-                        color="black"
-                        floated="right"
-                        onClick={this.handleSaveSprintQuote}
-                      >
-                        Save
-                      </Button>
-                    </div>
-                  ) : (
-                    <Container onClick={this.toggleEditSprintQuote}>
-                      {quote || selectedSprint.quote || "no quote"}
-                    </Container>
-                  )}
-                </Header.Subheader>
-              </Header>
-            </Grid.Row>
-            <Divider />
-            <Grid.Row>
-              <Button
-                onClick={() => this.setState({ display: "issue" })}
-                color="black"
-                floated="left"
-              >
-                {"Issues"}
-              </Button>
-              <Button
-                onClick={() => this.setState({ display: "graph" })}
-                color="black"
-                floated="left"
-              >
-                {"Graphs"}
-              </Button>
-              <Button
-                onClick={() => this.setState({ display: "timelog" })}
-                color="black"
-                floated="left"
-              >
-                {"Timelogs"}
-              </Button>
-              <Button
-                onClick={() => this.setState({ display: "scratchpad" })}
-                color="black"
-                floated="left"
-              >
-                {"Scratchpad"}
-              </Button>
-              <Button
-                onClick={() => this.setState({ display: "calendar" })}
-                color="black"
-                floated="left"
-              >
-                {"Calendar"}
-              </Button>
-            </Grid.Row>
-          </Grid.Column>
-          <Grid.Column width={9}>
-            <Container />
-          </Grid.Column>
-        </Grid>
+                    {editQuote ? (
+                      <div>
+                        <TextArea
+                          onChange={this.handleSprintQuoteChange}
+                          defaultValue={quote || selectedSprint.quote}
+                        />
+                        <Button
+                          color="black"
+                          floated="right"
+                          onClick={this.handleSaveSprintQuote}
+                        >
+                          Save
+                        </Button>
+                      </div>
+                    ) : (
+                      <Container onClick={this.toggleEditSprintQuote}>
+                        {quote || selectedSprint.quote || "no quote"}
+                      </Container>
+                    )}
+                  </Header.Subheader>
+                </Header>
+              </Grid.Row>
+              <Divider />
+              <Grid.Row>
+                <Button
+                  onClick={() => this.setState({ display: "issue" })}
+                  color="black"
+                  floated="left"
+                >
+                  {"Issues"}
+                </Button>
+                <Button
+                  onClick={() => this.setState({ display: "graph" })}
+                  color="black"
+                  floated="left"
+                >
+                  {"Graphs"}
+                </Button>
+                <Button
+                  onClick={() => this.setState({ display: "timelog" })}
+                  color="black"
+                  floated="left"
+                >
+                  {"Timelogs"}
+                </Button>
+                <Button
+                  onClick={() => this.setState({ display: "scratchpad" })}
+                  color="black"
+                  floated="left"
+                >
+                  {"Scratchpad"}
+                </Button>
+                <Button
+                  onClick={() => this.setState({ display: "calendar" })}
+                  color="black"
+                  floated="left"
+                >
+                  {"Calendar"}
+                </Button>
+              </Grid.Row>
+            </Grid.Column>
+            <Grid.Column width={9}>
+              <Container />
+            </Grid.Column>
+          </Grid>
 
-        {displayComponent}
+          {displayComponent}
 
-        <Editor
-          sprintScratchpad
-          autoSize
-          id={selectedSprint.id}
-          content={selectedSprint.notes}
-        />
-      </div>
+          <Editor
+            sprintScratchpad
+            autoSize
+            id={selectedSprint.id}
+            content={selectedSprint.notes}
+          />
+        </div>
+      </HotKeys>
     );
   }
 }

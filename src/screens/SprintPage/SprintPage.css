@@ -48,3 +48,8 @@
 .ql-editor {
   min-height: 200px;
 }
+
+/* This removes blue outline from react hotkeys */
+div[tabindex="-1"]:focus {
+  outline: 0;
+}
