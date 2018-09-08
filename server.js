@@ -390,10 +390,23 @@ app.get("/Settings", (req, res) => {
   res.send(file.get());
 });
 
-// Get all todos that aren't done
-// search: getScratchpads
+// search: getAllScratchpads
 app.get("/Scratchpads", (req, res) => {
   const query = "SELECT * FROM scratchpads where archived=0";
+  db.read(query)
+    .then(response => {
+      res.send(response);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
+// search: getScratchpads
+app.get("/Scratchpads/:page", (req, res) => {
+  const query = `SELECT * FROM scratchpads where archived=0 AND page=${
+    req.params.page
+  }`;
   db.read(query)
     .then(response => {
       res.send(response);
@@ -466,7 +479,7 @@ app.post("/Event", (req, res) => {
 });
 
 app.get("/Pages", (req, res) => {
-  const query = `SELECT * FROM events`;
+  const query = `SELECT * FROM scratchpad_pages`;
   db.read(query)
     .then(response => {
       res.send(response);

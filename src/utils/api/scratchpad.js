@@ -1,5 +1,17 @@
-export const getScratchpads = () => {
+export const getAllScratchpads = () => {
   return fetch("/Scratchpads", {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  }).then(response => {
+    return response.json();
+  });
+};
+
+export const getScratchpads = page => {
+  return fetch(`/Scratchpads/${page}`, {
     method: "GET",
     headers: {
       Accept: "application/json",

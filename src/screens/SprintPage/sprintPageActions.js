@@ -34,7 +34,17 @@ export const deleteLog = id =>
     API.deleteTimeLog
   )(id);
 
-export const getScratchpads = () =>
+export const getAllScratchpads = () =>
+  asyncActionCreator(
+    {
+      pending: ActionTypes.FETCH_ALL_SCRATCHPADS_REQUEST,
+      complete: ActionTypes.FETCH_ALL_SCRATCHPADS_SUCCESS,
+      error: ActionTypes.FETCH_ALL_SCRATCHPADS_FAILURE,
+    },
+    API.getAllScratchpads
+  )();
+
+export const getScratchpads = page =>
   asyncActionCreator(
     {
       pending: ActionTypes.FETCH_SCRATCHPADS_REQUEST,
@@ -42,7 +52,7 @@ export const getScratchpads = () =>
       error: ActionTypes.FETCH_SCRATCHPADS_FAILURE,
     },
     API.getScratchpads
-  )();
+  )(page);
 
 export const setScratchpad = (id, content) =>
   asyncActionCreator(

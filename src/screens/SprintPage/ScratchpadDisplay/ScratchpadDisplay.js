@@ -9,8 +9,13 @@ import ArchiveModal from "./components/ArchiveModal/ArchiveModal";
 import PageModal from "./components/PageModal/PageModal";
 
 class ScratchpadDisplay extends Component {
+  state = {};
+
   componentDidMount() {
-    this.props.getScratchpads();
+    // this.setState({
+    //   selectedPage: this.props.pages && this.props.pages[0],
+    // });
+    this.props.getScratchpads(this.props.pages ? this.props.pages[0].id : 0);
   }
 
   renderEditor = scratchpad => {
@@ -23,8 +28,24 @@ class ScratchpadDisplay extends Component {
     );
   };
 
+  renderPage = page => {
+    return (
+      <Button
+        onClick={() => {
+          this.props.getScratchpads(page.id);
+          this.setState({ selectedPage: page });
+        }}
+        color="black"
+        key={page.id}
+      >
+        {page.name}
+      </Button>
+    );
+  };
+
   render() {
-    const { scratchpads } = this.props;
+    const { scratchpads, pages } = this.props;
+    console.log(this.state.selectedPage);
 
     if (!scratchpads) {
       return <Loader active inline />;
@@ -32,6 +53,9 @@ class ScratchpadDisplay extends Component {
 
     return (
       <div>
+        <Button.Group>
+          {pages && pages.map(page => this.renderPage(page))}
+        </Button.Group>
         <Grid columns={2}>
           <Grid.Column style={{ paddingRight: 5 }}>
             {scratchpads.map(
@@ -68,6 +92,7 @@ class ScratchpadDisplay extends Component {
 
 const mapStateToProps = state => ({
   scratchpads: state.sprintPage.scratchpads.data,
+  pages: state.sprintPage.pages.data,
 });
 
 const mapDispatchToProps = {
