@@ -6,6 +6,7 @@ import Editor from "./components/Editor/Editor";
 
 import * as Actions from "../sprintPageActions";
 import ArchiveModal from "./components/ArchiveModal/ArchiveModal";
+import PageModal from "./components/PageModal/PageModal";
 
 class ScratchpadDisplay extends Component {
   componentDidMount() {
@@ -46,16 +47,7 @@ class ScratchpadDisplay extends Component {
           </Grid.Column>
         </Grid>
         <br />
-        <Button
-          floated="left"
-          labelPosition="left"
-          icon
-          onClick={this.props.createPage}
-          color="black"
-        >
-          New Page
-          <Icon color="red" name="plus" />
-        </Button>
+        <PageModal />
         <Button
           floated="left"
           labelPosition="left"

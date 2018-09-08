@@ -393,7 +393,7 @@ app.get("/Settings", (req, res) => {
 // Get all todos that aren't done
 // search: getScratchpads
 app.get("/Scratchpads", (req, res) => {
-  const query = "SELECT * FROM scratchpads";
+  const query = "SELECT * FROM scratchpads where archived=0";
   db.read(query)
     .then(response => {
       res.send(response);
@@ -406,12 +406,20 @@ app.get("/Scratchpads", (req, res) => {
 // Get all todos that aren't done
 // search: setScratchpad
 app.put("/Scratchpad/:id", (req, res) => {
-  const { content, title } = req.body;
-  console.log(req.params);
-  const query = `UPDATE scratchpads SET content=(?), title=(?) where id=(?)`;
-  db.insert(query, [content, title || "", req.params.id])
+  const { content, title, archived } = req.body;
+  let query;
+  let params;
+  if (typeof archived === "undefined") {
+    query = `UPDATE scratchpads SET content=(?), title=(?) where id=(?)`;
+    params = [content, title || "", req.params.id];
+  } else {
+    query = `UPDATE scratchpads SET content=(?), title=(?), archived=(?) WHERE id=(?)`;
+    params = [content, title || "", archived, req.params.id];
+  }
+  const select = `SELECT * FROM scratchpads where id=${req.params.id}`;
+  db.insertReturning(query, select, params)
     .then(response => {
-      res.send(response);
+      res.send(response[0]);
     })
     .catch(err => {
       res.send({ status: "Failure" });
@@ -421,7 +429,7 @@ app.put("/Scratchpad/:id", (req, res) => {
 // Get all todos that aren't done
 // search: createScratchpad
 app.post("/Scratchpad", (req, res) => {
-  const query = `INSERT INTO scratchpads values(null, "", "")`;
+  const query = `INSERT INTO scratchpads values(null, "", "", 0)`;
   const select = `SELECT * FROM scratchpads WHERE id in (SELECT last_insert_rowid());`;
   db.insertReturning(query, select)
     .then(response => {
@@ -451,6 +459,30 @@ app.post("/Event", (req, res) => {
   db.insert(query, [id, title, start, allDay])
     .then(() => {
       res.send({ status: "Success" });
+    })
+    .catch(err => {
+      res.send({ status: "Failure" });
+    });
+});
+
+app.get("/Pages", (req, res) => {
+  const query = `SELECT * FROM events`;
+  db.read(query)
+    .then(response => {
+      res.send(response);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
+app.post("/Page", (req, res) => {
+  const { name } = req.body;
+  const query = `INSERT INTO scratchpad_pages values(NULL, (?))`;
+  const select = `SELECT * FROM scratchpad_pages WHERE id in (SELECT last_insert_rowid());`;
+  db.insertReturning(query, select, [name])
+    .then(response => {
+      res.send(response);
     })
     .catch(err => {
       res.send({ status: "Failure" });

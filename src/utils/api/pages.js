@@ -1,5 +1,5 @@
-export const getScratchpads = () => {
-  return fetch("/Scratchpads", {
+export const getPages = () => {
+  return fetch("/Pages", {
     method: "GET",
     headers: {
       Accept: "application/json",
@@ -10,13 +10,14 @@ export const getScratchpads = () => {
   });
 };
 
-export const createPage = () => {
+export const createPage = name => {
   return fetch("/Page", {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
+    body: JSON.stringify({ name }),
   }).then(response => {
     return response.json();
   });

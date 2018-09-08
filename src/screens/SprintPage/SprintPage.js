@@ -6,8 +6,6 @@ import {
   Grid,
   Button,
   Menu,
-  Dropdown,
-  Form,
   TextArea,
   Header,
   Container,
@@ -23,6 +21,7 @@ import CalendarDisplay from "./CalendarDisplay/CalendarDisplay";
 import Editor from "./ScratchpadDisplay/components/Editor/Editor";
 
 import * as CommonActions from "../../commonActions";
+import * as Actions from "./sprintPageActions";
 import "./SprintPage.css";
 
 import { updateSprintQuote } from "../../utils/api";
@@ -40,6 +39,7 @@ class SprintDisplay extends Component {
     const { match } = this.props;
     this.props.getSprintIssues(match.params.id);
     this.props.getSprint(match.params.id);
+    this.props.getPages();
   }
 
   componentDidUpdate(prevProps) {
@@ -273,6 +273,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   getSprintIssues: CommonActions.getSprintIssues,
   getSprint: CommonActions.getSprint,
+  getPages: Actions.getPages,
 };
 
 export default connect(

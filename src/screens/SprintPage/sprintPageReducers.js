@@ -21,6 +21,12 @@ const asyncScratchpadReducer = asyncStateReducer({
   [ActionTypes.FETCH_SCRATCHPADS_SUCCESS]: "complete",
 });
 
+const asyncPageReducer = asyncStateReducer({
+  [ActionTypes.FETCH_PAGES_REQUEST]: "pending",
+  [ActionTypes.FETCH_PAGES_FAILURE]: "error",
+  [ActionTypes.FETCH_PAGES_SUCCESS]: "complete",
+});
+
 const timeSpentLogReducer = (state, action) => {
   switch (action.type) {
     case ActionTypes.DELETE_TIMELOGS_SUCCESS:
@@ -42,6 +48,13 @@ const timeRemainingLogReducer = (state, action) => {
       };
     default:
       return asyncTimeRemainingLogListReducer(state, action);
+  }
+};
+
+const pageReducer = (state, action) => {
+  switch (action.type) {
+    default:
+      return asyncPageReducer(state, action);
   }
 };
 
@@ -78,4 +91,5 @@ export default combineReducers({
   timeSpentLogList: timeSpentLogReducer,
   timeRemainingLogList: timeRemainingLogReducer,
   scratchpads: scratchpadReducer,
+  pages: pageReducer,
 });

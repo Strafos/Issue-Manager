@@ -74,7 +74,7 @@ export const createScratchpad = () =>
     API.createScratchpad
   )();
 
-export const createPage = () =>
+export const createPage = name =>
   asyncActionCreator(
     {
       pending: ActionTypes.CREATE_PAGE_REQUEST,
@@ -82,4 +82,14 @@ export const createPage = () =>
       error: ActionTypes.CREATE_PAGE_FAILURE,
     },
     API.createPage
+  )(name);
+
+export const getPages = name =>
+  asyncActionCreator(
+    {
+      pending: ActionTypes.FETCH_PAGES_REQUEST,
+      complete: ActionTypes.FETCH_PAGES_SUCCESS,
+      error: ActionTypes.FETCH_PAGES_FAILURE,
+    },
+    API.getPages
   )();

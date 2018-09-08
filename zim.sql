@@ -66,8 +66,15 @@ CREATE TABLE todos (
 
 CREATE TABLE scratchpads (
  id integer PRIMARY KEY AUTOINCREMENT,
- content text NOT NULL,
- title text DEFAULT ""
+ content text NOT NULL, 
+ title TEXT default "", 
+ archived default 0, 
+ page integer NOT NULL
+);
+
+CREATE TABLE scratchpad_pages (
+ id integer PRIMARY KEY AUTOINCREMENT,
+ name text NOT NULL
 );
 
 CREATE TABLE events (
