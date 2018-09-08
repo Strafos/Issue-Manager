@@ -22,3 +22,15 @@ export const createPage = name => {
     return response.json();
   });
 };
+
+export const archivePage = pageId => {
+  return fetch(`/Page/archive/${pageId}`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  }).then(response => {
+    return response.json();
+  });
+};

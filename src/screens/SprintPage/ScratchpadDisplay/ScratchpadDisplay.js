@@ -12,10 +12,16 @@ class ScratchpadDisplay extends Component {
   state = {};
 
   componentDidMount() {
-    // this.setState({
-    //   selectedPage: this.props.pages && this.props.pages[0],
-    // });
     this.props.getScratchpads(this.props.pages ? this.props.pages[0].id : 0);
+    this.setState({ selectedPage: this.props.pages && this.props.pages[0] });
+  }
+
+  componentDidUpdate(prevProps) {
+    const { pages } = this.props;
+    if (prevProps.pages != pages) {
+      this.props.getScratchpads(this.props.pages ? this.props.pages[0].id : 0);
+      this.setState({ selectedPage: this.props.pages && this.props.pages[0] });
+    }
   }
 
   renderEditor = scratchpad => {
@@ -29,23 +35,25 @@ class ScratchpadDisplay extends Component {
   };
 
   renderPage = page => {
+    const { selectedPage } = this.state;
     return (
-      <Button
-        onClick={() => {
-          this.props.getScratchpads(page.id);
-          this.setState({ selectedPage: page });
-        }}
-        color="black"
+      <Menu.Item
+        name={page.name}
+        active={selectedPage && selectedPage.id === page.id}
         key={page.id}
-      >
-        {page.name}
-      </Button>
+        onClick={() => {
+          if (page != this.state.selectedPage) {
+            this.props.getScratchpads(page.id);
+            this.setState({ selectedPage: page });
+          }
+        }}
+      />
     );
   };
 
   render() {
     const { scratchpads, pages } = this.props;
-    console.log(this.state.selectedPage);
+    const { selectedPage } = this.state;
 
     if (!scratchpads) {
       return <Loader active inline />;
@@ -53,9 +61,9 @@ class ScratchpadDisplay extends Component {
 
     return (
       <div>
-        <Button.Group>
+        <Menu pointing>
           {pages && pages.map(page => this.renderPage(page))}
-        </Button.Group>
+        </Menu>
         <Grid columns={2}>
           <Grid.Column style={{ paddingRight: 5 }}>
             {scratchpads.map(
@@ -71,18 +79,28 @@ class ScratchpadDisplay extends Component {
           </Grid.Column>
         </Grid>
         <br />
-        <PageModal />
         <Button
           floated="left"
           labelPosition="left"
           icon
-          onClick={this.props.createScratchpad}
+          onClick={() => this.props.createScratchpad(selectedPage.id)}
           color="black"
         >
           New Scratchpad
           <Icon color="red" name="plus" />
         </Button>
         <ArchiveModal scratchpads={scratchpads} />
+        <PageModal />
+        <Button
+          floated="right"
+          labelPosition="left"
+          icon
+          onClick={() => this.props.archivePage(selectedPage.id)}
+          color="black"
+        >
+          Archive Page
+          <Icon color="red" name="trash" />
+        </Button>
         <br />
         <br />
       </div>
@@ -99,6 +117,7 @@ const mapDispatchToProps = {
   getScratchpads: Actions.getScratchpads,
   createScratchpad: Actions.createScratchpad,
   createPage: Actions.createPage,
+  archivePage: Actions.archivePage,
 };
 
 export default connect(

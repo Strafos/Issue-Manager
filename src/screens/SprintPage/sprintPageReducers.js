@@ -53,6 +53,16 @@ const timeRemainingLogReducer = (state, action) => {
 
 const pageReducer = (state, action) => {
   switch (action.type) {
+    case ActionTypes.CREATE_PAGE_SUCCESS:
+      return {
+        ...state,
+        data: [...state.data, action.responseJson],
+      };
+    case ActionTypes.ARCHIVE_PAGE_SUCCESS:
+      return {
+        ...state,
+        data: state.data.filter(page => page.id !== action.responseJson),
+      };
     default:
       return asyncPageReducer(state, action);
   }
@@ -80,6 +90,13 @@ const scratchpadReducer = (state, action) => {
             scratchpad.id === action.responseJson.id
               ? action.responseJson
               : scratchpad
+        ),
+      };
+    case ActionTypes.ARCHIVE_PAGE_SUCCESS:
+      return {
+        ...state,
+        data: state.data.filter(
+          scratchpad => scratchpad.page !== action.responseJson
         ),
       };
     default:

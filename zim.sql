@@ -74,7 +74,8 @@ CREATE TABLE scratchpads (
 
 CREATE TABLE scratchpad_pages (
  id integer PRIMARY KEY AUTOINCREMENT,
- name text NOT NULL
+ name text NOT NULL,
+ archived default 0
 );
 
 CREATE TABLE events (

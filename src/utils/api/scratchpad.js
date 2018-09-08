@@ -48,13 +48,14 @@ export const archiveScratchpad = (id, content, title) => {
   });
 };
 
-export const createScratchpad = () => {
+export const createScratchpad = pageId => {
   return fetch("/Scratchpad", {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
+    body: JSON.stringify({ pageId }),
   }).then(response => {
     return response.json();
   });

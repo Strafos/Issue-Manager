@@ -53,7 +53,7 @@ class PageModal extends Component {
         open={modalOpen}
         trigger={
           <Button
-            floated="left"
+            floated="right"
             onClick={this.handleOpen}
             labelPosition="left"
             icon

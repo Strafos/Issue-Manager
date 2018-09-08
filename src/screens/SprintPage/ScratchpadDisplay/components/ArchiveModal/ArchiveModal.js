@@ -94,7 +94,7 @@ class ArchiveModal extends Component {
             style={this.padding}
             color="black"
           >
-            Archive
+            Archive Scratchpad
           </Button>
         </Form>
       </Modal>
