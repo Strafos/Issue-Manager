@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Loader, Grid, Button, Icon } from "semantic-ui-react";
+import { Loader, Grid, Menu, Button, Icon } from "semantic-ui-react";
 import { connect } from "react-redux";
 
 import Editor from "./Editor";
@@ -26,20 +26,6 @@ class ScratchpadDisplay extends Component {
 
     return (
       <div>
-        <Button.Group style={{ paddingTop: 0 }}>
-          <Button icon>
-            <Icon inverted name="align left" />
-          </Button>
-          <Button icon>
-            <Icon name="align center" />
-          </Button>
-          <Button icon>
-            <Icon name="align right" />
-          </Button>
-          <Button icon>
-            <Icon name="align justify" />
-          </Button>
-        </Button.Group>
         <Grid columns={2}>
           <Grid.Column style={{ paddingRight: 5 }}>
             {scratchpads
@@ -52,6 +38,39 @@ class ScratchpadDisplay extends Component {
               .map(scratchpad => this.renderEditor(scratchpad))}
           </Grid.Column>
         </Grid>
+        <br />
+        <Button
+          floated="left"
+          labelPosition="left"
+          icon
+          onClick={this.props.createScratchpad}
+          color="black"
+        >
+          New Page
+          <Icon color="red" name="plus" />
+        </Button>
+        <Button
+          floated="left"
+          labelPosition="left"
+          icon
+          onClick={this.props.createScratchpad}
+          color="black"
+        >
+          New Scratchpad
+          <Icon color="red" name="plus" />
+        </Button>
+        <Button
+          floated="left"
+          labelPosition="left"
+          icon
+          onClick={this.handleOpen}
+          color="black"
+        >
+          Archive
+          <Icon color="red" name="trash" />
+        </Button>
+        <br />
+        <br />
       </div>
     );
   }
@@ -63,6 +82,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   getScratchpads: Actions.getScratchpads,
+  createScratchpad: Actions.createScratchpad,
 };
 
 export default connect(

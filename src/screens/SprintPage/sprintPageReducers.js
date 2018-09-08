@@ -21,11 +21,11 @@ const asyncScratchpadReducer = asyncStateReducer({
   [ActionTypes.FETCH_SCRATCHPADS_SUCCESS]: "complete",
 });
 
-// const asyncSetScratchpadReducer = asyncStateReducer({
-//   [ActionTypes.SET_SCRATCHPAD_REQUEST]: "pending",
-//   [ActionTypes.SET_SCRATCHPAD_FAILURE]: "error",
-//   [ActionTypes.SET_SCRATCHPAD_SUCCESS]: "complete",
-// });
+const asyncCreateScratchpadReducer = asyncStateReducer({
+  [ActionTypes.CREATE_SCRATCHPADS_REQUEST]: "pending",
+  [ActionTypes.CREATE_SCRATCHPADS_FAILURE]: "error",
+  [ActionTypes.CREATE_SCRATCHPADS_SUCCESS]: "complete",
+});
 
 const timeSpentLogReducer = (state, action) => {
   switch (action.type) {
@@ -51,8 +51,20 @@ const timeRemainingLogReducer = (state, action) => {
   }
 };
 
+const scratchpadReducer = (state, action) => {
+  switch (action.type) {
+    case ActionTypes.CREATE_SCRATCHPADS_SUCCESS:
+      return {
+        ...state,
+        data: [...state.data, action.responseJson],
+      };
+    default:
+      return asyncScratchpadReducer(state, action);
+  }
+};
+
 export default combineReducers({
   timeSpentLogList: timeSpentLogReducer,
   timeRemainingLogList: timeRemainingLogReducer,
-  scratchpads: asyncScratchpadReducer,
+  scratchpads: scratchpadReducer,
 });

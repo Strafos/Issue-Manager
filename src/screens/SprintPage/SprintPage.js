@@ -248,7 +248,7 @@ class SprintDisplay extends Component {
               </Container>
             </Grid.Column>
           </Grid>
-          {/* <Divider /> */}
+          <Divider />
 
           {displayComponent}
 
