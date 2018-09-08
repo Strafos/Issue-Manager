@@ -57,9 +57,9 @@ export const setScratchpad = (id, content) =>
 export const archiveScratchpad = (id, content, title) =>
   asyncActionCreator(
     {
-      pending: ActionTypes.SET_SCRATCHPAD_REQUEST,
-      complete: ActionTypes.SET_SCRATCHPAD_SUCCESS,
-      error: ActionTypes.SET_SCRATCHPAD_FAILURE,
+      pending: ActionTypes.ARCHIVE_SCRATCHPAD_REQUEST,
+      complete: ActionTypes.ARCHIVE_SCRATCHPAD_SUCCESS,
+      error: ActionTypes.ARCHIVE_SCRATCHPAD_FAILURE,
     },
     API.archiveScratchpad
   )(id, content, title);
@@ -72,4 +72,14 @@ export const createScratchpad = () =>
       error: ActionTypes.CREATE_SCRATCHPADS_FAILURE,
     },
     API.createScratchpad
+  )();
+
+export const createPage = () =>
+  asyncActionCreator(
+    {
+      pending: ActionTypes.CREATE_PAGE_REQUEST,
+      complete: ActionTypes.CREATE_PAGE_SUCCESS,
+      error: ActionTypes.CREATE_PAGE_FAILURE,
+    },
+    API.createPage
   )();

@@ -52,6 +52,23 @@ const scratchpadReducer = (state, action) => {
         ...state,
         data: [...state.data, action.responseJson],
       };
+    case ActionTypes.ARCHIVE_SCRATCHPAD_SUCCESS:
+      return {
+        ...state,
+        data: state.data.filter(
+          scratchpad => scratchpad.id !== action.responseJson.id
+        ),
+      };
+    case ActionTypes.SET_SCRATCHPAD_SUCCESS:
+      return {
+        ...state,
+        data: state.data.map(
+          scratchpad =>
+            scratchpad.id === action.responseJson.id
+              ? action.responseJson
+              : scratchpad
+        ),
+      };
     default:
       return asyncScratchpadReducer(state, action);
   }

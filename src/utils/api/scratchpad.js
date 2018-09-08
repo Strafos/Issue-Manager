@@ -30,7 +30,7 @@ export const archiveScratchpad = (id, content, title) => {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ content, title }),
+    body: JSON.stringify({ content, title, archived: 1 }),
   }).then(response => {
     return response.json();
   });

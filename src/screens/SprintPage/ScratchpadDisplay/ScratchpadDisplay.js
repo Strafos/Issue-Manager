@@ -50,7 +50,7 @@ class ScratchpadDisplay extends Component {
           floated="left"
           labelPosition="left"
           icon
-          onClick={this.props.createScratchpad}
+          onClick={this.props.createPage}
           color="black"
         >
           New Page
@@ -81,6 +81,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   getScratchpads: Actions.getScratchpads,
   createScratchpad: Actions.createScratchpad,
+  createPage: Actions.createPage,
 };
 
 export default connect(
