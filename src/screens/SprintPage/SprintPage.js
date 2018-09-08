@@ -32,7 +32,6 @@ class SprintDisplay extends Component {
     display: "issue",
     quote: "",
     editQuote: false,
-    isSaving: false,
   };
 
   componentDidMount() {
@@ -64,12 +63,6 @@ class SprintDisplay extends Component {
         }
       }
     );
-  };
-
-  setSaving = saveState => {
-    this.setState({
-      isSaving: saveState,
-    });
   };
 
   handleSprintQuoteChange = (event, { value }) => {
@@ -181,15 +174,6 @@ class SprintDisplay extends Component {
                 <Header floated="left" as="h1">
                   {selectedSprint && selectedSprint.name}
                   <Header.Subheader>
-                    {/* <Icon
-                    style={{
-                      position: "relative",
-                      left: "280px",
-                      top: "20px",
-                    }}
-                    loading={isSaving}
-                    name={isSaving ? "redo" : "check"}
-                  /> */}
                     {editQuote ? (
                       <div>
                         <TextArea

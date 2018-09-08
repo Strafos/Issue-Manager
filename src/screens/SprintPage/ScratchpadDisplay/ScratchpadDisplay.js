@@ -12,8 +12,15 @@ class ScratchpadDisplay extends Component {
   state = {};
 
   componentDidMount() {
-    this.props.getScratchpads(this.props.pages ? this.props.pages[0].id : 0);
-    this.setState({ selectedPage: this.props.pages && this.props.pages[0] });
+    this.props.getScratchpads(
+      this.props.pages && this.props.pages.length > 0
+        ? this.props.pages[0].id
+        : -1
+    );
+    this.setState({
+      selectedPage:
+        this.props.pages && this.props.pages.length > 0 && this.props.pages[0],
+    });
   }
 
   componentDidUpdate(prevProps) {
