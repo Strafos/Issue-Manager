@@ -75,10 +75,6 @@ class Editor extends Component {
     const { autoSize } = this.props;
     const { content } = this.state;
 
-    if (!true) {
-      return <Loader active inline />;
-    }
-
     return (
       <Segment>
         <ReactQuill

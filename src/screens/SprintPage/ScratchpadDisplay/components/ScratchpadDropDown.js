@@ -13,7 +13,7 @@ class ScratchpadDropDown extends Component {
 
   parseContent = content => {
     const cleanContent = content.replace(/<\/?[^>]+(>|$)/g, "");
-    return cleanContent.slice(0, 40) + "...";
+    return cleanContent.length > 0 ? cleanContent.slice(0, 40) + "..." : "";
   };
 
   render() {
