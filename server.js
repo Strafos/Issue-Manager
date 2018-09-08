@@ -406,9 +406,10 @@ app.get("/Scratchpads", (req, res) => {
 // Get all todos that aren't done
 // search: setScratchpad
 app.put("/Scratchpad/:id", (req, res) => {
-  const { content } = req.body;
-  const query = `UPDATE scratchpads SET content=(?) where id=(?)`;
-  db.insert(query, [content, req.params.id])
+  const { content, title } = req.body;
+  console.log(req.params);
+  const query = `UPDATE scratchpads SET content=(?), title=(?) where id=(?)`;
+  db.insert(query, [content, title || "", req.params.id])
     .then(response => {
       res.send(response);
     })

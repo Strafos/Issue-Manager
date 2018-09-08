@@ -7,8 +7,8 @@ import "react-quill/dist/quill.bubble.css"; // ES6
 
 import "./Editor.css";
 
-import * as Actions from "../sprintPageActions";
-import { updateSprintNotes } from "../../../utils/api";
+import * as Actions from "../../../sprintPageActions";
+import { updateSprintNotes } from "../../../../../utils/api";
 
 const saveTime = 1000;
 

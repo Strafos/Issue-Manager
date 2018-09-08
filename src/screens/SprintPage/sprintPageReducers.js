@@ -21,12 +21,6 @@ const asyncScratchpadReducer = asyncStateReducer({
   [ActionTypes.FETCH_SCRATCHPADS_SUCCESS]: "complete",
 });
 
-const asyncCreateScratchpadReducer = asyncStateReducer({
-  [ActionTypes.CREATE_SCRATCHPADS_REQUEST]: "pending",
-  [ActionTypes.CREATE_SCRATCHPADS_FAILURE]: "error",
-  [ActionTypes.CREATE_SCRATCHPADS_SUCCESS]: "complete",
-});
-
 const timeSpentLogReducer = (state, action) => {
   switch (action.type) {
     case ActionTypes.DELETE_TIMELOGS_SUCCESS:

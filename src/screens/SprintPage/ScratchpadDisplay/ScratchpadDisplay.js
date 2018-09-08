@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import { Loader, Grid, Menu, Button, Icon } from "semantic-ui-react";
 import { connect } from "react-redux";
 
-import Editor from "./Editor";
+import Editor from "./components/Editor/Editor";
 
 import * as Actions from "../sprintPageActions";
+import ArchiveModal from "./components/ArchiveModal/ArchiveModal";
 
 class ScratchpadDisplay extends Component {
   componentDidMount() {
@@ -12,7 +13,13 @@ class ScratchpadDisplay extends Component {
   }
 
   renderEditor = scratchpad => {
-    return <Editor content={scratchpad.content} id={scratchpad.id} />;
+    return (
+      <Editor
+        key={scratchpad.id}
+        content={scratchpad.content}
+        id={scratchpad.id}
+      />
+    );
   };
 
   render() {
@@ -22,20 +29,20 @@ class ScratchpadDisplay extends Component {
       return <Loader active inline />;
     }
 
-    const half = Math.ceil(scratchpads.length / 2);
-
     return (
       <div>
         <Grid columns={2}>
           <Grid.Column style={{ paddingRight: 5 }}>
-            {scratchpads
-              .slice(0, half)
-              .map(scratchpad => this.renderEditor(scratchpad))}
+            {scratchpads.map(
+              (scratchpad, idx) =>
+                idx % 2 === 0 ? this.renderEditor(scratchpad) : null
+            )}
           </Grid.Column>
           <Grid.Column style={{ paddingLeft: 5 }}>
-            {scratchpads
-              .slice(half, scratchpads.length)
-              .map(scratchpad => this.renderEditor(scratchpad))}
+            {scratchpads.map(
+              (scratchpad, idx) =>
+                idx % 2 === 1 ? this.renderEditor(scratchpad) : null
+            )}
           </Grid.Column>
         </Grid>
         <br />
@@ -59,16 +66,7 @@ class ScratchpadDisplay extends Component {
           New Scratchpad
           <Icon color="red" name="plus" />
         </Button>
-        <Button
-          floated="left"
-          labelPosition="left"
-          icon
-          onClick={this.handleOpen}
-          color="black"
-        >
-          Archive
-          <Icon color="red" name="trash" />
-        </Button>
+        <ArchiveModal scratchpads={scratchpads} />
         <br />
         <br />
       </div>

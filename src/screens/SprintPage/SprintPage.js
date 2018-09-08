@@ -20,7 +20,7 @@ import TimelogDisplay from "./TimelogDisplay/TimelogDisplay";
 import IssueDisplay from "./IssueDisplay/IssueDisplay";
 import ScratchpadDisplay from "./ScratchpadDisplay/ScratchpadDisplay";
 import CalendarDisplay from "./CalendarDisplay/CalendarDisplay";
-import Editor from "./ScratchpadDisplay/Editor";
+import Editor from "./ScratchpadDisplay/components/Editor/Editor";
 
 import * as CommonActions from "../../commonActions";
 import "./SprintPage.css";
