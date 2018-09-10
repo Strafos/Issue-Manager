@@ -203,12 +203,10 @@ class IssueDisplay extends Component {
 
   handleSaveIssueNotes = (id, notes) => {
     this.handleEditNotes(id);
-    this.props.saving(true);
     updateIssueNotes(id, notes).then(res => {
       if (!res || res.status !== "Success") {
         this.props.error("Failed to save issue notes");
       } else {
-        this.props.saving(false);
       }
     });
   };
