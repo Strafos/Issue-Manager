@@ -7,7 +7,6 @@ CREATE TABLE sprints (
  quote text default ''
 );
 
-
 CREATE TABLE status (
  id integer PRIMARY KEY AUTOINCREMENT,
  type text NOT NULL
@@ -77,6 +76,8 @@ CREATE TABLE scratchpad_pages (
  name text NOT NULL,
  archived default 0
 );
+
+INSERT INTO scratchpad_pages values(NULL, "Home", 0);
 
 CREATE TABLE events (
  id integer NOT NULL,

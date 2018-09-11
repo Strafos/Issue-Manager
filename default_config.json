@@ -1,0 +1,6 @@
+{
+  "weekdayHours": 3,
+  "weekendHours": 6,
+  "timeDelta": 1,
+  "build": "prod"
+}
