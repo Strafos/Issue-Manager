@@ -25,7 +25,7 @@ class ScratchpadDisplay extends Component {
 
   componentDidUpdate(prevProps) {
     const { pages } = this.props;
-    if (prevProps.pages != pages) {
+    if (JSON.stringify(prevProps.pages) !== JSON.stringify(pages)) {
       this.props.getScratchpads(this.props.pages ? this.props.pages[0].id : 0);
       this.setState({ selectedPage: this.props.pages && this.props.pages[0] });
     }
@@ -49,7 +49,9 @@ class ScratchpadDisplay extends Component {
         active={selectedPage && selectedPage.id === page.id}
         key={page.id}
         onClick={() => {
-          if (page != this.state.selectedPage) {
+          if (
+            JSON.stringify(page) !== JSON.stringify(this.state.selectedPage)
+          ) {
             this.props.getScratchpads(page.id);
             this.setState({ selectedPage: page });
           }

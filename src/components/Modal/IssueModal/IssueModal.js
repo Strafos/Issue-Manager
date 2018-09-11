@@ -36,7 +36,10 @@ class IssueModal extends Component {
 
   componentDidUpdate(prevProps) {
     const { selectedSprint } = this.props;
-    if (selectedSprint != prevProps.selectedSprint) {
+    if (
+      JSON.stringify(selectedSprint) !==
+      JSON.stringify(prevProps.selectedSprint)
+    ) {
       this.setState({
         sprintId: selectedSprint && selectedSprint.id,
       });

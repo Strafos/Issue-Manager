@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import ReactQuill, { Quill } from "react-quill"; // ES6
+import ReactQuill from "react-quill"; // ES6
 import { connect } from "react-redux";
-import { Loader, Segment } from "semantic-ui-react";
+import { Segment } from "semantic-ui-react";
 
 import "react-quill/dist/quill.bubble.css"; // ES6
 

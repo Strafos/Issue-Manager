@@ -22,7 +22,7 @@ class TimeSpentMiniGraph extends Component {
 
   componentDidUpdate(prevProps) {
     const { sprint } = this.props;
-    if (sprint != prevProps.sprint) {
+    if (sprint.id !== prevProps.sprint.id) {
       this.onMount(sprint);
     }
   }

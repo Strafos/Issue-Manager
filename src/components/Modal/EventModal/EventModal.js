@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import ReactDatePicker from "react-datepicker";
-import TimePicker from "rc-time-picker";
-import moment from "moment";
 
 import {
   Container,
@@ -21,7 +19,6 @@ import "./EventModal.css";
 class EventModal extends Component {
   state = {
     startDate: null,
-    endDate: null,
     title: "",
     modalOpen: false,
     isRepeated: false,
@@ -60,7 +57,7 @@ class EventModal extends Component {
 
   handleSubmit = () => {
     const { onModalClose, createEvent, id } = this.props;
-    const { title, startDate, endDate, isRepeated, weeksRepeated } = this.state;
+    const { title, startDate, isRepeated, weeksRepeated } = this.state;
     const eventList = [
       {
         id,
@@ -93,14 +90,8 @@ class EventModal extends Component {
     });
   };
 
-  handleChangeEndDate = date => {
-    this.setState({
-      endDate: date,
-    });
-  };
-
   render() {
-    const { modalOpen, startDate, endDate, isRepeated } = this.state;
+    const { modalOpen, startDate, isRepeated } = this.state;
     const { onModalClose } = this.props;
 
     return (
@@ -131,19 +122,6 @@ class EventModal extends Component {
                 minuteStep={15}
               /> */}
             </Form.Field>
-            {/* <Form.Field>
-              <label>End</label>
-              <ReactDatePicker
-                selected={endDate}
-                onChange={this.handleChangeEndDate}
-              />
-              <TimePicker
-                defaultValue={undefined}
-                showSecond={false}
-                minuteStep={15}
-                onChange={this.handleChangeEndTime}
-              />
-            </Form.Field> */}
             <Form.Checkbox
               label={"Repeated"}
               onClick={() => this.setState({ isRepeated: !isRepeated })}
