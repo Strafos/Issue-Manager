@@ -21,8 +21,6 @@ yarn-debug.log*
 yarn-error.log*
 
 /db
-/prod_db
 .vscode/
 
-/config.json
-/package-lock.json
+config.json
