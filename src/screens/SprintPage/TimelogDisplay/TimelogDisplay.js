@@ -19,8 +19,8 @@ class TimelogDisplay extends Component {
   componentDidUpdate(prevProps) {
     const { sprintId } = this.props;
     if (prevProps.sprintId !== sprintId) {
-      this.props.getSprintIssues(sprintId);
-      this.props.getSprint(sprintId);
+      this.props.getSpentTimeLogs(sprintId);
+      this.props.getRemainingTimeLogs(sprintId);
     }
   }
 
