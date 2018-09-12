@@ -22,6 +22,6 @@ yarn-error.log*
 
 /db
 .vscode/
-.eslint
+.eslintrc
 
 config.json
