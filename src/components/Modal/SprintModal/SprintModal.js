@@ -74,7 +74,7 @@ class SprintModal extends Component {
 
   quickCreate = weeksAdv => {
     const startDate = this.futureMonday(weeksAdv);
-    const name = `${startDate} Sprint`;
+    const name = `${startDate}`;
     const requestObj = {
       name,
       startDate,
