@@ -41,7 +41,7 @@ class ScratchpadDisplay extends Component {
     );
   };
 
-  renderPage = page => {
+  renderPageMenu = page => {
     const { selectedPage } = this.state;
     return (
       <Menu.Item
@@ -71,7 +71,19 @@ class ScratchpadDisplay extends Component {
     return (
       <div>
         <Menu pointing>
-          {pages && pages.map(page => this.renderPage(page))}
+          {pages && pages.map(page => this.renderPageMenu(page))}
+          <Menu.Item
+            name="Archive"
+            active={selectedPage && selectedPage === "archive"}
+            key={-1}
+            position="right"
+            onClick={() => {
+              {
+                this.props.getArchivedScratchpads();
+                this.setState({ selectedPage: "archive" });
+              }
+            }}
+          />
         </Menu>
         <Grid columns={2}>
           <Grid.Column style={{ paddingRight: 5 }}>
@@ -99,16 +111,6 @@ class ScratchpadDisplay extends Component {
           <Icon color="red" name="plus" />
         </Button>
         <ArchiveModal scratchpads={scratchpads} />
-        <Button
-          floated="right"
-          labelPosition="left"
-          icon
-          onClick={() => this.props.getArchivedScratchpads()}
-          color="black"
-        >
-          View Archive
-          <Icon color="red" name="circle" />
-        </Button>
         <PageModal />
         <Button
           floated="right"
@@ -116,6 +118,7 @@ class ScratchpadDisplay extends Component {
           icon
           onClick={() => this.props.archivePage(selectedPage.id)}
           color="black"
+          disabled={selectedPage === "archive"}
         >
           Archive Page
           <Icon color="red" name="trash" />
@@ -134,7 +137,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   getScratchpads: Actions.getScratchpads,
-  getArchivedScratchpads: Actions.getScratchpads,
+  getArchivedScratchpads: Actions.getArchivedScratchpads,
   createScratchpad: Actions.createScratchpad,
   createPage: Actions.createPage,
   archivePage: Actions.archivePage,
