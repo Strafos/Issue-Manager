@@ -99,6 +99,16 @@ class ScratchpadDisplay extends Component {
           <Icon color="red" name="plus" />
         </Button>
         <ArchiveModal scratchpads={scratchpads} />
+        <Button
+          floated="right"
+          labelPosition="left"
+          icon
+          onClick={() => this.props.getArchivedScratchpads()}
+          color="black"
+        >
+          View Archive
+          <Icon color="red" name="circle" />
+        </Button>
         <PageModal />
         <Button
           floated="right"
@@ -124,6 +134,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   getScratchpads: Actions.getScratchpads,
+  getArchivedScratchpads: Actions.getScratchpads,
   createScratchpad: Actions.createScratchpad,
   createPage: Actions.createPage,
   archivePage: Actions.archivePage,

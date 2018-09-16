@@ -99,6 +99,11 @@ const scratchpadReducer = (state, action) => {
           scratchpad => scratchpad.page !== action.responseJson
         ),
       };
+    case ActionTypes.FETCH_ARCHIVED_SCRATCHPADS_SUCCESS:
+      return {
+        ...state,
+        data: action.responseJson,
+      };
     default:
       return asyncScratchpadReducer(state, action);
   }

@@ -402,6 +402,18 @@ app.get("/Scratchpads", (req, res) => {
     });
 });
 
+// search: getArchivedScratchpads
+app.get("/Scratchpads/archived", (req, res) => {
+  const query = "SELECT * FROM scratchpads where archived=1";
+  db.read(query)
+    .then(response => {
+      res.send(response);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
 // search: getScratchpads
 app.get("/Scratchpads/:page", (req, res) => {
   const query = `SELECT * FROM scratchpads where archived=0 AND page=${

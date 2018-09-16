@@ -22,6 +22,18 @@ export const getScratchpads = page => {
   });
 };
 
+export const getArchivedScratchpads = () => {
+  return fetch(`/Scratchpads/archived`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  }).then(response => {
+    return response.json();
+  });
+};
+
 export const setScratchpad = (id, content) => {
   return fetch(`/Scratchpad/${id}`, {
     method: "PUT",

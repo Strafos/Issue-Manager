@@ -54,6 +54,16 @@ export const getScratchpads = page =>
     API.getScratchpads
   )(page);
 
+export const getArchivedScratchpads = () =>
+  asyncActionCreator(
+    {
+      pending: ActionTypes.FETCH_ARCHIVED_SCRATCHPADS_REQUEST,
+      complete: ActionTypes.FETCH_ARCHIVED_SCRATCHPADS_SUCCESS,
+      error: ActionTypes.FETCH_ARCHIVED_SCRATCHPADS_FAILURE,
+    },
+    API.getArchivedScratchpads
+  )();
+
 export const setScratchpad = (id, content) =>
   asyncActionCreator(
     {
