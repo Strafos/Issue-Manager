@@ -53,13 +53,10 @@ class SprintDisplay extends Component {
     const { selectedSprint } = this.props;
     const { quote } = this.state;
     this.toggleEditSprintQuote();
-    this.setSaving(true);
     updateSprintQuote(quote || selectedSprint.quote, selectedSprint.id).then(
       res => {
         if (!res || res.status !== "Success") {
           this.props.error("Failed to save quote");
-        } else {
-          this.setSaving(false);
         }
       }
     );
@@ -153,7 +150,6 @@ class SprintDisplay extends Component {
             projects={projectList}
             sprints={sprintList}
             issues={issueList}
-            saving={this.setSaving}
           />
         );
         break;
