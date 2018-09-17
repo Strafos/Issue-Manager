@@ -3,6 +3,7 @@ import {
   TextArea,
   Container,
   Icon,
+  Form,
   Button,
   Modal,
   Divider,
@@ -46,10 +47,31 @@ class SettingModal extends Component {
   };
 
   handleSubmit = () => {
-    const {} = this.state;
+    const { setting } = this.state;
     const requestObj = {};
     this.props.createIssue(requestObj);
     this.handleClose();
+  };
+
+  handleChange = (event, { value }) => {
+    this.setState({
+      setting: value,
+    });
+  };
+
+  renderTextArea = () => {
+    return (
+      <TextArea
+        onChange={this.handleChange}
+        style={{
+          minHeight: 250,
+          backgroundColor: "#282828",
+          color: "#BEBEBE",
+          fontSize: 17,
+        }}
+        value={this.state.setting}
+      />
+    );
   };
 
   render() {
@@ -58,7 +80,7 @@ class SettingModal extends Component {
 
     return (
       <Modal
-        size="mini"
+        size="large"
         closeIcon
         centered
         onClose={this.handleClose}
@@ -76,26 +98,19 @@ class SettingModal extends Component {
         }
         className="Modal"
       >
-        <Modal.Header textAlign="left">Create Issue</Modal.Header>
+        <Modal.Header textAlign="left">Settings</Modal.Header>
         <Container textAlign="left">
-          <TextArea
-            onChange={this.handleNotes}
-            style={{
-              minHeight: 250,
-              backgroundColor: "#282828",
-              color: "#BEBEBE",
-              fontSize: 17,
-            }}
-            value={setting}
-          />
+          <Form className="Left">
+            <Form.Field control={this.renderTextArea} />
+          </Form>
+
           <Divider />
           <Button
             onClick={this.handleSubmit}
             disabled={this.handleValidate()}
-            style={this.padding}
             color="black"
           >
-            Create Issue
+            Save settings
           </Button>
         </Container>
         <Container textAlign="center" />
