@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import { Message, Grid } from "semantic-ui-react";
+import { Grid } from "semantic-ui-react";
 import { connect } from "react-redux";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -15,25 +15,7 @@ import SideBar from "./components/SideBar/SideBar";
 import * as CommonActions from "./commonActions";
 
 class App extends Component {
-  state = {
-    errorMessage: "",
-    showErrorMessage: false,
-  };
-
-  handleErrorMessage = () => {
-    return (
-      <Message negative>
-        <Message.Header>{this.state.errorMessage}</Message.Header>
-      </Message>
-    );
-  };
-
-  setError = message => {
-    this.setState({
-      showErrorMessage: true,
-      errorMessage: message,
-    });
-  };
+  state = {};
 
   componentDidMount() {
     this.props.getSettings();
@@ -49,20 +31,18 @@ class App extends Component {
               <SideBar />
 
               <Grid.Column width={13}>
-                {this.state.showErrorMessage && this.handleErrorMessage()}
-
                 <Route
                   exact
                   path="/sprint/:id?"
                   render={props => {
-                    return <SprintPage error={this.setError} {...props} />;
+                    return <SprintPage {...props} />;
                   }}
                 />
 
                 <Route
                   path="/issue/:id?"
                   render={props => {
-                    return <IssuePage error={this.setError} {...props} />;
+                    return <IssuePage {...props} />;
                   }}
                 />
               </Grid.Column>
