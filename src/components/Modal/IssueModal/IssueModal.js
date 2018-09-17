@@ -104,7 +104,16 @@ class IssueModal extends Component {
       notes,
     };
     this.props.createIssue(requestObj);
-    this.handleClose();
+
+    // Reset state after submit
+    this.setState({
+      name: "",
+      timeEstimate: 0,
+      projectId: 0,
+      sprintId: 0,
+      modalOpen: false,
+      notes: "",
+    });
   };
 
   render() {
