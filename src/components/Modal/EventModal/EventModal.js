@@ -14,8 +14,6 @@ import { connect } from "react-redux";
 import "react-datepicker/dist/react-datepicker.css";
 import "rc-time-picker/assets/index.css";
 
-import "./EventModal.css";
-
 class EventModal extends Component {
   state = {
     startDate: null,

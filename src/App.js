@@ -40,8 +40,10 @@ class App extends Component {
                 />
 
                 <Route
+                  exact
                   path="/issue/:id?"
                   render={props => {
+                    console.log(props);
                     return <IssuePage {...props} />;
                   }}
                 />

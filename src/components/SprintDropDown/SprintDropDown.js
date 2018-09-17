@@ -6,8 +6,8 @@ class SprintDropDown extends Component {
   renderItem = sprint => {
     return (
       <Dropdown.Item
-        as={Link}
-        to={`/sprint/${sprint.id}`}
+        // as={Link}
+        // to={`/sprint/${sprint.id}`}
         text={sprint.name}
         key={sprint.id}
         value={sprint.id}

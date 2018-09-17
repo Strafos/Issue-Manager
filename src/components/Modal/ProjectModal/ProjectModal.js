@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import "./ProjectModal.css";
 import { Icon, Segment, Button, Modal, Input } from "semantic-ui-react";
 
 import { createProject } from "../../../utils/api";

@@ -12,8 +12,6 @@ import { connect } from "react-redux";
 
 import * as CommonActions from "../../../commonActions";
 
-import "./SettingModal.css";
-
 class SettingModal extends Component {
   state = { modalOpen: false };
 
@@ -75,8 +73,7 @@ class SettingModal extends Component {
   };
 
   render() {
-    const { setting, modalOpen } = this.state;
-    console.log(this.props.setting);
+    const { modalOpen } = this.state;
 
     return (
       <Modal

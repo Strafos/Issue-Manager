@@ -5,8 +5,6 @@ import { connect } from "react-redux";
 
 import * as CommonActions from "../../../commonActions";
 
-import "./SprintModal.css";
-
 import "react-datepicker/dist/react-datepicker.css";
 
 class SprintModal extends Component {

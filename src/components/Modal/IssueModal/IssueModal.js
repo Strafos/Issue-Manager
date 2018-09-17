@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import "./IssueModal.css";
 import {
   TextArea,
   Container,

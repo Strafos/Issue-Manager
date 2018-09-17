@@ -14,6 +14,7 @@ class SprintDropDown extends Component {
 
   render() {
     const { sprints, value, onChange } = this.props;
+    console.log(sprints);
 
     return (
       <Dropdown

@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 import "./IssuePage.css";
 
 import StatusDisplay from "../../components/Status/StatusDisplay";
+// import SprintDropDown from "../../components/Modal/IssueModal/SprintDropDown";
 import SprintDropDown from "../../components/SprintDropDown/SprintDropDown";
 import ProjectDropDown from "../../components/ProjectDropDown/ProjectDropDown";
 
@@ -92,15 +93,6 @@ class IssueDisplay extends Component {
       });
     });
   }
-
-  sprintOptions = sprints =>
-    sprints.map(sprint => {
-      return {
-        text: sprint.name,
-        key: sprint.id,
-        value: sprint.id,
-      };
-    });
 
   handleSubmit = () => {
     const {
@@ -346,6 +338,10 @@ class IssueDisplay extends Component {
               sprints={sprintList}
               onChange={this.handleSprintSelect}
             />
+            {/* <SprintDropDown
+              value={sprintId}
+              onChange={this.handleSprintSelect}
+            /> */}
           </Form.Field>
 
           <Form.Field width={3}>

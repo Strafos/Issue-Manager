@@ -19,8 +19,10 @@
   width: 85%;
 }
 
-.foo {
-  text-align: left;
-  padding-left: 10px;
-  padding-top: 15px;
+.Modal {
+  padding: 20px;
+}
+
+.ModalHeader {
+  background-color: #0dca3c;
 }
