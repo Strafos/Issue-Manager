@@ -9,7 +9,7 @@ import "./RestoreModal.css";
 import ScratchpadDropDown from "../ScratchpadDropDown";
 import * as Actions from "../../../sprintPageActions";
 
-class ArchiveModal extends Component {
+class RestoreModal extends Component {
   state = {
     selectedScratchpad: null,
     modalOpen: false,
@@ -104,4 +104,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ArchiveModal);
+)(RestoreModal);
