@@ -516,17 +516,22 @@ app.post("/Page", (req, res) => {
 });
 
 app.put("/Page/archive/:id", (req, res) => {
+  const { archived } = req.body;
   const query = `UPDATE scratchpad_pages SET archived=(?) WHERE id=(?)`;
   const query2 = `UPDATE scratchpads SET archived=(?) WHERE page=(?)`;
-  db.insert(query, [1, req.params.id])
+  db.insert(query, [archived, req.params.id])
     .then(() => {
-      db.insert(query2, [1, req.params.id])
-        .then(() => {
-          res.send(req.params.id);
-        })
-        .catch(err => {
-          res.send({ status: "Failure" });
-        });
+      if (archived === 1) {
+        db.insert(query2, [archived, req.params.id])
+          .then(() => {
+            res.send(req.params.id);
+          })
+          .catch(err => {
+            res.send({ status: "Failure" });
+          });
+      } else {
+        res.send(req.params.id);
+      }
     })
     .catch(err => {
       res.send({ status: "Failure" });

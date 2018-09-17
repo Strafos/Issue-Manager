@@ -47,14 +47,14 @@ export const setScratchpad = (id, content) => {
   });
 };
 
-export const archiveScratchpad = (id, content, title) => {
+export const archiveScratchpad = (id, content, title, archived) => {
   return fetch(`/Scratchpad/${id}`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ content, title, archived: 1 }),
+    body: JSON.stringify({ content, title, archived }),
   }).then(response => {
     return response.json();
   });

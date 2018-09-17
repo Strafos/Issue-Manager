@@ -1,17 +1,16 @@
 import React, { Component } from "react";
-import { Icon, Button, Modal, Input, Form, Divider } from "semantic-ui-react";
+import { Icon, Button, Modal, Form, Divider } from "semantic-ui-react";
 import { connect } from "react-redux";
 
 import "react-datepicker/dist/react-datepicker.css";
 
-import "./ArchiveModal.css";
+import "./RestoreModal.css";
 
 import ScratchpadDropDown from "../ScratchpadDropDown";
 import * as Actions from "../../../sprintPageActions";
 
 class ArchiveModal extends Component {
   state = {
-    title: "",
     selectedScratchpad: null,
     modalOpen: false,
   };
@@ -27,12 +26,6 @@ class ArchiveModal extends Component {
     });
   };
 
-  handleTitle = (event, { value }) => {
-    this.setState({
-      title: value,
-    });
-  };
-
   handleScratchpadSelect = (_, { value }) => {
     const { scratchpads } = this.props;
     this.setState({
@@ -43,13 +36,14 @@ class ArchiveModal extends Component {
   };
 
   handleSubmit = () => {
-    const { selectedScratchpad, title } = this.state;
+    const { selectedScratchpad } = this.state;
     this.props.archiveScratchpad(
       selectedScratchpad.id,
       selectedScratchpad.content,
-      title,
-      1
+      selectedScratchpad.title,
+      0
     );
+    this.props.archivePage(selectedScratchpad.page, 0);
     this.handleClose();
   };
 
@@ -70,19 +64,15 @@ class ArchiveModal extends Component {
             labelPosition="left"
             icon
             onClick={this.handleOpen}
-            disabled={selectedPage === "archive" || scratchpads.length === 0}
+            disabled={selectedPage !== "archive"}
             color="black"
           >
-            Archive
-            <Icon color="red" name="trash" />
+            Restore
+            <Icon color="red" name="plus" />
           </Button>
         }
       >
         <Form className="ModalForm">
-          <Form.Field>
-            <label>Archive name</label>
-            <Input size="tiny" type="text" onChange={this.handleTitle} />
-          </Form.Field>
           <ScratchpadDropDown
             value={selectedScratchpad && selectedScratchpad.id}
             onChange={this.handleScratchpadSelect}
@@ -96,7 +86,7 @@ class ArchiveModal extends Component {
             style={this.padding}
             color="black"
           >
-            Archive Scratchpad
+            Restore Scratchpad
           </Button>
         </Form>
       </Modal>
@@ -108,6 +98,7 @@ const mapStateToProps = state => ({});
 
 const mapDispatchToProps = {
   archiveScratchpad: Actions.archiveScratchpad,
+  archivePage: Actions.archivePage,
 };
 
 export default connect(

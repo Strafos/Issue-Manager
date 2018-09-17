@@ -6,6 +6,7 @@ import Editor from "./components/Editor/Editor";
 
 import * as Actions from "../sprintPageActions";
 import ArchiveModal from "./components/ArchiveModal/ArchiveModal";
+import RestoreModal from "./components/RestoreModal/RestoreModal";
 import PageModal from "./components/PageModal/PageModal";
 
 class ScratchpadDisplay extends Component {
@@ -78,10 +79,8 @@ class ScratchpadDisplay extends Component {
             key={-1}
             position="right"
             onClick={() => {
-              {
-                this.props.getArchivedScratchpads();
-                this.setState({ selectedPage: "archive" });
-              }
+              this.props.getArchivedScratchpads();
+              this.setState({ selectedPage: "archive" });
             }}
           />
         </Menu>
@@ -110,13 +109,16 @@ class ScratchpadDisplay extends Component {
           New Scratchpad
           <Icon color="red" name="plus" />
         </Button>
-        <ArchiveModal scratchpads={scratchpads} />
+        <ArchiveModal selectedPage={selectedPage} scratchpads={scratchpads} />
+        {selectedPage === "archive" && (
+          <RestoreModal selectedPage={selectedPage} scratchpads={scratchpads} />
+        )}
         <PageModal />
         <Button
           floated="right"
           labelPosition="left"
           icon
-          onClick={() => this.props.archivePage(selectedPage.id)}
+          onClick={() => this.props.archivePage(selectedPage.id, 1)}
           color="black"
           disabled={selectedPage === "archive"}
         >

@@ -23,13 +23,14 @@ export const createPage = name => {
   });
 };
 
-export const archivePage = pageId => {
+export const archivePage = (pageId, archived) => {
   return fetch(`/Page/archive/${pageId}`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
+    body: JSON.stringify({ archived }),
   }).then(response => {
     return response.json();
   });
