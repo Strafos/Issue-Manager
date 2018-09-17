@@ -14,7 +14,7 @@ class TodoList extends Component {
 
   renderTodo = todo => {
     return (
-      <Menu.Item position="left">
+      <Menu.Item key={todo.id} position="left">
         <Checkbox
           onClick={() => this.handleFinishTodo(todo.id)}
           checked={false}
@@ -69,7 +69,7 @@ class TodoList extends Component {
       <div className="center">
         <Menu vertical>
           <Segment size="mini">
-            <Menu.Header verticalAlign="middle">TODOs</Menu.Header>
+            <Menu.Header>TODOs</Menu.Header>
           </Segment>
           <Menu.Menu>
             {todoList && todoList.map(todo => this.renderTodo(todo))}

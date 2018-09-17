@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import IssueModal from "../Modal/IssueModal/IssueModal";
 import ProjectModal from "../Modal/ProjectModal/ProjectModal";
 import SprintModal from "../Modal/SprintModal/SprintModal";
+import SettingModal from "../Modal/SettingModal/SettingModal";
 import SprintMenu from "../SprintMenu/SprintMenu";
 import TodoList from "../TodoList/TodoList";
 import TimeSpentMiniGraph from "../../screens/SprintPage/GraphDisplay/Graphs/TimeSpentMiniGraph";
@@ -45,6 +46,12 @@ class SideBar extends Component {
               <TimeSpentMiniGraph sprint={selectedSprint} />
             </div>
           )}
+        </Grid.Row>
+
+        <Grid.Row>
+          <Button.Group color="black" vertical>
+            <SettingModal />
+          </Button.Group>
         </Grid.Row>
 
         <br />
