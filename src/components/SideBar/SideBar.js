@@ -31,11 +31,7 @@ class SideBar extends Component {
 
         <Grid.Row>
           <div className="center">
-            <SprintMenu
-              handleSprintMenuClick={this.handleSprintMenuClick}
-              handleIssueMenuClick={this.handleIssueMenuClick}
-              sprints={sprintList}
-            />
+            <SprintMenu sprints={sprintList} />
             <br />
             <TodoList />
           </div>

@@ -5,15 +5,7 @@ import { connect } from "react-redux";
 import "./SprintMenu.css";
 import { Menu, Loader } from "semantic-ui-react";
 
-import * as CommonActions from "../../commonActions";
-
-import "react-datepicker/dist/react-datepicker.css";
-
 class SprintMenu extends Component {
-  componentDidMount() {
-    this.props.getSprints();
-  }
-
   renderSprints = sprint => {
     const { selectedSprint } = this.props;
     return (
@@ -22,7 +14,6 @@ class SprintMenu extends Component {
         content={sprint.name}
         index={sprint.id}
         active={selectedSprint && selectedSprint.name === sprint.name}
-        onClick={this.props.handleSprintMenuClick}
         as={Link}
         to={`/sprint/${sprint.id}`}
       />
@@ -67,9 +58,7 @@ const mapStateToProps = state => ({
   sprintList: state.commonData.sprintList.data,
 });
 
-const mapDispatchToProps = {
-  getSprints: CommonActions.getAllSprints,
-};
+const mapDispatchToProps = {};
 
 export default connect(
   mapStateToProps,
