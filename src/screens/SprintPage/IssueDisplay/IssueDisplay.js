@@ -337,6 +337,10 @@ class IssueDisplay extends Component {
       return <Loader active inline />;
     }
 
+    if (issueList.length === 0) {
+      return <div />;
+    }
+
     return (
       <Table sortable fixed celled size="large" compact>
         <Table.Header>
