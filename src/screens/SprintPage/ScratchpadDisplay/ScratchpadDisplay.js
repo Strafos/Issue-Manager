@@ -13,22 +13,22 @@ class ScratchpadDisplay extends Component {
   state = {};
 
   componentDidMount() {
-    this.props.getScratchpads(
-      this.props.pages && this.props.pages.length > 0
-        ? this.props.pages[0].id
-        : -1
-    );
-    this.setState({
-      selectedPage:
-        this.props.pages && this.props.pages.length > 0 && this.props.pages[0],
-    });
+    const { selectedPage } = this.props;
+    if (selectedPage.id === "archive") {
+      this.props.getArchivedScratchpads();
+    } else {
+      this.props.getScratchpads(selectedPage.id);
+    }
   }
 
   componentDidUpdate(prevProps) {
-    const { pages } = this.props;
-    if (JSON.stringify(prevProps.pages) !== JSON.stringify(pages)) {
-      this.props.getScratchpads(this.props.pages ? this.props.pages[0].id : 0);
-      this.setState({ selectedPage: this.props.pages && this.props.pages[0] });
+    const { selectedPage } = this.props;
+    if (selectedPage.id !== prevProps.selectedPage.id) {
+      if (selectedPage.id === "archive") {
+        this.props.getArchivedScratchpads();
+      } else {
+        this.props.getScratchpads(selectedPage.id);
+      }
     }
   }
 
@@ -42,28 +42,8 @@ class ScratchpadDisplay extends Component {
     );
   };
 
-  renderPageMenu = page => {
-    const { selectedPage } = this.state;
-    return (
-      <Menu.Item
-        name={page.name}
-        active={selectedPage && selectedPage.id === page.id}
-        key={page.id}
-        onClick={() => {
-          if (
-            JSON.stringify(page) !== JSON.stringify(this.state.selectedPage)
-          ) {
-            this.props.getScratchpads(page.id);
-            this.setState({ selectedPage: page });
-          }
-        }}
-      />
-    );
-  };
-
   render() {
-    const { scratchpads, pages } = this.props;
-    const { selectedPage } = this.state;
+    const { scratchpads, pages, selectedPage } = this.props;
 
     if (!scratchpads) {
       return <Loader active inline />;
@@ -71,19 +51,6 @@ class ScratchpadDisplay extends Component {
 
     return (
       <div>
-        <Menu pointing>
-          {pages && pages.map(page => this.renderPageMenu(page))}
-          <Menu.Item
-            name="Archive"
-            active={selectedPage && selectedPage === "archive"}
-            key={-1}
-            position="right"
-            onClick={() => {
-              this.props.getArchivedScratchpads();
-              this.setState({ selectedPage: "archive" });
-            }}
-          />
-        </Menu>
         <Grid columns={2}>
           <Grid.Column style={{ paddingRight: 5 }}>
             {scratchpads.map(

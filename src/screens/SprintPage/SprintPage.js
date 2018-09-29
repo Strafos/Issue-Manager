@@ -32,6 +32,7 @@ class SprintDisplay extends Component {
     display: "issue",
     quote: "",
     editQuote: false,
+    scratchpadPage: null,
   };
 
   componentDidMount() {
@@ -116,9 +117,33 @@ class SprintDisplay extends Component {
     </div>
   );
 
+  renderPageMenu = page => {
+    const { scratchpadPage } = this.state;
+    return (
+      <Menu.Item
+        name={page.name}
+        active={scratchpadPage && scratchpadPage.id === page.id}
+        key={page.id}
+        onClick={() => {
+          {
+            this.setState({ scratchpadPage: page, display: "scratchpad" });
+          }
+        }}
+      />
+    );
+  };
+
   render() {
-    const { editQuote, quote, display } = this.state;
-    const { projectList, sprintList, issueList, selectedSprint } = this.props;
+    const { editQuote, quote, display, scratchpadPage } = this.state;
+    const {
+      projectList,
+      sprintList,
+      issueList,
+      selectedSprint,
+      pages,
+    } = this.props;
+
+    console.log(scratchpadPage);
 
     if (!selectedSprint) {
       return <Loader active inline />;
@@ -137,7 +162,7 @@ class SprintDisplay extends Component {
         );
         break;
       case "scratchpad":
-        displayComponent = <ScratchpadDisplay />;
+        displayComponent = <ScratchpadDisplay selectedPage={scratchpadPage} />;
         break;
       case "calendar":
         displayComponent = <CalendarDisplay />;
@@ -194,7 +219,21 @@ class SprintDisplay extends Component {
               </Grid.Row>
             </Grid.Column>
             <Grid.Column width={6}>
-              <Container />
+              <Menu pointing>
+                {pages && pages.map(page => this.renderPageMenu(page))}
+                <Menu.Item
+                  name="Archive"
+                  active={scratchpadPage && scratchpadPage.name === "archive"}
+                  key={-1}
+                  position="right"
+                  onClick={() => {
+                    this.setState({
+                      scratchpadPage: { name: "archive", id: "archive" },
+                    });
+                    this.setState({ display: "scratchpad" });
+                  }}
+                />
+              </Menu>
             </Grid.Column>
             <Grid.Column width={6}>
               <Container>
@@ -202,27 +241,36 @@ class SprintDisplay extends Component {
                   <Menu.Item
                     name="issue"
                     active={display === "issue"}
-                    onClick={() => this.setState({ display: "issue" })}
+                    onClick={() =>
+                      this.setState({ display: "issue", scratchpadPage: null })
+                    }
                   />
                   <Menu.Item
                     name="graph"
                     active={display === "graph"}
-                    onClick={() => this.setState({ display: "graph" })}
+                    onClick={() =>
+                      this.setState({ display: "graph", scratchpadPage: null })
+                    }
                   />
                   <Menu.Item
                     name="timelog"
                     active={display === "timelog"}
-                    onClick={() => this.setState({ display: "timelog" })}
-                  />
-                  <Menu.Item
-                    name="scratchpad"
-                    active={display === "scratchpad"}
-                    onClick={() => this.setState({ display: "scratchpad" })}
+                    onClick={() =>
+                      this.setState({
+                        display: "timelog",
+                        scratchpadPage: null,
+                      })
+                    }
                   />
                   <Menu.Item
                     name="calendar"
                     active={display === "calendar"}
-                    onClick={() => this.setState({ display: "calendar" })}
+                    onClick={() =>
+                      this.setState({
+                        display: "calendar",
+                        scratchpadPage: null,
+                      })
+                    }
                   />
                 </Menu>
               </Container>
@@ -248,6 +296,7 @@ const mapStateToProps = state => ({
   issueList: state.commonData.sprintIssues.data,
   selectedSprint: state.commonData.sprint.data && state.commonData.sprint.data,
   projectList: state.commonData.projects.data || [],
+  pages: state.sprintPage.pages.data,
 });
 
 const mapDispatchToProps = {
