@@ -313,6 +313,9 @@ class IssueDisplay extends Component {
                 <div
                   onClick={() => this.handleEditNotes(id)}
                   className="linebreak"
+                  style={{
+                    whiteSpace: "pre",
+                  }}
                 >
                   {this.state.issueNoteList[id] || "Notes: "}
                 </div>

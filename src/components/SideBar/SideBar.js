@@ -45,9 +45,7 @@ class SideBar extends Component {
         </Grid.Row>
 
         <Grid.Row>
-          <Button.Group color="black" vertical>
-            <SettingModal />
-          </Button.Group>
+          <SettingModal />
         </Grid.Row>
 
         <br />
@@ -56,6 +54,7 @@ class SideBar extends Component {
             sprints={sprintList}
             onChange={this.handleSprintSelect}
             simple={true}
+            link
           />
         </Grid.Row>
       </Grid.Column>

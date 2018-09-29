@@ -83,15 +83,17 @@ class SettingModal extends Component {
         onClose={this.handleClose}
         open={modalOpen}
         trigger={
-          <Button
-            icon
-            labelPosition="left"
-            onClick={this.handleOpen}
-            color="black"
-          >
-            <Icon color="red" name="square" />
-            Settings
-          </Button>
+          <Button.Group color="black" vertical>
+            <Button
+              icon
+              labelPosition="left"
+              onClick={this.handleOpen}
+              color="black"
+            >
+              <Icon color="red" name="square" />
+              Settings
+            </Button>
+          </Button.Group>
         }
         className="Modal"
       >

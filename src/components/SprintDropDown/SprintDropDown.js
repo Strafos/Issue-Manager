@@ -4,10 +4,11 @@ import { Link } from "react-router-dom";
 
 class SprintDropDown extends Component {
   renderItem = sprint => {
+    const { link } = this.props;
     return (
       <Dropdown.Item
-        // as={Link}
-        // to={`/sprint/${sprint.id}`}
+        as={link && Link}
+        to={`/sprint/${sprint.id}`}
         text={sprint.name}
         key={sprint.id}
         value={sprint.id}
