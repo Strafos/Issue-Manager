@@ -1,13 +1,22 @@
 import _ from "lodash";
 import React, { Component } from "react";
 
-import { Icon, Button, Form, TextArea, Table, Loader } from "semantic-ui-react";
+import {
+  Icon,
+  Button,
+  Form,
+  Container,
+  TextArea,
+  Table,
+  Loader,
+} from "semantic-ui-react";
 
 import Status from "../../../components/Status/Status";
 import TimeCounter from "../../../components/TimeCounter/TimeCounter";
 
 import { updateIssueNotes, updateShowNotes } from "../../../utils/api";
 import { cleanNumber } from "../../../utils/arithUtils";
+import "./IssueDisplay.css";
 
 const statusMap = {
   "In queue": 1,
@@ -310,15 +319,12 @@ class IssueDisplay extends Component {
                   </Button>
                 </Form>
               ) : (
-                <div
+                <p
                   onClick={() => this.handleEditNotes(id)}
-                  className="linebreak"
-                  style={{
-                    whiteSpace: "pre",
-                  }}
+                  className="NoteText"
                 >
                   {this.state.issueNoteList[id] || "Notes: "}
-                </div>
+                </p>
               )}
             </Table.Cell>
           </Table.Row>
