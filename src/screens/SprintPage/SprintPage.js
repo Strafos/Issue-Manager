@@ -74,23 +74,6 @@ class SprintDisplay extends Component {
     });
   };
 
-  overrideMousetrap(HotKeys) {
-    //define previous stopCallback handler for mousetrap
-    HotKeys.__mousetrap__.stopCallback = function(e, element, combo) {
-      // if the element has the class "mousetrap" then no need to stop
-      if ((" " + element.className + " ").indexOf(" mousetrap ") > -1) {
-        return false;
-      }
-      // stop for input, select, and textarea
-      return (
-        element.tagName === "INPUT" ||
-        element.tagName === "SELECT" ||
-        element.tagName === "TEXTAREA" ||
-        (element.contentEditable && element.contentEditable === "true")
-      );
-    };
-  }
-
   renderName = (name, id) => (
     <div>
       {name}
@@ -125,8 +108,6 @@ class SprintDisplay extends Component {
       selectedSprint,
       pages,
     } = this.props;
-
-    console.log(scratchpadPage);
 
     if (!selectedSprint) {
       return <Loader active inline />;

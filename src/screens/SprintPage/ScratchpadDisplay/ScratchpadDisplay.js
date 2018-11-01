@@ -43,7 +43,7 @@ class ScratchpadDisplay extends Component {
   };
 
   render() {
-    const { scratchpads, pages, selectedPage } = this.props;
+    const { scratchpads, selectedPage } = this.props;
 
     if (!scratchpads) {
       return <Loader active inline />;
