@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { HotKeys } from "react-hotkeys";
 import {
   Icon,
   Grid,
@@ -92,22 +91,6 @@ class SprintDisplay extends Component {
     };
   }
 
-  keyMap = {
-    changeToIssues: "1",
-    changeToGraphs: "2",
-    changeToTimelogs: "3",
-    changeToScratchpad: "4",
-    changeToCalendar: "5",
-  };
-
-  handlers = {
-    changeToIssues: () => this.setState({ display: "issue" }),
-    changeToGraphs: () => this.setState({ display: "graph" }),
-    changeToTimelogs: () => this.setState({ display: "timelog" }),
-    changeToScratchpad: () => this.setState({ display: "scratchpad" }),
-    changeToCalendar: () => this.setState({ display: "calendar" }),
-  };
-
   renderName = (name, id) => (
     <div>
       {name}
@@ -183,111 +166,105 @@ class SprintDisplay extends Component {
     }
 
     return (
-      <HotKeys
-        keyMap={this.keyMap}
-        handlers={this.handlers}
-        ref={this.overrideMousetrap}
-      >
-        <div>
-          <Grid verticalAlign="top" columns={2} stretched>
-            <Grid.Column textAlign="left" width={4}>
-              <Grid.Row>
-                <Header floated="left" as="h1">
-                  {selectedSprint && selectedSprint.name}
-                  <Header.Subheader>
-                    {editQuote ? (
-                      <div>
-                        <TextArea
-                          onChange={this.handleSprintQuoteChange}
-                          defaultValue={quote || selectedSprint.quote}
-                        />
-                        <Button
-                          color="black"
-                          floated="right"
-                          onClick={this.handleSaveSprintQuote}
-                        >
-                          Save
-                        </Button>
-                      </div>
-                    ) : (
-                      <div onClick={this.toggleEditSprintQuote}>
-                        {quote || selectedSprint.quote || "no quote"}
-                      </div>
-                    )}
-                  </Header.Subheader>
-                </Header>
-              </Grid.Row>
-            </Grid.Column>
-            <Grid.Column width={6}>
-              <Menu pointing>
-                {pages && pages.map(page => this.renderPageMenu(page))}
+      <div>
+        <Grid verticalAlign="top" columns={2} stretched>
+          <Grid.Column textAlign="left" width={4}>
+            <Grid.Row>
+              <Header floated="left" as="h1">
+                {selectedSprint && selectedSprint.name}
+                <Header.Subheader>
+                  {editQuote ? (
+                    <div>
+                      <TextArea
+                        onChange={this.handleSprintQuoteChange}
+                        defaultValue={quote || selectedSprint.quote}
+                      />
+                      <Button
+                        color="black"
+                        floated="right"
+                        onClick={this.handleSaveSprintQuote}
+                      >
+                        Save
+                      </Button>
+                    </div>
+                  ) : (
+                    <div onClick={this.toggleEditSprintQuote}>
+                      {quote || selectedSprint.quote || "no quote"}
+                    </div>
+                  )}
+                </Header.Subheader>
+              </Header>
+            </Grid.Row>
+          </Grid.Column>
+          <Grid.Column width={6}>
+            <Menu pointing>
+              {pages && pages.map(page => this.renderPageMenu(page))}
+              <Menu.Item
+                name="Archive"
+                active={scratchpadPage && scratchpadPage.name === "archive"}
+                key={-1}
+                position="right"
+                onClick={() => {
+                  this.setState({
+                    scratchpadPage: { name: "archive", id: "archive" },
+                  });
+                  this.setState({ display: "scratchpad" });
+                }}
+              />
+            </Menu>
+          </Grid.Column>
+          <Grid.Column width={6}>
+            <Container>
+              <Menu pointing compact style={{ float: "right" }}>
                 <Menu.Item
-                  name="Archive"
-                  active={scratchpadPage && scratchpadPage.name === "archive"}
-                  key={-1}
-                  position="right"
-                  onClick={() => {
+                  name="issue"
+                  active={display === "issue"}
+                  onClick={() =>
+                    this.setState({ display: "issue", scratchpadPage: null })
+                  }
+                />
+                <Menu.Item
+                  name="graph"
+                  active={display === "graph"}
+                  onClick={() =>
+                    this.setState({ display: "graph", scratchpadPage: null })
+                  }
+                />
+                <Menu.Item
+                  name="timelog"
+                  active={display === "timelog"}
+                  onClick={() =>
                     this.setState({
-                      scratchpadPage: { name: "archive", id: "archive" },
-                    });
-                    this.setState({ display: "scratchpad" });
-                  }}
+                      display: "timelog",
+                      scratchpadPage: null,
+                    })
+                  }
+                />
+                <Menu.Item
+                  name="calendar"
+                  active={display === "calendar"}
+                  onClick={() =>
+                    this.setState({
+                      display: "calendar",
+                      scratchpadPage: null,
+                    })
+                  }
                 />
               </Menu>
-            </Grid.Column>
-            <Grid.Column width={6}>
-              <Container>
-                <Menu pointing compact style={{ float: "right" }}>
-                  <Menu.Item
-                    name="issue"
-                    active={display === "issue"}
-                    onClick={() =>
-                      this.setState({ display: "issue", scratchpadPage: null })
-                    }
-                  />
-                  <Menu.Item
-                    name="graph"
-                    active={display === "graph"}
-                    onClick={() =>
-                      this.setState({ display: "graph", scratchpadPage: null })
-                    }
-                  />
-                  <Menu.Item
-                    name="timelog"
-                    active={display === "timelog"}
-                    onClick={() =>
-                      this.setState({
-                        display: "timelog",
-                        scratchpadPage: null,
-                      })
-                    }
-                  />
-                  <Menu.Item
-                    name="calendar"
-                    active={display === "calendar"}
-                    onClick={() =>
-                      this.setState({
-                        display: "calendar",
-                        scratchpadPage: null,
-                      })
-                    }
-                  />
-                </Menu>
-              </Container>
-            </Grid.Column>
-          </Grid>
-          <Divider />
+            </Container>
+          </Grid.Column>
+        </Grid>
+        <Divider />
 
-          {displayComponent}
+        {displayComponent}
 
-          <Editor
-            sprintScratchpad
-            autoSize
-            id={selectedSprint.id}
-            content={selectedSprint.notes}
-          />
-        </div>
-      </HotKeys>
+        <Editor
+          sprintScratchpad
+          autoSize
+          id={selectedSprint.id}
+          content={selectedSprint.notes}
+        />
+      </div>
     );
   }
 }
