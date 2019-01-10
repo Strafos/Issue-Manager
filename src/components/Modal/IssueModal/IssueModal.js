@@ -86,8 +86,8 @@ class IssueModal extends Component {
   };
 
   handleValidate = () => {
-    const { name, timeEstimate, sprintId } = this.state;
-    return name.length === 0 || timeEstimate === 0 || sprintId === 0;
+    const { name, sprintId } = this.state;
+    return name.length === 0 || sprintId === 0;
   };
 
   handleSubmit = () => {
@@ -110,14 +110,13 @@ class IssueModal extends Component {
       name: "",
       timeEstimate: 0,
       projectId: 0,
-      sprintId: 0,
       modalOpen: false,
       notes: "",
     });
   };
 
   render() {
-    const { modalOpen, sprintId } = this.state;
+    const { modalOpen, sprintId, timeEstimate } = this.state;
 
     const { projects } = this.props;
 
@@ -152,7 +151,12 @@ class IssueModal extends Component {
             </Form.Field>
             <Form.Field>
               <label>Time Est.</label>
-              <Input size="tiny" type="text" onChange={this.handleTime} />
+              <Input
+                value={timeEstimate}
+                size="tiny"
+                type="text"
+                onChange={this.handleTime}
+              />
             </Form.Field>
             <Form.Field>
               <label>Project</label>
@@ -171,7 +175,7 @@ class IssueModal extends Component {
             onClick={this.handleSubmit}
             disabled={this.handleValidate()}
             style={this.padding}
-            color="green"
+            color="red"
           >
             Create Issue
           </Button>
