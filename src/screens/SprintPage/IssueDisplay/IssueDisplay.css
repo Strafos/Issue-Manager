@@ -1,6 +1,6 @@
 .NoteText {
   /* overflow-wrap: normal; */
   overflow: hidden;
-  white-space: nowrap;
+  white-space: pre-line;
   /* overflow-wrap: break-word; */
 }
