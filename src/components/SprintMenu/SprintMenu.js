@@ -42,8 +42,9 @@ class SprintMenu extends Component {
             <Menu.Menu>
               {len > 4
                 ? sprintList
-                    .slice(len - 4, len)
-                    .map(sprint => this.renderSprints(sprint))
+                  .slice(len - 4, len)
+                  .reverse()
+                  .map(sprint => this.renderSprints(sprint))
                 : sprintList.map(sprint => this.renderSprints(sprint))}
             </Menu.Menu>
           </Menu.Item>

@@ -41,8 +41,5 @@
     "build": "npm run build-semantic && react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
-  },
-  "devDependencies": {
-    "semantic-ui": "^2.3.3"
   }
 }
