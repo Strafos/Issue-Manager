@@ -10,8 +10,6 @@ import {
 } from "semantic-ui-react";
 import { connect } from "react-redux";
 
-import * as CommonActions from "../../../commonActions";
-
 class SettingModal extends Component {
   state = { modalOpen: false };
 
@@ -40,12 +38,10 @@ class SettingModal extends Component {
     });
 
   handleValidate = () => {
-    const {} = this.state;
     return false;
   };
 
   handleSubmit = () => {
-    const { setting } = this.state;
     const requestObj = {};
     this.props.createIssue(requestObj);
     this.handleClose();

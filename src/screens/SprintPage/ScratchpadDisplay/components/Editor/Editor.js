@@ -48,20 +48,21 @@ class Editor extends Component {
 
   // An attempt to handle the pre tag,
   // but not great solution because it removes whitespace
-  processContent = content => {
-    return content;
-    const patt = /<pre[^>]*>/g;
-    var c1 = content.replace(patt, "<p>");
-    const patt2 = /<\/pre[^>]*>/g;
-    return content.replace(patt2, "</p>");
-  };
+  // processContent = content => {
+  //   return content;
+  //   const patt = /<pre[^>]*>/g;
+  //   var c1 = content.replace(patt, "<p>");
+  //   const patt2 = /<\/pre[^>]*>/g;
+  //   return content.replace(patt2, "</p>");
+  // };
 
   handleSave = () => {
     const { content, prevContent } = this.state;
     const { id } = this.props;
     if (prevContent !== content) {
       this.setState({ prevContent: content });
-      const processed_content = this.processContent(content);
+      // const processed_content = this.processContent(content);
+      const processed_content = content;
       console.log(processed_content);
       this.handleAPI(id, processed_content);
     }

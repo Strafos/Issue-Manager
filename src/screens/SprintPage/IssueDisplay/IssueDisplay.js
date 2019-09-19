@@ -5,7 +5,6 @@ import {
   Icon,
   Button,
   Form,
-  Container,
   TextArea,
   Table,
   Loader,
@@ -76,9 +75,9 @@ class IssueDisplay extends Component {
           : 0,
         totalTimeSpent: issues
           ? issues
-              .filter(i => !i.bad)
-              .map(i => i.time_spent)
-              .reduce((a, b) => a + b, 0)
+            .filter(i => !i.bad)
+            .map(i => i.time_spent)
+            .reduce((a, b) => a + b, 0)
           : 0,
         totalTimeRemaining: issues
           ? issues.map(i => i.time_remaining).reduce((a, b) => a + b, 0)
@@ -319,13 +318,13 @@ class IssueDisplay extends Component {
                   </Button>
                 </Form>
               ) : (
-                <p
-                  onClick={() => this.handleEditNotes(id)}
-                  className="NoteText"
-                >
-                  {this.state.issueNoteList[id] || "Notes: "}
-                </p>
-              )}
+                  <p
+                    onClick={() => this.handleEditNotes(id)}
+                    className="NoteText"
+                  >
+                    {this.state.issueNoteList[id] || "Notes: "}
+                  </p>
+                )}
             </Table.Cell>
           </Table.Row>
         )}

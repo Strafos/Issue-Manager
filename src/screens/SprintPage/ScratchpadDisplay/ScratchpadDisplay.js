@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Loader, Grid, Menu, Button, Icon } from "semantic-ui-react";
+import { Loader, Grid, Button, Icon } from "semantic-ui-react";
 import { connect } from "react-redux";
 
 import Editor from "./components/Editor/Editor";

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import {
-  Icon,
   Grid,
   Button,
   Menu,
@@ -74,15 +73,6 @@ class SprintDisplay extends Component {
     });
   };
 
-  renderName = (name, id) => (
-    <div>
-      {name}
-      <a href={`/issue/${id}`}>
-        <Icon color="red" className="super" name="plus" size="small" />
-      </a>
-    </div>
-  );
-
   renderPageMenu = page => {
     const { scratchpadPage } = this.state;
     return (
@@ -91,9 +81,7 @@ class SprintDisplay extends Component {
         active={scratchpadPage && scratchpadPage.id === page.id}
         key={page.id}
         onClick={() => {
-          {
-            this.setState({ scratchpadPage: page, display: "scratchpad" });
-          }
+          this.setState({ scratchpadPage: page, display: "scratchpad" });
         }}
       />
     );
@@ -145,6 +133,8 @@ class SprintDisplay extends Component {
       default:
         displayComponent = null;
     }
+    console.log(selectedSprint);
+    console.log("Foo");
 
     return (
       <div>
@@ -169,10 +159,10 @@ class SprintDisplay extends Component {
                       </Button>
                     </div>
                   ) : (
-                    <div onClick={this.toggleEditSprintQuote}>
-                      {quote || selectedSprint.quote || "no quote"}
-                    </div>
-                  )}
+                      <div onClick={this.toggleEditSprintQuote}>
+                        {quote || selectedSprint.quote || "no quote"}
+                      </div>
+                    )}
                 </Header.Subheader>
               </Header>
             </Grid.Row>
