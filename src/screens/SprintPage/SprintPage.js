@@ -30,6 +30,7 @@ class SprintDisplay extends Component {
     display: "issue",
     quote: "",
     editQuote: false,
+    hideTitle: true,
     scratchpadPage: null,
   };
 
@@ -61,6 +62,16 @@ class SprintDisplay extends Component {
     );
   };
 
+  handleHideTitle = () => {
+    const { hideTitle } = this.state;
+    console.log(hideTitle);
+
+    this.setState({
+      hideTitle: hideTitle ? false : true
+    })
+  };
+
+
   handleSprintQuoteChange = (event, { value }) => {
     this.setState({
       quote: value,
@@ -88,7 +99,7 @@ class SprintDisplay extends Component {
   };
 
   render() {
-    const { editQuote, quote, display, scratchpadPage } = this.state;
+    const { editQuote, quote, hideTitle, display, scratchpadPage } = this.state;
     const {
       projectList,
       sprintList,
@@ -133,39 +144,43 @@ class SprintDisplay extends Component {
       default:
         displayComponent = null;
     }
-    console.log(selectedSprint);
-    console.log("Foo");
-
     return (
       <div>
-        <Grid verticalAlign="top" columns={2} stretched>
-          <Grid.Column textAlign="left" width={4}>
+        <Grid verticalAlign="top" columns={4} stretched>
+          <Grid.Column textAlign="left" width={3}>
             <Grid.Row>
-              <Header floated="left" as="h1">
-                {selectedSprint && selectedSprint.name}
-                <Header.Subheader>
-                  {editQuote ? (
-                    <div>
-                      <TextArea
-                        onChange={this.handleSprintQuoteChange}
-                        defaultValue={quote || selectedSprint.quote}
-                      />
-                      <Button
-                        color="black"
-                        floated="right"
-                        onClick={this.handleSaveSprintQuote}
-                      >
-                        Save
+              {!hideTitle &&
+                <Header floated="left" as="h1">
+                  {selectedSprint && selectedSprint.name}
+                  <Header.Subheader>
+                    {editQuote ? (
+                      <div>
+                        <TextArea
+                          onChange={this.handleSprintQuoteChange}
+                          defaultValue={quote || selectedSprint.quote}
+                        />
+                        <Button
+                          color="black"
+                          floated="right"
+                          onClick={this.handleSaveSprintQuote}
+                        >
+                          Save
                       </Button>
-                    </div>
-                  ) : (
-                      <div onClick={this.toggleEditSprintQuote}>
-                        {quote || selectedSprint.quote || "no quote"}
                       </div>
-                    )}
-                </Header.Subheader>
-              </Header>
+                    ) : (
+                        <div onClick={this.toggleEditSprintQuote}>
+                          {quote || selectedSprint.quote || "no quote"}
+                        </div>
+                      )}
+                  </Header.Subheader>
+                </Header>
+              }
             </Grid.Row>
+          </Grid.Column>
+          <Grid.Column verticalAlign="middle" textAlign="left" width={1}>
+            {!hideTitle &&
+              selectedSprint && selectedSprint.start_date + "\n" + selectedSprint.end_date
+            }
           </Grid.Column>
           <Grid.Column width={6}>
             <Menu pointing>
@@ -235,6 +250,13 @@ class SprintDisplay extends Component {
           id={selectedSprint.id}
           content={selectedSprint.notes}
         />
+        <Button
+          color="red"
+          floated="left"
+          onClick={this.handleHideTitle}
+        >
+          Hide
+        </Button>
       </div>
     );
   }
