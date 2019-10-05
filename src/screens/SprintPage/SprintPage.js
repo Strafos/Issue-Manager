@@ -64,7 +64,6 @@ class SprintDisplay extends Component {
 
   handleHideTitle = () => {
     const { hideTitle } = this.state;
-    console.log(hideTitle);
 
     this.setState({
       hideTitle: hideTitle ? false : true
@@ -133,7 +132,6 @@ class SprintDisplay extends Component {
       case "issue":
         displayComponent = (
           <IssueDisplay
-            issueList={issueList}
             selectedSprint={selectedSprint}
             projects={projectList}
             sprints={sprintList}

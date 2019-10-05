@@ -53,6 +53,12 @@ class IssueModal extends Component {
   handleClose = () =>
     this.setState({
       modalOpen: false,
+      name: "",
+      timeEstimate: 0,
+      projectId: 0,
+      sprintId: 0,
+      modalOpen: false,
+      notes: "",
     });
 
   handleName = (event, { value }) => {

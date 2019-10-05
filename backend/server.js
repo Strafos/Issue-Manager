@@ -110,7 +110,7 @@ app.put("/Issue/:id/status", (req, res) => {
   const { status } = req.body;
   const query = `UPDATE issues SET status='${status}' where id=${
     req.params.id
-  }`;
+    }`;
   db.insert(query)
     .then(() => {
       res.send({ status: "Success" });
@@ -126,7 +126,7 @@ app.put("/Issue/:id/blocked", (req, res) => {
   const { blocked } = req.body;
   const query = `UPDATE issues SET blocked='${blocked}' where id=${
     req.params.id
-  }`;
+    }`;
   db.insert(query)
     .then(() => {
       res.send({ status: "Success" });
@@ -142,7 +142,7 @@ app.put("/Issue/:id/showNotes", (req, res) => {
   const { bool } = req.body;
   const query = `UPDATE issues SET show_notes=${bool} where id=${
     req.params.id
-  }`;
+    }`;
   db.insert(query)
     .then(() => {
       res.send({ status: "Success" });
@@ -210,7 +210,7 @@ app.get("/Log/:id", (req, res) => {
       `timelog.time_delta, timelog.time_stat, timelog.created_at, issues.name, timelog.total ` +
       `FROM timelog INNER JOIN issues ON timelog.issue_id = issues.id ` +
       `WHERE timelog.sprint_id=${req.params.id} AND timelog.time_stat='${
-        req.query.type
+      req.query.type
       }';`;
   } else {
     query =
@@ -418,7 +418,7 @@ app.get("/Scratchpads/archived", (req, res) => {
 app.get("/Scratchpads/:page", (req, res) => {
   const query = `SELECT * FROM scratchpads where archived=0 AND page=${
     req.params.page
-  }`;
+    }`;
   db.read(query)
     .then(response => {
       res.send(response);

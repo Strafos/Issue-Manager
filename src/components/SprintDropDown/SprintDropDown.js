@@ -23,7 +23,11 @@ class SprintDropDown extends Component {
     return (
       <Dropdown
         placeholder="Select Sprint"
+
+        // This prints an error to console, I need it for the dropdown to look nice
+        // GRRR
         selection
+
         value={value}
         item
         simple={simple}

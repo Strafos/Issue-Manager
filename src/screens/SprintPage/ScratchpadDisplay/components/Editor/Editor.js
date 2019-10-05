@@ -81,8 +81,8 @@ class Editor extends Component {
   handleContentChange(content, delta, source, editor) {
     clearTimeout(this.saveTimer);
     this.setState({ content });
-    console.log(content);
-    console.log(delta);
+    // console.log(content);
+    // console.log(delta);
     this.saveTimer = setTimeout(this.handleSave, saveTime);
   }
 

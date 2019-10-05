@@ -1,0 +1,8 @@
+There's a bug where if I change the state of the issue list, and then add an issue, then the entire issue list goes back to the original state. 
+
+The cause of the bug is when I do modifications, I don't use the redux store. Thus, when I add an issue, it changes the redux store and does everything. There are a couple ways to fix this:
+1. Use redux for all issue operations (such as changing time remaining, adding notes, etc.) This is a huge pain in the ass because there's so much boilerplate. I don't want to do this
+2. Fetch the issue list before creating an issue. I'm not sure why this isn't working. When I call FetchIssueList, it doesn't return
+3. Have createIssue return a list of all issues for a sprint, rather than only the new one. I tried this and it didn't work. 
+
+I don't think I can fix this bug. This touches parts of the code that are too complicated for me now. I don't know how I wrote these things the first time and I certainly can't trivially fix them. When, if I ever rewrite this tool, this bug will be fixed. Alternatively, when I decide to do a lot of touch ups, I will be familiar with the code again, and maybe will be able to fix this. :(
