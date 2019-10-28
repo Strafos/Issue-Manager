@@ -392,7 +392,7 @@ app.get("/Settings", (req, res) => {
 
 // search: getAllScratchpads
 app.get("/Scratchpads", (req, res) => {
-  const query = "SELECT * FROM scratchpads where archived=0";
+  const query = "SELECT * FROM scratchpads WHERE archived=0 ORDER BY id DESC";
   db.read(query)
     .then(response => {
       res.send(response);
@@ -404,7 +404,7 @@ app.get("/Scratchpads", (req, res) => {
 
 // search: getArchivedScratchpads
 app.get("/Scratchpads/archived", (req, res) => {
-  const query = "SELECT * FROM scratchpads where archived=1";
+  const query = "SELECT * FROM scratchpads where archived=1 ORDER BY id DESC";
   db.read(query)
     .then(response => {
       res.send(response);
@@ -418,7 +418,7 @@ app.get("/Scratchpads/archived", (req, res) => {
 app.get("/Scratchpads/:page", (req, res) => {
   const query = `SELECT * FROM scratchpads where archived=0 AND page=${
     req.params.page
-    }`;
+    } ORDER BY id DESC`;
   db.read(query)
     .then(response => {
       res.send(response);

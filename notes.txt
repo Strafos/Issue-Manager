@@ -6,3 +6,5 @@ The cause of the bug is when I do modifications, I don't use the redux store. Th
 3. Have createIssue return a list of all issues for a sprint, rather than only the new one. I tried this and it didn't work. 
 
 I don't think I can fix this bug. This touches parts of the code that are too complicated for me now. I don't know how I wrote these things the first time and I certainly can't trivially fix them. When, if I ever rewrite this tool, this bug will be fixed. Alternatively, when I decide to do a lot of touch ups, I will be familiar with the code again, and maybe will be able to fix this. :(
+
+Damn I feel like there are so many things here that I don't truly understand. That's the difference between this codebase and the CQL codebase
