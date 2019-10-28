@@ -73,7 +73,7 @@ const scratchpadReducer = (state, action) => {
     case ActionTypes.CREATE_SCRATCHPADS_SUCCESS:
       return {
         ...state,
-        data: [...state.data, action.responseJson],
+        data: [action.responseJson, ...state.data],
       };
     case ActionTypes.ARCHIVE_SCRATCHPAD_SUCCESS:
       return {
