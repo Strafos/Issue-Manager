@@ -68,6 +68,15 @@ class Editor extends React.Component {
     }
   }
 
+  // An attempt to handle the pre tag,
+  // but not great solution because it removes whitespace
+  // processContent = content => {
+  //   return content;
+  //   const patt = /<pre[^>]*>/g;
+  //   var c1 = content.replace(patt, "<p>");
+  //   const patt2 = /<\/pre[^>]*>/g;
+  //   return content.replace(patt2, "</p>");
+
   handleSave = () => {
     const { content, prevContent } = this.state;
     const { id } = this.props;
