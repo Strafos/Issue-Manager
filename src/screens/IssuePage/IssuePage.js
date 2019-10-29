@@ -116,9 +116,9 @@ class IssueDisplay extends Component {
       sprintId,
       projectId,
       status,
-      timeEstimate,
-      timeRemaining,
-      timeSpent,
+      timeEstimate: parseFloat(timeEstimate),
+      timeRemaining: parseFloat(timeRemaining),
+      timeSpent: parseFloat(timeSpent),
       notes,
       blocked,
       bad,
@@ -219,19 +219,17 @@ class IssueDisplay extends Component {
 
   handleTimeRemaining = (event, { value }) => {
     const { timeRemaining, timeRemainingDelta } = this.state;
-    const time = parseInt(value, 10) || 0;
     this.setState({
-      timeRemainingDelta: timeRemainingDelta + time - timeRemaining,
-      timeRemaining: time,
+      timeRemainingDelta: timeRemainingDelta + parseFloat(value) - timeRemaining,
+      timeRemaining: value,
     });
   };
 
   handleTimeSpent = (event, { value }) => {
     const { timeSpent, timeSpentDelta } = this.state;
-    const time = parseInt(value, 10) || 0;
     this.setState({
-      timeSpentDelta: timeSpentDelta + time - timeSpent,
-      timeSpent: time,
+      timeSpentDelta: timeSpentDelta + parseFloat(value) - timeSpent,
+      timeSpent: value,
     });
   };
 
@@ -315,19 +313,19 @@ class IssueDisplay extends Component {
               </Form.Field>
             </Form>
           ) : (
-            <Header as="h1">
-              <Header.Content>
-                {name}
-                <Icon
-                  className="super"
-                  name="edit"
-                  size="mini"
-                  fitted
-                  onClick={this.handleEditName}
-                />
-              </Header.Content>
-            </Header>
-          )}
+              <Header as="h1">
+                <Header.Content>
+                  {name}
+                  <Icon
+                    className="super"
+                    name="edit"
+                    size="mini"
+                    fitted
+                    onClick={this.handleEditName}
+                  />
+                </Header.Content>
+              </Header>
+            )}
         </div>
 
         <Form className="Left">
