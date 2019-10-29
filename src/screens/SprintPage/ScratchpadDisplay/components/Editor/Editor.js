@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import ReactQuill from "react-quill"; // ES6
+import ReactQuill, { Quill } from "react-quill"; // ES6
 import { connect } from "react-redux";
 import { Segment } from "semantic-ui-react";
 
@@ -12,17 +12,22 @@ import { updateSprintNotes } from "../../../../../utils/api";
 
 const saveTime = 1000;
 
-class Editor extends Component {
-  state = {};
+class Editor extends React.Component {
+  state = {}
 
   constructor(props) {
-    super(props);
+    super(props)
+    this.quillRef = null;
+    this.reactQuillRef = null;
+    this.handleStrikethrough = this.handleStrikethrough.bind(this)
+    this.registerFormats = this.registerFormats.bind(this)
+
     this.handleContentChange = this.handleContentChange.bind(this);
-    this.saveTimer = setTimeout(this.handleSave, saveTime);
   }
 
   componentDidMount() {
     const { content } = this.props;
+    this.registerFormats()
     this.setState({
       content: content || "",
       prevContent: content || "",
@@ -31,6 +36,7 @@ class Editor extends Component {
 
   componentDidUpdate(prevProps) {
     const { content } = this.props;
+    this.registerFormats()
     if (content !== prevProps.content) {
       this.setState({
         content: content || "",
@@ -47,15 +53,20 @@ class Editor extends Component {
     this.handleAPI(id, content);
   }
 
-  // An attempt to handle the pre tag,
-  // but not great solution because it removes whitespace
-  // processContent = content => {
-  //   return content;
-  //   const patt = /<pre[^>]*>/g;
-  //   var c1 = content.replace(patt, "<p>");
-  //   const patt2 = /<\/pre[^>]*>/g;
-  //   return content.replace(patt2, "</p>");
-  // };
+  registerFormats() {
+    // Ensure React-Quill references is available:
+    if (typeof this.reactQuillRef.getEditor !== 'function') return;
+    // Skip if Quill reference is defined:
+    if (this.quillRef != null) return;
+
+    console.log('Registering formats...', this.reactQuillRef)
+    const quillRef = this.reactQuillRef.getEditor() // could still be null
+
+    if (quillRef != null) {
+      this.quillRef = quillRef;
+      console.log(Quill.imports)
+    }
+  }
 
   handleSave = () => {
     const { content, prevContent } = this.state;
@@ -64,7 +75,6 @@ class Editor extends Component {
       this.setState({ prevContent: content });
       // const processed_content = this.processContent(content);
       const processed_content = content;
-      console.log(processed_content);
       this.handleAPI(id, processed_content);
     }
     this.saveTimer = setTimeout(this.handleSave, saveTime);
@@ -82,9 +92,16 @@ class Editor extends Component {
   handleContentChange(content, delta, source, editor) {
     clearTimeout(this.saveTimer);
     this.setState({ content });
-    // console.log(content);
-    // console.log(delta);
     this.saveTimer = setTimeout(this.handleSave, saveTime);
+  }
+
+  handleStrikethrough(range, context) {
+    if (range) {
+      // If entire selection has strike: format = {strike: true}
+      // Otherwise: format = {} 
+      const newVal = !('strike' in context.format);
+      this.quillRef.format('strike', newVal);
+    }
   }
 
   render() {
@@ -94,18 +111,30 @@ class Editor extends Component {
     return (
       <Segment>
         <ReactQuill
-          style={autoSize ? {} : { height: "500px" }}
+          // Do these matter?
           className="quill-container"
-          theme="bubble"
-          value={content}
-          onChange={this.handleContentChange}
           bounds={".app"}
+
+          ref={(el) => { this.reactQuillRef = el }}
+          style={autoSize ? {} : { height: "500px" }}
+          value={content}
+          theme='bubble'
+          onChange={this.handleContentChange}
           modules={{
             clipboard: { matchVisual: false },
+            keyboard: {
+              bindings: {
+                strikethrough: {
+                  key: 's',
+                  altKey: true,
+                  handler: this.handleStrikethrough
+                },
+              }
+            }
           }}
-        />
+          placeholder={this.props.placeholder} />
       </Segment>
-    );
+    )
   }
 }
 
