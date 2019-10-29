@@ -39,6 +39,7 @@ class Editor extends Component {
     }
   }
 
+  // Autosave on close
   componentWillUnmount() {
     clearTimeout(this.saveTimer);
     const { content } = this.state;
