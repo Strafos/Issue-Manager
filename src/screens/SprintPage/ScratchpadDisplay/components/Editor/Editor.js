@@ -12,6 +12,20 @@ import { updateSprintNotes } from "../../../../../utils/api";
 
 const saveTime = 1000;
 
+const Embed = ReactQuill.Quill.import('blots/block/embed');
+class Hr extends Embed {
+  static create(value) {
+    let node = super.create(value);
+    return node;
+  }
+}
+Hr.blotName = 'hr';
+Hr.tagName = 'hr';
+
+ReactQuill.Quill.register({
+  'formats/hr': Hr
+});
+
 class Editor extends Component {
   state = {}
 
@@ -19,9 +33,10 @@ class Editor extends Component {
     super(props)
     this.quillRef = null;
     this.reactQuillRef = null;
-    this.handleStrikethrough = this.handleStrikethrough.bind(this)
-    this.handleStrikethroughLine = this.handleStrikethroughLine.bind(this)
-    this.registerFormats = this.registerFormats.bind(this)
+    this.handleStrikethrough = this.handleStrikethrough.bind(this);
+    this.handleStrikethroughLine = this.handleStrikethroughLine.bind(this);
+    this.handleInsertDivider = this.handleInsertDivider.bind(this);
+    this.registerFormats = this.registerFormats.bind(this);
 
     this.handleContentChange = this.handleContentChange.bind(this);
   }
@@ -69,21 +84,11 @@ class Editor extends Component {
     }
   }
 
-  // An attempt to handle the pre tag,
-  // but not great solution because it removes whitespace
-  // processContent = content => {
-  //   return content;
-  //   const patt = /<pre[^>]*>/g;
-  //   var c1 = content.replace(patt, "<p>");
-  //   const patt2 = /<\/pre[^>]*>/g;
-  //   return content.replace(patt2, "</p>");
-
   handleSave = () => {
     const { content, prevContent } = this.state;
     const { id } = this.props;
     if (prevContent !== content) {
       this.setState({ prevContent: content });
-      // const processed_content = this.processContent(content);
       const processed_content = content;
       this.handleAPI(id, processed_content);
     }
@@ -111,6 +116,12 @@ class Editor extends Component {
       // Otherwise: format = {} 
       const newVal = !('strike' in context.format);
       this.quillRef.format('strike', newVal);
+    }
+  }
+
+  handleInsertDivider(range, _) {
+    if (range) {
+      this.quillRef.insertEmbed(range.index, "hr", "null")
     }
   }
 
@@ -149,14 +160,19 @@ class Editor extends Component {
               bindings: {
                 strikethrough: {
                   key: 's',
-                  altKey: true,
+                  ctrlKey: true,
                   shiftKey: true,
                   handler: this.handleStrikethrough
                 },
                 strikethrough_line: {
                   key: 's',
-                  altKey: true,
+                  ctrlKey: true,
                   handler: this.handleStrikethroughLine
+                },
+                divider: {
+                  key: 'h',
+                  ctrlKey: true,
+                  handler: this.handleInsertDivider
                 },
               }
             }
