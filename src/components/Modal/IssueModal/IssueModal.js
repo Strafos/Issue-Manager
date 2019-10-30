@@ -57,7 +57,6 @@ class IssueModal extends Component {
       timeEstimate: 0,
       projectId: 0,
       sprintId: 0,
-      modalOpen: false,
       notes: "",
     });
 

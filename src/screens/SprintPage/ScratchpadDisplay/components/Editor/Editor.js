@@ -12,7 +12,7 @@ import { updateSprintNotes } from "../../../../../utils/api";
 
 const saveTime = 1000;
 
-class Editor extends React.Component {
+class Editor extends Component {
   state = {}
 
   constructor(props) {
@@ -20,6 +20,7 @@ class Editor extends React.Component {
     this.quillRef = null;
     this.reactQuillRef = null;
     this.handleStrikethrough = this.handleStrikethrough.bind(this)
+    this.handleStrikethroughLine = this.handleStrikethroughLine.bind(this)
     this.registerFormats = this.registerFormats.bind(this)
 
     this.handleContentChange = this.handleContentChange.bind(this);
@@ -113,6 +114,19 @@ class Editor extends React.Component {
     }
   }
 
+  handleStrikethroughLine(range, context) {
+    if (range) {
+      const prefix = context.prefix;
+      const suffix = context.suffix;
+      const index = range.index - prefix.length;
+      const len = prefix.length + suffix.length;
+
+      this.quillRef.setSelection(index, len);
+      this.handleStrikethrough(range, context);
+    }
+  }
+
+
   render() {
     const { autoSize } = this.props;
     const { content } = this.state;
@@ -136,7 +150,13 @@ class Editor extends React.Component {
                 strikethrough: {
                   key: 's',
                   altKey: true,
+                  shiftKey: true,
                   handler: this.handleStrikethrough
+                },
+                strikethrough_line: {
+                  key: 's',
+                  altKey: true,
+                  handler: this.handleStrikethroughLine
                 },
               }
             }
