@@ -129,7 +129,7 @@ class TimeSpentMiniGraph extends Component {
           />
           <LineMarkSeries
             color="red"
-            size="1"
+            size="4.5"
             onValueMouseOver={hoveredNode => this.setState({ hoveredNode })}
             onValueMouseOut={() => this.setState({ hoveredNode: null })}
             data={timeSpentData}
@@ -152,31 +152,31 @@ class TimeSpentMiniGraph extends Component {
                 {currWeek ? (
                   <TimeAgo date={lastPoint.x} />
                 ) : (
-                  "Time: " +
-                  lastPoint.x.toLocaleTimeString() +
-                  " on " +
-                  lastPoint.x.toDateString()
-                )}
+                    "Time: " +
+                    lastPoint.x.toLocaleTimeString() +
+                    " on " +
+                    lastPoint.x.toDateString()
+                  )}
               </div>
             </Hint>
           ) : (
-            <Hint value={hoveredNode}>
-              <div
-                style={{
-                  background: "black",
-                  textAlign: "left",
-                  padding: "5px",
-                  borderRadius: "5px",
-                }}
-              >
-                <p>{hoveredNode.y + " hours spent"}</p>
-                {"Time: " +
-                  hoveredNode.x.toLocaleTimeString() +
-                  " on " +
-                  hoveredNode.x.toDateString()}
-              </div>
-            </Hint>
-          )}
+              <Hint value={hoveredNode}>
+                <div
+                  style={{
+                    background: "black",
+                    textAlign: "left",
+                    padding: "5px",
+                    borderRadius: "5px",
+                  }}
+                >
+                  <p>{hoveredNode.y + " hours spent"}</p>
+                  {"Time: " +
+                    hoveredNode.x.toLocaleTimeString() +
+                    " on " +
+                    hoveredNode.x.toDateString()}
+                </div>
+              </Hint>
+            )}
         </XYPlot>
       </div>
     );
