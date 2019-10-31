@@ -293,6 +293,7 @@ class IssueDisplay extends Component {
               {this.state.editNoteList[id] ? (
                 <Form>
                   <TextArea
+                    autoFocus
                     onChange={(event, { value }) =>
                       this.handleIssueNotes(id, value)
                     }

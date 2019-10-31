@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import ReactQuill, { Quill } from "react-quill"; // ES6
+import ReactQuill from "react-quill"; // ES6
 import { connect } from "react-redux";
 import { Segment } from "semantic-ui-react";
 
@@ -75,12 +75,10 @@ class Editor extends Component {
     // Skip if Quill reference is defined:
     if (this.quillRef != null) return;
 
-    console.log('Registering formats...', this.reactQuillRef)
     const quillRef = this.reactQuillRef.getEditor() // could still be null
 
     if (quillRef != null) {
       this.quillRef = quillRef;
-      console.log(Quill.imports)
     }
   }
 

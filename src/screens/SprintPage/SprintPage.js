@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import {
   Grid,
-  Segment,
   Button,
   Menu,
   TextArea,
@@ -11,7 +10,6 @@ import {
   Loader,
   Divider,
 } from "semantic-ui-react";
-import ReactStopwatch from 'react-stopwatch';
 
 import GraphDisplay from "./GraphDisplay/GraphDisplay";
 import TimelogDisplay from "./TimelogDisplay/TimelogDisplay";
@@ -174,24 +172,6 @@ class SprintDisplay extends Component {
                       )}
                   </Header.Subheader>
                 </Header>
-              }
-              {hideTitle &&
-                <Segment>
-                  <ReactStopwatch
-                    seconds={0}
-                    minutes={0}
-                    hours={0}
-                    limit="00:00:10"
-                    onChange={({ hours, minutes, seconds }) => {
-                      // do something
-                    }}
-                    onCallback={() => 5}
-                    render={({ formatted, hours, minutes, seconds }) => {
-                      return (<p>{formatted}</p>
-                      );
-                    }}
-                  />
-                </Segment>
               }
             </Grid.Row>
           </Grid.Column>
