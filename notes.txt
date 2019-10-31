@@ -8,3 +8,10 @@ The cause of the bug is when I do modifications, I don't use the redux store. Th
 I don't think I can fix this bug. This touches parts of the code that are too complicated for me now. I don't know how I wrote these things the first time and I certainly can't trivially fix them. When, if I ever rewrite this tool, this bug will be fixed. Alternatively, when I decide to do a lot of touch ups, I will be familiar with the code again, and maybe will be able to fix this. :(
 
 Damn I feel like there are so many things here that I don't truly understand. That's the difference between this codebase and the CQL codebase
+
+--
+
+10/31/19
+Seems that using Quill might be better in the future... 
+Opening the notes would look the same, closing it could be done with a hotkey.
+As my Quill stuff becomes more and more customized, there will be a larger gap in functionality between the two. So perhaps in the future, I will want this more

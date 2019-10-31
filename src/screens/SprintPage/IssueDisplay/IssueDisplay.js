@@ -20,8 +20,8 @@ import "./IssueDisplay.css";
 const statusMap = {
   "In queue": 1,
   "In progress": 0,
-  Paused: 2,
-  Done: 3,
+  "Paused": 2,
+  "Done": 3,
 };
 
 class IssueDisplay extends Component {
@@ -52,6 +52,11 @@ class IssueDisplay extends Component {
     ) {
       this._loadData(selectedSprint, issues);
     }
+  }
+
+  componentWillUnmount() {
+    const { issueList, issueNoteList } = this.state;
+    issueList.map(issue => this.handleSaveIssueNotes(issue.id, issueNoteList[issue.id]));
   }
 
   _loadData = (selectedSprint, issues) => {
@@ -193,12 +198,18 @@ class IssueDisplay extends Component {
   };
 
   handleShowNotes = id => {
-    const { showNoteList } = this.state;
+    const { showNoteList, issueNoteList, editNoteList } = this.state;
     showNoteList[id] = !showNoteList[id];
     this.setState({
       showNoteList,
     });
     updateShowNotes(id, showNoteList[id] ? 1 : 0);
+
+    // Case where you edit the note, then close it without saving, 
+    // it will autosave!
+    if (showNoteList[id] === false && editNoteList[id]) {
+      this.handleSaveIssueNotes(id, issueNoteList[id])
+    }
   };
 
   handleEditNotes = id => {
