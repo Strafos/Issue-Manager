@@ -538,4 +538,10 @@ app.put("/Page/archive/:id", (req, res) => {
     });
 });
 
+// Ping backend server
+app.get("/Ping", (_, res) => {
+  res.send();
+});
+
+
 app.listen(port, () => console.log(`Listening on port ${port}`));

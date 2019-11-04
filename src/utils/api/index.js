@@ -7,3 +7,4 @@ export * from "./settings";
 export * from "./scratchpad";
 export * from "./events";
 export * from "./pages";
+export * from "./ping";

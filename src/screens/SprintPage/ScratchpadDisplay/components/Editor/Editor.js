@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import ReactQuill from "react-quill"; // ES6
+
 import { connect } from "react-redux";
 import { Segment } from "semantic-ui-react";
 
@@ -23,7 +24,7 @@ Hr.blotName = 'hr';
 Hr.tagName = 'hr';
 
 ReactQuill.Quill.register({
-  'formats/hr': Hr
+  'formats/hr': Hr,
 });
 
 class Editor extends Component {
@@ -173,7 +174,7 @@ class Editor extends Component {
                   handler: this.handleInsertDivider
                 },
               }
-            }
+            },
           }}
           placeholder={this.props.placeholder} />
       </Segment>
