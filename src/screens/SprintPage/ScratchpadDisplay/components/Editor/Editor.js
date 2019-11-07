@@ -2,14 +2,10 @@ import React, { Component } from "react";
 import ReactQuill from "react-quill"; // ES6
 
 import { connect } from "react-redux";
-import { Segment } from "semantic-ui-react";
 
 import "react-quill/dist/quill.bubble.css"; // ES6
 
 import "./Editor.css";
-
-import * as Actions from "../../../sprintPageActions";
-import { updateSprintNotes } from "../../../../../utils/api";
 
 const saveTime = 1000;
 
@@ -34,21 +30,24 @@ class Editor extends Component {
     super(props)
     this.quillRef = null;
     this.reactQuillRef = null;
+    this.registerFormats = this.registerFormats.bind(this);
+
     this.handleStrikethrough = this.handleStrikethrough.bind(this);
     this.handleStrikethroughLine = this.handleStrikethroughLine.bind(this);
     this.handleInsertDivider = this.handleInsertDivider.bind(this);
-    this.registerFormats = this.registerFormats.bind(this);
+    this.handleCallback = this.handleCallback.bind(this);
 
     this.handleContentChange = this.handleContentChange.bind(this);
   }
 
   componentDidMount() {
-    const { content } = this.props;
+    const { content, autoFocus } = this.props;
     this.registerFormats()
     this.setState({
       content: content || "",
       prevContent: content || "",
     });
+    autoFocus && this.quillRef.focus()
   }
 
   componentDidUpdate(prevProps) {
@@ -66,8 +65,8 @@ class Editor extends Component {
   componentWillUnmount() {
     clearTimeout(this.saveTimer);
     const { content } = this.state;
-    const { id } = this.props;
-    this.handleAPI(id, content);
+    const { id, onSave } = this.props;
+    onSave(id, content);
   }
 
   registerFormats() {
@@ -85,22 +84,12 @@ class Editor extends Component {
 
   handleSave = () => {
     const { content, prevContent } = this.state;
-    const { id } = this.props;
+    const { id, onSave } = this.props;
     if (prevContent !== content) {
       this.setState({ prevContent: content });
-      const processed_content = content;
-      this.handleAPI(id, processed_content);
+      onSave(id, content);
     }
     this.saveTimer = setTimeout(this.handleSave, saveTime);
-  };
-
-  handleAPI = (id, content) => {
-    const { setScratchpad, sprintScratchpad } = this.props;
-    if (sprintScratchpad) {
-      updateSprintNotes(id, content);
-    } else {
-      setScratchpad(id, content);
-    }
   };
 
   handleContentChange(content, delta, source, editor) {
@@ -136,57 +125,67 @@ class Editor extends Component {
     }
   }
 
+  handleCallback(range, context) {
+    const { id, callback } = this.props;
+    callback(id);
+  }
 
   render() {
-    const { autoSize } = this.props;
+    const { autoSize, } = this.props;
     const { content } = this.state;
 
     return (
-      <Segment>
-        <ReactQuill
-          // Do these matter?
-          className="quill-container"
-          bounds={".app"}
+      <ReactQuill
+        // Do these matter?
+        className="quill-container"
+        bounds={".app"}
 
-          ref={(el) => { this.reactQuillRef = el }}
-          style={autoSize ? {} : { height: "500px" }}
-          value={content}
-          theme='bubble'
-          onChange={this.handleContentChange}
-          modules={{
-            clipboard: { matchVisual: false },
-            keyboard: {
-              bindings: {
-                strikethrough: {
-                  key: 's',
-                  ctrlKey: true,
-                  shiftKey: true,
-                  handler: this.handleStrikethrough
-                },
-                strikethrough_line: {
-                  key: 's',
-                  ctrlKey: true,
-                  handler: this.handleStrikethroughLine
-                },
-                divider: {
-                  key: 'h',
-                  ctrlKey: true,
-                  handler: this.handleInsertDivider
-                },
-              }
-            },
-          }}
-          placeholder={this.props.placeholder} />
-      </Segment>
+        ref={(el) => { this.reactQuillRef = el }}
+        style={autoSize ? { "min-height": "5px" } : { height: "500px" }}
+        value={content}
+        theme='bubble'
+        onChange={this.handleContentChange}
+        modules={{
+          clipboard: { matchVisual: false },
+          keyboard: {
+            bindings: {
+              strikethrough: {
+                key: 's',
+                ctrlKey: true,
+                shiftKey: true,
+                handler: this.handleStrikethrough
+              },
+              strikethrough_line: {
+                key: 's',
+                ctrlKey: true,
+                handler: this.handleStrikethroughLine
+              },
+              divider: {
+                key: 'h',
+                ctrlKey: true,
+                handler: this.handleInsertDivider
+              },
+              callback: {
+                key: 'enter',
+                ctrlKey: true,
+                handler: this.handleCallback,
+              },
+              callback2: {
+                key: 'enter',
+                shiftKey: true,
+                handler: this.handleCallback,
+              },
+            }
+          },
+        }}
+        placeholder={this.props.placeholder} />
     )
   }
 }
 
 const mapStateToProps = state => ({});
 
-const mapDispatchToProps = {
-  setScratchpad: Actions.setScratchpad,
-};
+const mapDispatchToProps = {};
 
 export default connect(
   mapStateToProps,

@@ -23,7 +23,6 @@ class IssueModal extends Component {
     projectId: 0,
     sprintId: 0,
     modalOpen: false,
-    notes: "",
   };
 
   componentWillMount() {
@@ -57,7 +56,6 @@ class IssueModal extends Component {
       timeEstimate: 0,
       projectId: 0,
       sprintId: 0,
-      notes: "",
     });
 
   handleName = (event, { value }) => {
@@ -84,19 +82,13 @@ class IssueModal extends Component {
     });
   };
 
-  handleNotes = (event, { value }) => {
-    this.setState({
-      notes: value,
-    });
-  };
-
   handleValidate = () => {
     const { name, sprintId } = this.state;
     return name.length === 0 || sprintId === 0;
   };
 
   handleSubmit = () => {
-    const { sprintId, name, timeEstimate, projectId, notes } = this.state;
+    const { sprintId, name, timeEstimate, projectId, } = this.state;
     const requestObj = {
       sprintId,
       name,
@@ -106,7 +98,7 @@ class IssueModal extends Component {
       status: "In queue", //In queue
       blocked: 0, // not blocked
       projectId,
-      notes,
+      notes: "",
     };
     this.props.createIssue(requestObj);
 
@@ -116,7 +108,6 @@ class IssueModal extends Component {
       timeEstimate: 0,
       projectId: 0,
       modalOpen: false,
-      notes: "",
     });
   };
 
@@ -169,10 +160,6 @@ class IssueModal extends Component {
                 projects={projects}
                 onChange={this.handleProjectSelect}
               />
-            </Form.Field>
-            <Form.Field>
-              <label>Notes</label>
-              <TextArea onChange={this.handleNotes} />
             </Form.Field>
           </Form>
           <Divider />

@@ -5,6 +5,7 @@ const dbFile = path.normalize(path.join(__dirname, "../db/", "zim.db"));
 
 let db = new sqlite3.Database(dbFile, sqlite3.OPEN_READWRITE, err => {
   if (err) {
+    console.error(query);
     return console.log(err.message);
   }
 });
@@ -19,6 +20,7 @@ const insert = (query, params) => {
   return new Promise((resolve, reject) => {
     db.all(query, params, (err, res) => {
       if (err) {
+        console.error(query);
         console.error(err.message);
         reject(err);
       }
@@ -35,6 +37,7 @@ const read = async query => {
   return new Promise((resolve, reject) => {
     db.all(query, (err, res) => {
       if (err) {
+        console.error(query);
         console.error(err.message);
         reject(err);
       }
@@ -53,11 +56,13 @@ const insertReturning = (insert, select, params) => {
   return new Promise((resolve, reject) => {
     db.all(insert, params, (err, res) => {
       if (err) {
+        console.error(query);
         console.error(err.message);
         reject(err);
       }
       db.all(select, (err, res) => {
         if (err) {
+          console.error(query);
           console.error(err.message);
           reject(err);
         }

@@ -2,12 +2,14 @@ import React, { Component } from "react";
 import { Loader, Grid, Button, Icon } from "semantic-ui-react";
 import { connect } from "react-redux";
 
-import Editor from "./components/Editor/Editor";
+import { Segment } from "semantic-ui-react";
 
+import Editor from "./components/Editor/Editor";
 import * as Actions from "../sprintPageActions";
 import ArchiveModal from "./components/ArchiveModal/ArchiveModal";
 import RestoreModal from "./components/RestoreModal/RestoreModal";
 import PageModal from "./components/PageModal/PageModal";
+
 
 class ScratchpadDisplay extends Component {
   state = {};
@@ -34,11 +36,14 @@ class ScratchpadDisplay extends Component {
 
   renderEditor = scratchpad => {
     return (
-      <Editor
-        key={scratchpad.id}
-        content={scratchpad.content}
-        id={scratchpad.id}
-      />
+      <Segment>
+        <Editor
+          key={scratchpad.id}
+          content={scratchpad.content}
+          id={scratchpad.id}
+          onSave={this.props.setScratchpad}
+        />
+      </Segment>
     );
   };
 
@@ -106,6 +111,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   getScratchpads: Actions.getScratchpads,
+  setScratchpad: Actions.setScratchpad,
   getArchivedScratchpads: Actions.getArchivedScratchpads,
   createScratchpad: Actions.createScratchpad,
   createPage: Actions.createPage,

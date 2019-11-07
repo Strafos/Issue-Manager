@@ -9,6 +9,7 @@ import {
   Container,
   Loader,
   Divider,
+  Segment,
 } from "semantic-ui-react";
 
 import GraphDisplay from "./GraphDisplay/GraphDisplay";
@@ -22,7 +23,7 @@ import * as CommonActions from "../../commonActions";
 import * as Actions from "./sprintPageActions";
 import "./SprintPage.css";
 
-import { updateSprintQuote } from "../../utils/api";
+import { updateSprintQuote, updateSprintNotes } from "../../utils/api";
 
 class SprintDisplay extends Component {
   state = {
@@ -242,12 +243,14 @@ class SprintDisplay extends Component {
 
         {displayComponent}
 
-        <Editor
-          sprintScratchpad
-          autoSize
-          id={selectedSprint.id}
-          content={selectedSprint.notes}
-        />
+        <Segment>
+          <Editor
+            onSave={updateSprintNotes}
+            autoSize
+            id={selectedSprint.id}
+            content={selectedSprint.notes}
+          />
+        </Segment>
         <Button
           color="red"
           floated="left"

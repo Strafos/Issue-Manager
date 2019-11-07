@@ -3,15 +3,13 @@ import React, { Component } from "react";
 
 import {
   Icon,
-  Button,
-  Form,
-  TextArea,
   Table,
   Loader,
 } from "semantic-ui-react";
 
 import Status from "../../../components/Status/Status";
 import TimeCounter from "../../../components/TimeCounter/TimeCounter";
+import Editor from "../ScratchpadDisplay/components/Editor/Editor";
 
 import { updateIssueNotes, updateShowNotes } from "../../../utils/api";
 import { cleanNumber } from "../../../utils/arithUtils";
@@ -52,11 +50,6 @@ class IssueDisplay extends Component {
     ) {
       this._loadData(selectedSprint, issues);
     }
-  }
-
-  componentWillUnmount() {
-    const { issueList, issueNoteList } = this.state;
-    // issueList.map(issue => this.handleSaveIssueNotes(issue.id, issueNoteList[issue.id]));
   }
 
   _loadData = (selectedSprint, issues) => {
@@ -198,19 +191,12 @@ class IssueDisplay extends Component {
   };
 
   handleShowNotes = id => {
-    const { showNoteList, issueNoteList, editNoteList } = this.state;
+    const { showNoteList } = this.state;
     showNoteList[id] = !showNoteList[id];
     this.setState({
       showNoteList,
     });
     updateShowNotes(id, showNoteList[id] ? 1 : 0);
-
-    // Case where you edit the note, then close it without saving, 
-    // it will autosave!
-    // TODO: there are problems with this
-    // if (showNoteList[id] === false && editNoteList[id]) {
-    //   this.handleSaveIssueNotes(id, issueNoteList[id])
-    // }
   };
 
   handleEditNotes = id => {
@@ -222,14 +208,26 @@ class IssueDisplay extends Component {
   };
 
   handleSaveIssueNotes = (id, notes) => {
-    this.handleEditNotes(id);
-    updateIssueNotes(id, notes).then(res => {
-      if (!res || res.status !== "Success") {
-        this.props.error("Failed to save issue notes");
-      } else {
-      }
-    });
+    const { issueNoteList } = this.state;
+    issueNoteList[id] = notes;
+    this.setState({ issueNoteList })
+    updateIssueNotes(id, notes)
   };
+
+  // I can display quill content as html, but first, I need to do some parsing
+  // to get all the new lines/paragraphs to look the right way
+  unquill = (text) => {
+    text = text.replace(new RegExp("</p><p><br /></p><p>", 'g'), "eibkdjlfbasdf");
+    text = text.replace(new RegExp("</p><p><br></p><p>", 'g'), "eibkdjlfbasdf");
+    text = text.replace(new RegExp("</p><p>", 'g'), "\n");
+    text = text.replace(new RegExp("eibkdjlfbasdf", 'g'), "</p><p>");
+    // For empty notes
+    if (text === "<p></p>") {
+      text = "<p><br></p>"
+      // text = "<p>Issue Notes...</p>"
+    }
+    return text;
+  }
 
   renderName = (name, id) => (
     <div>
@@ -303,41 +301,23 @@ class IssueDisplay extends Component {
           <Table.Row>
             <Table.Cell colSpan="6">
               {this.state.editNoteList[id] ? (
-                <Form>
-                  <TextArea
-                    autoFocus
-                    onChange={(event, { value }) =>
-                      this.handleIssueNotes(id, value)
-                    }
-                    style={{
-                      minHeight: 350,
-                      backgroundColor: "#282828",
-                      color: "#BEBEBE",
-                    }}
-                    placeholder="Issue notes..."
-                    value={this.state.issueNoteList[id]}
-                  />
-                  <Button
-                    floated="left"
-                    color="red"
-                    onClick={() =>
-                      this.handleSaveIssueNotes(
-                        id,
-                        this.state.issueNoteList[id]
-                      )
-                    }
-                  >
-                    Save
-                  </Button>
-                </Form>
-              ) : (
-                  <p
-                    onClick={() => this.handleEditNotes(id)}
-                    className="NoteText"
-                  >
-                    {this.state.issueNoteList[id] || "Notes: "}
-                  </p>
-                )}
+                <Editor
+                  type="IssueNotes"
+                  autoFocus
+                  onSave={this.handleSaveIssueNotes}
+                  callback={this.handleEditNotes}
+                  autoSize
+                  id={id}
+                  content={this.state.issueNoteList[id]}
+                />) :
+                <div
+                  onClick={() => this.handleEditNotes(id)}
+                  style={{ "whiteSpace": "pre-line" }}
+                  // Yes I understand this is literally running HTML from text input
+                  // But this stuff is self hosted so who cares?
+                  dangerouslySetInnerHTML={{ __html: this.unquill(this.state.issueNoteList[id]) }}
+                />
+              }
             </Table.Cell>
           </Table.Row>
         )}

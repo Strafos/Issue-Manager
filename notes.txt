@@ -1,7 +1,8 @@
 11/06/19
 I want to fix the problems with issue notes.
-
 I think it makes sense to transition to using editor. This will be a huge change but I think it's necessary!
+
+Keeping this on branch for now, but I migrated issuenotes to use Quill. I think this handles most of the issues I previously had.
 
 --
 There's a bug where if I change the state of the issue list, and then add an issue, then the entire issue list goes back to the original state. 
