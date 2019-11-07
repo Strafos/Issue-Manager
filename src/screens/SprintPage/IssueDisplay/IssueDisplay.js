@@ -56,7 +56,7 @@ class IssueDisplay extends Component {
 
   componentWillUnmount() {
     const { issueList, issueNoteList } = this.state;
-    issueList.map(issue => this.handleSaveIssueNotes(issue.id, issueNoteList[issue.id]));
+    // issueList.map(issue => this.handleSaveIssueNotes(issue.id, issueNoteList[issue.id]));
   }
 
   _loadData = (selectedSprint, issues) => {
@@ -207,9 +207,10 @@ class IssueDisplay extends Component {
 
     // Case where you edit the note, then close it without saving, 
     // it will autosave!
-    if (showNoteList[id] === false && editNoteList[id]) {
-      this.handleSaveIssueNotes(id, issueNoteList[id])
-    }
+    // TODO: there are problems with this
+    // if (showNoteList[id] === false && editNoteList[id]) {
+    //   this.handleSaveIssueNotes(id, issueNoteList[id])
+    // }
   };
 
   handleEditNotes = id => {
