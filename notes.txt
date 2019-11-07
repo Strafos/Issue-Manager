@@ -1,3 +1,9 @@
+11/06/19
+I want to fix the problems with issue notes.
+
+I think it makes sense to transition to using editor. This will be a huge change but I think it's necessary!
+
+--
 There's a bug where if I change the state of the issue list, and then add an issue, then the entire issue list goes back to the original state. 
 
 The cause of the bug is when I do modifications, I don't use the redux store. Thus, when I add an issue, it changes the redux store and does everything. There are a couple ways to fix this:
