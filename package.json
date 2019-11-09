@@ -7,7 +7,7 @@
     "edit-json-file": "^1.1.0",
     "eslint": "^5.6.1",
     "eslint-config-airbnb": "^17.0.0",
-    "express": "^4.16.2",
+    "express": "^4.17.1",
     "fullcalendar-reactwrapper": "^1.0.7",
     "gulp": "^3.9.1",
     "lodash": "^4.17.10",
