@@ -221,8 +221,11 @@ class IssueDisplay extends Component {
     text = text.replace(new RegExp("</p><p><br></p><p>", 'g'), "eibkdjlfbasdf");
     text = text.replace(new RegExp("</p><p>", 'g'), "\n");
     text = text.replace(new RegExp("eibkdjlfbasdf", 'g'), "</p><p>");
+
     // For empty notes
-    if (text === "<p></p>") {
+    // TODO: it's possible the first condition is not necessary and that 
+    // it was only needed after running the python scripts
+    if (text === "<p></p>" || text === "") {
       text = "<p><br></p>"
       // text = "<p>Issue Notes...</p>"
     }
