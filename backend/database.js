@@ -21,6 +21,7 @@ const insert = (query, params) => {
     db.all(query, params, (err, res) => {
       if (err) {
         console.error(query);
+        console.error(params);
         console.error(err.message);
         reject(err);
       }
@@ -56,13 +57,14 @@ const insertReturning = (insert, select, params) => {
   return new Promise((resolve, reject) => {
     db.all(insert, params, (err, res) => {
       if (err) {
-        console.error(query);
+        console.error(insert);
+        console.error(params);
         console.error(err.message);
         reject(err);
       }
       db.all(select, (err, res) => {
         if (err) {
-          console.error(query);
+          console.error(select);
           console.error(err.message);
           reject(err);
         }
