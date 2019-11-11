@@ -8,8 +8,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import "./semantic/dist/semantic.min.css";
 import "./App.css";
 
-import { pingServer } from "./utils/api";
-
 import SprintPage from "./screens/SprintPage/SprintPage";
 import IssuePage from "./screens/IssuePage/IssuePage";
 import SideBar from "./components/SideBar/SideBar";
@@ -25,16 +23,6 @@ class App extends Component {
     this.props.getSettings();
     this.props.getProjects();
     this.props.getSprints();
-
-    this.pingServer = this.pingServer.bind(this);
-    this.timer = setInterval(this.pingServer, pingInterval);
-  }
-
-  // Ping the backend server every 30 seconds to see if it's still up
-  pingServer() {
-    if (this.state.serverStatus) {
-      pingServer().then(res => this.setState({ serverStatus: res }));
-    }
   }
 
   render() {
