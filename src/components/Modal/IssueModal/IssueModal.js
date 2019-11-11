@@ -126,7 +126,7 @@ class IssueModal extends Component {
         trigger={
           <Button icon labelPosition="left" onClick={this.handleOpen} primary>
             <Icon color="red" name="plus" />
-            New issue
+            New Issue
           </Button>
         }
         className="Modal"

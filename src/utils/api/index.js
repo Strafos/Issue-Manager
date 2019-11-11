@@ -8,3 +8,4 @@ export * from "./scratchpad";
 export * from "./events";
 export * from "./pages";
 export * from "./ping";
+export * from "./reminders";

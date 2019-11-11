@@ -40,7 +40,7 @@ class SprintModal extends Component {
     return name.length === 0 || startDate === null || endDate === null;
   };
 
-  handleChangeStartDate = (date, foo) => {
+  handleChangeStartDate = date => {
     this.setState({
       startDate: date,
     });

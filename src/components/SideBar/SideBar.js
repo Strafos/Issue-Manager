@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import IssueModal from "../Modal/IssueModal/IssueModal";
 import ProjectModal from "../Modal/ProjectModal/ProjectModal";
 import SprintModal from "../Modal/SprintModal/SprintModal";
+import ReminderModal from "../Modal/ReminderModal/ReminderModal";
 import SettingModal from "../Modal/SettingModal/SettingModal";
 import SprintMenu from "../SprintMenu/SprintMenu";
 import TodoList from "../TodoList/TodoList";
@@ -23,8 +24,9 @@ class SideBar extends Component {
           <br />
           <Button.Group color="black" vertical>
             <SprintModal sprints={sprintList} />
-            <ProjectModal sprints={sprintList} projects={projectList} />
             <IssueModal projects={projectList} sprints={sprintList} />
+            <ProjectModal sprints={sprintList} projects={projectList} />
+            <ReminderModal />
           </Button.Group>
         </Grid.Row>
         <br />

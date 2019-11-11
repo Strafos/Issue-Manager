@@ -2,6 +2,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const editJsonFile = require("edit-json-file");
+const { exec } = require('child_process');
 
 const db = require("./database");
 const app = express();
@@ -536,6 +537,20 @@ app.put("/Page/archive/:id", (req, res) => {
     .catch(err => {
       res.send({ status: "Failure" });
     });
+});
+
+// Create new reminder
+// search: createReminder
+app.post("/Reminder", (req, res) => {
+  const {
+    text,
+    diffInMinutes,
+    timestamp,
+    reminderTime,
+  } = req.body;
+  // Initial texts are looking good, I should spin up the remote server and 
+  // go from there
+  exec(`echo "touch ~/${text}" | at now + ${diffInMinutes} minutes`, () => { });
 });
 
 // Ping backend server
