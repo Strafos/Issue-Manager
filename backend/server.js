@@ -548,14 +548,12 @@ app.post("/Reminder", (req, res) => {
     timestamp,
     reminderTime,
   } = req.body;
-  // Initial texts are looking good, I should spin up the remote server and 
-  // go from there
-  exec(`echo "touch ~/${text}" | at now + ${diffInMinutes} minutes`, () => { });
+  exec(`echo "python3 ~/remote_scripts/text_args.py ${text}" | at now + ${diffInMinutes} minutes`, () => { });
 });
 
 // Ping backend server
 app.get("/Ping", (_, res) => {
-  res.send();
+  res.send({});
 });
 
 
