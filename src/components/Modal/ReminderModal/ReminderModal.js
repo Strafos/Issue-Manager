@@ -39,8 +39,8 @@ class ReminderModal extends Component {
   };
 
   handleValidate = () => {
-    const { text, date } = this.state;
-    return text.length === 0 || date === null;
+    const { text } = this.state;
+    return text.length === 0;
   };
 
   handleChangeDate = date => {
@@ -60,6 +60,22 @@ class ReminderModal extends Component {
       text: value,
     });
   };
+
+  handleCreateNextHour = () => {
+    const future = moment().add(1, 'hour')
+    this.setState({
+      time: future,
+      date: future,
+    }, this.handleSubmit)
+  }
+
+  handleCreateNextDay = () => {
+    const future = moment().add(1, 'day')
+    this.setState({
+      time: future,
+      date: future,
+    }, this.handleSubmit)
+  }
 
   handleSubmit = () => {
     const { date, text, time } = this.state;
@@ -96,6 +112,10 @@ class ReminderModal extends Component {
         <Modal.Header className="ModalHeader">Create Reminder</Modal.Header>
         <Form className="ModalForm">
           <Form.Field>
+            <label>Text</label>
+            <Input size="tiny" type="text" onChange={this.handleText} />
+          </Form.Field>
+          <Form.Field>
             <label>Date</label>
             <ReactDatePicker
               selected={date}
@@ -105,18 +125,32 @@ class ReminderModal extends Component {
           <Form.Field>
             <TimePicker showSecond={false} use12Hours onChange={this.handleChangeTime} />
           </Form.Field>
-          <Form.Field>
-            <label>Text</label>
-            <Input size="tiny" type="text" onChange={this.handleText} />
-          </Form.Field>
-          <Button
-            onClick={this.handleSubmit}
-            disabled={this.handleValidate()}
-            style={this.padding}
-            color="red"
-          >
-            Create Reminder
-              </Button>
+          <Button.Group color="black" vertical>
+            <Button
+              onClick={this.handleSubmit}
+              disabled={this.handleValidate()}
+              style={this.padding}
+              color="red"
+            >
+              Create Reminder
+          </Button>
+            <Button
+              onClick={this.handleCreateNextDay}
+              disabled={this.handleValidate()}
+              style={this.padding}
+              color="red"
+            >
+              Quick Create 1 Day
+          </Button>
+            <Button
+              onClick={this.handleCreateNextHour}
+              disabled={this.handleValidate()}
+              style={this.padding}
+              color="red"
+            >
+              Quick Create 1 Hour
+          </Button>
+          </Button.Group>
         </Form>
       </Modal>
     );

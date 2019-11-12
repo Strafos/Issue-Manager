@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import {
-  TextArea,
   Container,
   Icon,
   Button,

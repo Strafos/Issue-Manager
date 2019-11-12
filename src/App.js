@@ -14,8 +14,6 @@ import SideBar from "./components/SideBar/SideBar";
 
 import * as CommonActions from "./commonActions";
 
-const pingInterval = 30000;
-
 class App extends Component {
   state = { serverStatus: true };
 
