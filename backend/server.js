@@ -548,7 +548,7 @@ app.post("/Reminder", (req, res) => {
     timestamp,
     reminderTime,
   } = req.body;
-  exec(`echo "python3 ~/remote_scripts/text_args.py ${text}" | at now + ${diffInMinutes} minutes`, () => { });
+  exec(`echo "python3 ~/remote_scripts/text_args.py "${text}"" | at now + ${diffInMinutes} minutes`, () => { });
 });
 
 // Ping backend server
