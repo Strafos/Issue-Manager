@@ -127,7 +127,9 @@ class Editor extends Component {
 
   handleCallback(range, context) {
     const { id, callback } = this.props;
-    callback(id);
+    if (callback) {
+      callback(id);
+    }
   }
 
   render() {
