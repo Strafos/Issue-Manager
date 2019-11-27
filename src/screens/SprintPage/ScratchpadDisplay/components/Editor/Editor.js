@@ -32,10 +32,13 @@ class Editor extends Component {
     this.reactQuillRef = null;
     this.registerFormats = this.registerFormats.bind(this);
 
-    this.handleStrikethrough = this.handleStrikethrough.bind(this);
-    this.handleStrikethroughLine = this.handleStrikethroughLine.bind(this);
     this.handleInsertDivider = this.handleInsertDivider.bind(this);
     this.handleCallback = this.handleCallback.bind(this);
+
+    this.handleStrikethrough = this.handleStrikethrough.bind(this);
+    this.handleStrikethroughLine = this.handleStrikethroughLine.bind(this);
+
+    this.handleBoldLine = this.handleBoldLine.bind(this);
 
     this.handleContentChange = this.handleContentChange.bind(this);
   }
@@ -98,22 +101,22 @@ class Editor extends Component {
     this.saveTimer = setTimeout(this.handleSave, saveTime);
   }
 
-  handleStrikethrough(range, context) {
-    if (range) {
-      // If entire selection has strike: format = {strike: true}
-      // Otherwise: format = {} 
-      const newVal = !('strike' in context.format);
-      this.quillRef.format('strike', newVal);
-    }
-  }
-
   handleInsertDivider(range, _) {
     if (range) {
       this.quillRef.insertEmbed(range.index, "hr", "null")
     }
   }
 
-  handleStrikethroughLine(range, context) {
+  handleFormat(range, context, format) {
+    if (range) {
+      // If entire selection has strike: format = {strike: true}
+      // Otherwise: format = {} 
+      const newVal = !(format in context.format);
+      this.quillRef.format(format, newVal);
+    }
+  }
+
+  handleFormatLine(range, context, format) {
     if (range) {
       const prefix = context.prefix;
       const suffix = context.suffix;
@@ -121,8 +124,20 @@ class Editor extends Component {
       const len = prefix.length + suffix.length;
 
       this.quillRef.setSelection(index, len);
-      this.handleStrikethrough(range, context);
+      this.handleFormat(range, context, format);
     }
+  }
+
+  handleStrikethrough(range, context) {
+    this.handleFormat(range, context, "strike");
+  }
+
+  handleStrikethroughLine(range, context) {
+    this.handleFormatLine(range, context, "strike");
+  }
+
+  handleBoldLine(range, context) {
+    this.handleFormatLine(range, context, "bold");
   }
 
   handleCallback(range, context) {
@@ -143,7 +158,7 @@ class Editor extends Component {
         bounds={".app"}
 
         ref={(el) => { this.reactQuillRef = el }}
-        style={autoSize ? { "min-height": "5px" } : { height: "500px" }}
+        style={autoSize ? { "minHeight": "5px" } : { height: "500px" }}
         value={content}
         theme='bubble'
         onChange={this.handleContentChange}
@@ -161,6 +176,11 @@ class Editor extends Component {
                 key: 's',
                 ctrlKey: true,
                 handler: this.handleStrikethroughLine
+              },
+              bold_line: {
+                key: 'b',
+                ctrlKey: true,
+                handler: this.handleBoldLine
               },
               divider: {
                 key: 'h',
