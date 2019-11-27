@@ -22,3 +22,22 @@ Damn I feel like there are so many things here that I don't truly understand. Th
 Seems that using Quill might be better in the future... 
 Opening the notes would look the same, closing it could be done with a hotkey.
 As my Quill stuff becomes more and more customized, there will be a larger gap in functionality between the two. So perhaps in the future, I will want this more
+
+
+<p>At a high level, here's the plan:</p>
+<ol>
+	<li>
+	<s>Set up backup stuff on the remote server</s></li><li><s>Mount notes remotely and change ff/day scripts to change the remote file</s>
+	</li>
+	<li><s>Reminders:</s></li>
+		<li class="ql-indent-1"><s>Create API endpoints for creating reminders</s></li><li class="ql-indent-1"><s>Frontend support</s></li>
+	<li>Texting:</li>
+		<li class="ql-indent-1"><s>Receiving and parsing texts</s></li>
+		<li class="ql-indent-1"><s>Add item to TODO</s></li>
+		<li class="ql-indent-1"><s>Add item to QN</s></li>
+
+</ol>
+
+
+<p>Progress:</p><ul><li>Add a partial backup script that updates notes and backups only</li><li>Change scripts to edit remote notes files</li><li>Created MVP for reminders and have it working on my phone</li><li>Looked over texting stuff. Not sure how to hook things up with AWS. this will be hacky to figure out, to say the least. Hopefully I can tackle this with a fresh mind tomorrow</li><li>With Liam's help, I figured out how to expose a webhook</li><li>After that, getting the texting stuff to work was easy</li></ul><p><br></p><p>Still gotta look at nginx stuff</p>
+
