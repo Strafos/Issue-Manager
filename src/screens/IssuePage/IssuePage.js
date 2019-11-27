@@ -16,7 +16,6 @@ import { Link } from "react-router-dom";
 import "./IssuePage.css";
 
 import StatusDisplay from "../../components/Status/StatusDisplay";
-// import SprintDropDown from "../../components/Modal/IssueModal/SprintDropDown";
 import SprintDropDown from "../../components/SprintDropDown/SprintDropDown";
 import ProjectDropDown from "../../components/ProjectDropDown/ProjectDropDown";
 
@@ -37,9 +36,9 @@ class IssueDisplay extends Component {
     projectId: 0,
     status: "",
     timeEstimate: 0,
-    timeSpent: 0,
+    timeSpent: "0",
     timeSpentDelta: 0,
-    timeRemaining: 0,
+    timeRemaining: "0",
     timeRemainingDelta: 0,
     notes: "",
     blocked: "false",
@@ -219,16 +218,20 @@ class IssueDisplay extends Component {
 
   handleTimeRemaining = (event, { value }) => {
     const { timeRemaining, timeRemainingDelta } = this.state;
+    const parsedVal = value === "" ? 0 : parseFloat(value);
+    const parsedTimeRemaining = timeRemaining == "" ? 0 : parseFloat(timeRemaining);
     this.setState({
-      timeRemainingDelta: timeRemainingDelta + parseFloat(value) - timeRemaining,
+      timeRemainingDelta: timeRemainingDelta + parsedVal - parsedTimeRemaining,
       timeRemaining: value,
     });
   };
 
   handleTimeSpent = (event, { value }) => {
     const { timeSpent, timeSpentDelta } = this.state;
+    const parsedVal = value === "" ? 0 : parseFloat(value);
+    const parsedTimeSpent = timeSpent == "" ? 0 : parseFloat(timeSpent);
     this.setState({
-      timeSpentDelta: timeSpentDelta + parseFloat(value) - timeSpent,
+      timeSpentDelta: timeSpentDelta + parsedVal - parsedTimeSpent,
       timeSpent: value,
     });
   };
