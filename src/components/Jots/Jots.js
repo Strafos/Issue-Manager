@@ -94,7 +94,12 @@ class Jots extends Component {
           </Form>
         ) : (
             <Segment>
-              <p onClick={this.handleChangeEdit}>
+              <p
+                style={{
+                  "whiteSpace": "pre-line",
+                  // "textAlign": "left"
+                }}
+                onClick={this.handleChangeEdit}>
                 {currJot}
               </p>
             </Segment>
