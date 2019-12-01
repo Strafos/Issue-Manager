@@ -391,6 +391,23 @@ app.get("/Settings", (req, res) => {
   res.send(file.get());
 });
 
+// Jots
+// search: jots
+app.get("/Jots", (req, res) => {
+  const file = editJsonFile(`${__dirname}/jots.json`);
+  res.send(file.get());
+});
+
+// Update Jots
+app.put("/Jots", (req, res) => {
+  const js = req.body;
+  const file = editJsonFile(`${__dirname}/jots.json`);
+  file.set(js);
+  file.save();
+  res.send({});
+});
+
+
 // search: getAllScratchpads
 app.get("/Scratchpads", (req, res) => {
   const query = "SELECT * FROM scratchpads WHERE archived=0 ORDER BY id DESC";
