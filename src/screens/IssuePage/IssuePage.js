@@ -339,10 +339,6 @@ class IssueDisplay extends Component {
               sprints={sprintList}
               onChange={this.handleSprintSelect}
             />
-            {/* <SprintDropDown
-              value={sprintId}
-              onChange={this.handleSprintSelect}
-            /> */}
           </Form.Field>
 
           <Form.Field width={3}>

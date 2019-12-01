@@ -19,6 +19,7 @@ class App extends Component {
 
   componentDidMount() {
     this.props.getSettings();
+    this.props.getJots();
     this.props.getProjects();
     this.props.getSprints();
   }
@@ -68,6 +69,7 @@ const mapStateToProps = state => ({});
 
 const mapDispatchToProps = {
   getSettings: CommonActions.getSettings,
+  getJots: CommonActions.getJots,
   getProjects: CommonActions.getProjects,
   getSprints: CommonActions.getAllSprints,
 };
