@@ -9,6 +9,7 @@ import ReminderModal from "../Modal/ReminderModal/ReminderModal";
 import SettingModal from "../Modal/SettingModal/SettingModal";
 import SprintMenu from "../SprintMenu/SprintMenu";
 import TodoList from "../TodoList/TodoList";
+import Jots from "../Jots/Jots";
 import TimeSpentMiniGraph from "../../screens/SprintPage/GraphDisplay/Graphs/TimeSpentMiniGraph";
 import SprintDropDown from "../SprintDropDown/SprintDropDown";
 
@@ -29,6 +30,7 @@ class SideBar extends Component {
             <ReminderModal />
           </Button.Group>
         </Grid.Row>
+        <Jots />
         <br />
 
         <Grid.Row>
@@ -36,6 +38,7 @@ class SideBar extends Component {
             <SprintMenu sprints={sprintList} />
             <br />
             <TodoList />
+            <br />
           </div>
 
           {selectedSprint && (
