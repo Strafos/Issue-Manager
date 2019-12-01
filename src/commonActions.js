@@ -64,6 +64,26 @@ export const getSettings = () =>
     API.getSettings
   )();
 
+export const getJots = () =>
+  asyncActionCreator(
+    {
+      pending: ActionTypes.FETCH_JOTS_REQUEST,
+      complete: ActionTypes.FETCH_JOTS_SUCCESS,
+      error: ActionTypes.FETCH_JOTS_FAILURE,
+    },
+    API.getJots
+  )();
+
+export const updateJots = requestObj =>
+  asyncActionCreator(
+    {
+      pending: ActionTypes.UPDATE_JOTS_REQUEST,
+      complete: ActionTypes.UPDATE_JOTS_SUCCESS,
+      error: ActionTypes.UPDATE_JOTS_FAILURE,
+    },
+    API.updateJots
+  )(requestObj);
+
 export const getProjects = () =>
   asyncActionCreator(
     {
