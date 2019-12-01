@@ -18,11 +18,6 @@ CREATE TABLE recent_issues (
   name text NOT NULL
 );
 
-INSERT INTO status values(null, "In queue");
-INSERT INTO status values(null, "In progress");
-INSERT INTO status values(null, "Paused");
-INSERT INTO status values(null, "Done");
-
 CREATE TABLE issues (
  id integer PRIMARY KEY AUTOINCREMENT,
  sprint_id integer NOT NULL,
@@ -77,7 +72,6 @@ CREATE TABLE scratchpad_pages (
  archived default 0
 );
 
-INSERT INTO scratchpad_pages values(NULL, "Home", 0);
 
 CREATE TABLE events (
  id integer NOT NULL,
@@ -86,3 +80,17 @@ CREATE TABLE events (
  allDay integer NOT NULL default 0,
  end text
 );
+
+CREATE TABLE reminders (
+ id integer PRIMARY KEY AUTOINCREMENT,
+ content text NOT NULL,
+ timestamp text NOT NULL,
+ at_command text NOT NULL,
+ source text NOT NULL
+);
+
+-- INSERT INTO scratchpad_pages values(NULL, "Home", 0);
+-- INSERT INTO status values(null, "In queue");
+-- INSERT INTO status values(null, "In progress");
+-- INSERT INTO status values(null, "Paused");
+-- INSERT INTO status values(null, "Done");
