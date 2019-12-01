@@ -219,7 +219,7 @@ class IssueDisplay extends Component {
   handleTimeRemaining = (event, { value }) => {
     const { timeRemaining, timeRemainingDelta } = this.state;
     const parsedVal = value === "" ? 0 : parseFloat(value);
-    const parsedTimeRemaining = timeRemaining == "" ? 0 : parseFloat(timeRemaining);
+    const parsedTimeRemaining = timeRemaining === "" ? 0 : parseFloat(timeRemaining);
     this.setState({
       timeRemainingDelta: timeRemainingDelta + parsedVal - parsedTimeRemaining,
       timeRemaining: value,
@@ -229,7 +229,7 @@ class IssueDisplay extends Component {
   handleTimeSpent = (event, { value }) => {
     const { timeSpent, timeSpentDelta } = this.state;
     const parsedVal = value === "" ? 0 : parseFloat(value);
-    const parsedTimeSpent = timeSpent == "" ? 0 : parseFloat(timeSpent);
+    const parsedTimeSpent = timeSpent === "" ? 0 : parseFloat(timeSpent);
     this.setState({
       timeSpentDelta: timeSpentDelta + parsedVal - parsedTimeSpent,
       timeSpent: value,
