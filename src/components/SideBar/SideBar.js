@@ -30,11 +30,11 @@ class SideBar extends Component {
             <ReminderModal />
           </Button.Group>
         </Grid.Row>
-        <TodoList />
-        <br />
-
         <Grid.Row>
           <div className="center">
+            <br />
+            <TodoList />
+            <br />
             <SprintMenu sprints={sprintList} />
             <br />
             <Jots />

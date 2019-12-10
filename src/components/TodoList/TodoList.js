@@ -68,9 +68,9 @@ class TodoList extends Component {
     return (
       <div className="center">
         <Menu vertical>
-          <Segment size="mini">
+          {/* <Segment size="mini">
             <Menu.Header>TODOs</Menu.Header>
-          </Segment>
+          </Segment> */}
           <Menu.Menu>
             {todoList && todoList.map(todo => this.renderTodo(todo))}
           </Menu.Menu>
