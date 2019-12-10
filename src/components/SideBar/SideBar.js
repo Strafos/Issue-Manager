@@ -35,9 +35,9 @@ class SideBar extends Component {
             <br />
             <TodoList />
             <br />
-            <SprintMenu sprints={sprintList} />
-            <br />
             <Jots />
+            <br />
+            <SprintMenu sprints={sprintList} />
             <br />
           </div>
 

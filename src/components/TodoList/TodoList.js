@@ -67,14 +67,14 @@ class TodoList extends Component {
 
     return (
       <div className="center">
-        <Menu vertical>
+        <Menu vertical >
           {/* <Segment size="mini">
             <Menu.Header>TODOs</Menu.Header>
           </Segment> */}
           <Menu.Menu>
             {todoList && todoList.map(todo => this.renderTodo(todo))}
           </Menu.Menu>
-        </Menu>
+        </Menu >
         {/* <Input
           style={{ color: "black" }}
           placeholder="Add todo..."
@@ -86,8 +86,7 @@ class TodoList extends Component {
           size="small"
           onChange={this.handleInput}
         /> */}
-      </div>
-    );
+      </div >);
   }
 }
 
