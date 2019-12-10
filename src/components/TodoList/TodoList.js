@@ -75,7 +75,7 @@ class TodoList extends Component {
             {todoList && todoList.map(todo => this.renderTodo(todo))}
           </Menu.Menu>
         </Menu>
-        <Input
+        {/* <Input
           style={{ color: "black" }}
           placeholder="Add todo..."
           action={{
@@ -85,7 +85,7 @@ class TodoList extends Component {
           value={this.state.newTodo}
           size="small"
           onChange={this.handleInput}
-        />
+        /> */}
       </div>
     );
   }
