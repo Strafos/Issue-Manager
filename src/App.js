@@ -9,8 +9,9 @@ import "./semantic/dist/semantic.min.css";
 import "./App.css";
 
 import SprintPage from "./screens/SprintPage/SprintPage";
+import NotePage from "./screens/SprintPage/NotePage";
 import IssuePage from "./screens/IssuePage/IssuePage";
-import SideBar from "./components/SideBar/SideBar";
+import MiniSideBar from "./components/MiniSideBar/MiniSideBar";
 
 import * as CommonActions from "./commonActions";
 
@@ -30,7 +31,7 @@ class App extends Component {
         <div className="App">
           <Grid columns={2} divided>
             <Grid.Row>
-              <SideBar />
+              <MiniSideBar />
 
               <Grid.Column width={13}>
                 <Message
@@ -45,6 +46,14 @@ class App extends Component {
                   path="/sprint/:id?"
                   render={props => {
                     return <SprintPage {...props} />;
+                  }}
+                />
+
+                <Route
+                  exact
+                  path="/note/:id?"
+                  render={props => {
+                    return <NotePage {...props} />;
                   }}
                 />
 

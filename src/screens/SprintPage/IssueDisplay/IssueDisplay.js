@@ -9,7 +9,7 @@ import {
 
 import Status from "../../../components/Status/Status";
 import TimeCounter from "../../../components/TimeCounter/TimeCounter";
-import Editor from "../ScratchpadDisplay/components/Editor/Editor";
+import Editor from "../../../components/Editor/Editor";
 
 import { updateIssueNotes, updateShowNotes } from "../../../utils/api";
 import { cleanNumber } from "../../../utils/arithUtils";

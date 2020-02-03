@@ -12,20 +12,15 @@ import {
   Segment,
 } from "semantic-ui-react";
 
-import GraphDisplay from "./GraphDisplay/GraphDisplay";
-import TimelogDisplay from "./TimelogDisplay/TimelogDisplay";
-import IssueDisplay from "./IssueDisplay/IssueDisplay";
-import ScratchpadDisplay from "./ScratchpadDisplay/ScratchpadDisplay";
-import CalendarDisplay from "./CalendarDisplay/CalendarDisplay";
-import Editor from "../../components/Editor/Editor";
-
 import * as CommonActions from "../../commonActions";
 import * as Actions from "./sprintPageActions";
-import "./SprintPage.css";
+import "./NotePage.css";
 
+import Editor from "../../components/Editor/Editor";
 import { updateSprintQuote, updateSprintNotes } from "../../utils/api";
+import NotesDisplay from "./NotesDisplay/NotesDisplay";
 
-class SprintDisplay extends Component {
+class NoteDisplay extends Component {
   state = {
     issueList: [],
     display: "issue",
@@ -112,37 +107,6 @@ class SprintDisplay extends Component {
       return <Loader active inline />;
     }
 
-    let displayComponent;
-    switch (display) {
-      case "graph":
-        displayComponent = (
-          <GraphDisplay selectedSprint={selectedSprint} issueList={issueList} />
-        );
-        break;
-      case "timelog":
-        displayComponent = (
-          <TimelogDisplay sprintId={selectedSprint && selectedSprint.id} />
-        );
-        break;
-      case "scratchpad":
-        displayComponent = <ScratchpadDisplay selectedPage={scratchpadPage} />;
-        break;
-      case "calendar":
-        displayComponent = <CalendarDisplay />;
-        break;
-      case "issue":
-        displayComponent = (
-          <IssueDisplay
-            selectedSprint={selectedSprint}
-            projects={projectList}
-            sprints={sprintList}
-            issues={issueList}
-          />
-        );
-        break;
-      default:
-        displayComponent = null;
-    }
     return (
       <div>
         <Grid verticalAlign="top" columns={4} stretched>
@@ -198,50 +162,15 @@ class SprintDisplay extends Component {
               />
             </Menu>
           </Grid.Column>
-          <Grid.Column width={6}>
-            <Container>
-              <Menu pointing compact style={{ float: "right" }}>
-                <Menu.Item
-                  name="issue"
-                  active={display === "issue"}
-                  onClick={() =>
-                    this.setState({ display: "issue", scratchpadPage: null })
-                  }
-                />
-                <Menu.Item
-                  name="graph"
-                  active={display === "graph"}
-                  onClick={() =>
-                    this.setState({ display: "graph", scratchpadPage: null })
-                  }
-                />
-                <Menu.Item
-                  name="timelog"
-                  active={display === "timelog"}
-                  onClick={() =>
-                    this.setState({
-                      display: "timelog",
-                      scratchpadPage: null,
-                    })
-                  }
-                />
-                <Menu.Item
-                  name="calendar"
-                  active={display === "calendar"}
-                  onClick={() =>
-                    this.setState({
-                      display: "calendar",
-                      scratchpadPage: null,
-                    })
-                  }
-                />
-              </Menu>
-            </Container>
-          </Grid.Column>
         </Grid>
         <Divider />
 
-        {displayComponent}
+        <NotesDisplay
+          selectedSprint={selectedSprint}
+          projects={projectList}
+          sprints={sprintList}
+          issues={issueList}
+        />
 
         <Segment>
           <Editor
@@ -279,4 +208,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(SprintDisplay);
+)(NoteDisplay);

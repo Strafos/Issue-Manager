@@ -113,7 +113,7 @@ class IssueModal extends Component {
   render() {
     const { modalOpen, sprintId, timeEstimate } = this.state;
 
-    const { projects } = this.props;
+    const { projects, text } = this.props;
 
     return (
       <Modal
@@ -125,7 +125,7 @@ class IssueModal extends Component {
         trigger={
           <Button icon labelPosition="left" onClick={this.handleOpen} primary>
             <Icon color="red" name="plus" />
-            New Issue
+            {text || "New Issue"}
           </Button>
         }
         className="Modal"

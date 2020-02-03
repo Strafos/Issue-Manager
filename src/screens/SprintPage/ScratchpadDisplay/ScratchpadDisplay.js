@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 import { Segment } from "semantic-ui-react";
 
-import Editor from "./components/Editor/Editor";
+import Editor from "../../../components/Editor/Editor";
 import * as Actions from "../sprintPageActions";
 import ArchiveModal from "./components/ArchiveModal/ArchiveModal";
 import RestoreModal from "./components/RestoreModal/RestoreModal";

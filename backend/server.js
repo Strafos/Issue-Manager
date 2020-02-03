@@ -394,7 +394,7 @@ app.get("/Settings", (req, res) => {
 });
 
 // Jots
-// search: jots
+// search: getJots
 app.get("/Jots", (req, res) => {
   const file = editJsonFile(`${__dirname}/jots.json`);
   res.send(file.get());
@@ -567,24 +567,24 @@ app.post("/Reminder", (req, res) => {
     timestamp,
     reminderTime,
   } = req.body;
-  const hash = crypto.createHash('md5').update(text + timestamp).digest('hex').substring(0,12) + ".txt";
+  const hash = crypto.createHash('md5').update(text + timestamp).digest('hex').substring(0, 12) + ".txt";
   const filename = "/home/ec2-user/tmp/" + hash
-  
+
   fs.writeFile(filename, text, (err) => {
     // throws an error, you could also catch it here
     if (err) throw err;
-  
+
     const at_command = `at now + ${diffInMinutes} minutes`
     exec(`echo "python3 ~/remote_scripts/text_file.py ${filename} && rm ${filename}" | ${at_command}`, () => {
-    const query = `INSERT INTO reminders values(NULL, (?), (?), (?), (?))`;
+      const query = `INSERT INTO reminders values(NULL, (?), (?), (?), (?))`;
 
-    db.insert(query, [text, timestamp, at_command, "zim"])
-      .then(() => {
-        res.send({ status: "Success" });
-      })
-      .catch(err => {
-        res.send({ status: "Failure" });
-      });
+      db.insert(query, [text, timestamp, at_command, "zim"])
+        .then(() => {
+          res.send({ status: "Success" });
+        })
+        .catch(err => {
+          res.send({ status: "Failure" });
+        });
     });
   });
 
