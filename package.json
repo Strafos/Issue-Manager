@@ -10,7 +10,7 @@
     "express": "^4.17.1",
     "fullcalendar-reactwrapper": "^1.0.7",
     "gulp": "^3.9.1",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.21",
     "moment": "^2.22.2",
     "orama": "^2.0.4",
     "prettier": "^1.13.7",
